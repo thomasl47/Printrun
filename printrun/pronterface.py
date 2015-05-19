@@ -26,6 +26,8 @@ import subprocess
 import glob
 import logging
 
+from . import png
+
 try: import simplejson as json
 except ImportError: import json
 
@@ -709,6 +711,7 @@ class PronterWindow(MainWindow, pronsole.pronsole):
                   id = wx.ID_FILE1, id2 = wx.ID_FILE9)
         m.AppendMenu(wx.ID_ANY, _("&Recent Files"), recent)
         self.Bind(wx.EVT_MENU, self.clear_log, m.Append(-1, _("Clear console"), _(" Clear output console")))
+        self.Bind(wx.EVT_MENU, self.loadpng, m.Append(-1, _("Load Png"), _(" Load Png file")))
         self.Bind(wx.EVT_MENU, self.on_exit, m.Append(wx.ID_EXIT, _("E&xit"), _(" Closes the Window")))
         self.menustrip.Append(m, _("&File"))
 
@@ -1307,6 +1310,66 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         fileid = event.GetId() - wx.ID_FILE1
         path = self.filehistory.GetHistoryFile(fileid)
         self.loadfile(None, filename = path)
+
+    def loadpng(self, event, filename = None):
+        if self.slicing and self.slicep is not None:
+            self.slicep.terminate()
+            return
+        basedir = self.settings.last_file_path
+        if not os.path.exists(basedir):
+            basedir = "."
+            try:
+                basedir = os.path.split(self.filename)[0]
+            except:
+                pass
+        dlg = None
+        if filename is None:
+            dlg = wx.FileDialog(self, _("Open png file to print"), basedir, style = wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
+            dlg.SetWildcard(_("PNG files (*.png)|*.png|All Files (*.*)|*.*"))
+        if filename or dlg.ShowModal() == wx.ID_OK:
+            if filename:
+                name = filename
+            else:
+                name = dlg.GetPath()
+                dlg.Destroy()
+            if not os.path.exists(name):
+                self.statusbar.SetStatusText(_("File not found!"))
+                return
+            path = os.path.split(name)[0]
+            if path != self.settings.last_file_path:
+                self.set("last_file_path", path)
+            try:
+                abspath = os.path.abspath(name)
+                recent_files = []
+                try:
+                    recent_files = json.loads(self.settings.recentfiles)
+                except:
+                    self.logError(_("Failed to load recent files list:") +
+                                  "\n" + traceback.format_exc())
+                if abspath in recent_files:
+                    recent_files.remove(abspath)
+                recent_files.insert(0, abspath)
+                if len(recent_files) > 5:
+                    recent_files = recent_files[:5]
+                self.set("recentfiles", json.dumps(recent_files))
+            except:
+                self.logError(_("Could not update recent files list:") +
+                              "\n" + traceback.format_exc())
+            self.convert_png2gcode(name)
+        else:
+            dlg.Destroy()
+
+    def convert_png2gcode(self, filename):
+        self.filename = filename
+        # try:
+        #     import png2gcode
+        # except:
+        #     self.logError("load fail\n")
+
+        self.PNGtoGcode(str(filename))
+
+
+
 
     def loadfile(self, event, filename = None):
         if self.slicing and self.slicep is not None:
@@ -2179,6 +2242,210 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
             data = data.replace("[dummy]\n", "")
             with open(configfile, "w") as f:
                 f.write(data)
+
+    def PNGtoGcode(self,pos_file_png_exported,pos_file_png_BW="D:\Bw.png",pos_file_gcode='D:\out.gcode'):
+        
+        ######## GENERO IMMAGINE IN SCALA DI GRIGI ########
+        #Scorro l immagine e la faccio diventare una matrice composta da list
+
+        #public options
+        speed_ON = 200  #moving speed when laser on 
+        speed_OFF = 200 #moving speed when laser off
+        focus_dist = 10
+
+        #private options
+        grayscale_type = 1
+        homing = 1
+        speed_ON = True
+        resolution = 10
+
+        conversion_type = 1
+        BW_threshold = 128
+        grayscale_resolution = 1 # 1:256 2:128 3:64 ...
+
+        flip_y = False
+        homing = 1
+
+
+        reader = png.Reader(pos_file_png_exported)#File PNG generato
+        
+        w, h, pixels, metadata = reader.read_flat()
+        
+        
+        matrice = [[255 for i in range(w)]for j in range(h)]  #List al posto di un array
+        
+
+        #Scrivo una nuova immagine in Scala di grigio 8bit
+        #copia pixel per pixel 
+        
+        #0.21R + 0.71G + 0.07B
+        for y in range(h): # y varia da 0 a h-1
+            for x in range(w): # x varia da 0 a w-1
+                pixel_position = (x + y * w)*4 if metadata['alpha'] else (x + y * w)*3
+                matrice[y][x] = int(pixels[pixel_position]*0.21 + pixels[(pixel_position+1)]*0.71 + pixels[(pixel_position+2)]*0.07)
+        
+
+        ####Ora matrice contiene l'immagine in scala di grigi
+
+
+        ######## GENERO IMMAGINE IN BIANCO E NERO ########
+        #Scorro matrice e genero matrice_BN
+        B=255
+        N=0 
+        
+        matrice_BN = [[255 for i in range(w)]for j in range(h)]
+        
+        
+        #B/W fixed threshold
+        for y in range(h): 
+            for x in range(w):
+                if matrice[y][x] >= BW_threshold :
+                    matrice_BN[y][x] = B
+                else:
+                    matrice_BN[y][x] = N
+    
+            
+
+        #### Save black-white image for preview ####        
+        #file_img_BN = open(pos_file_png_BW, 'wb') 
+        #Costruttore_img = png.Writer(w, h, greyscale=True, bitdepth=8) 
+        #Costruttore_img.write(file_img_BN, matrice_BN) 
+        #file_img_BN.close() 
+
+
+        #### Generate Gcode ####              
+        Laser_ON = False
+
+        F_G01 = speed_ON
+        Scala = resolution
+
+        file_gcode = open(pos_file_gcode, 'w')  #Creo il file
+        
+        #Configurazioni iniziali standard Gcode
+        file_gcode.write('; Generated with:\n; "BEC Gcode generator"\n; by ATOM 3D Printer\n;\n;\n;\n')
+        #HOMING
+        if homing == 1:
+            file_gcode.write('G28; home all axes\n')
+        elif homing == 2:
+            file_gcode.write('$H; home all axes\n')
+        else:
+            pass
+        file_gcode.write('G21; Set units to millimeters\n')         
+        file_gcode.write('G90; Use absolute coordinates\n')             
+        file_gcode.write('G92; Coordinate Offset\n')    
+        file_gcode.write('G00 Z'+ str(focus_dist)+'n')    
+
+        #Creazione del Gcode
+        
+        #allargo la matrice per lavorare su tutta l'immagine
+        for y in range(h):
+            matrice_BN[y].append(B)
+        w = w+1
+        
+        if conversion_type != 6:
+            for y in range(h):
+                if y % 2 == 0 :
+                    for x in range(w):
+                        if matrice_BN[y][x] == N :
+                            if Laser_ON == False :
+                                #file_gcode.write('G00 X' + str(float(x)/Scala) + ' Y' + str(float(y)/Scala) + ' F' + str(F_G00) + '\n')
+                                file_gcode.write('G00 X' + str(float(x)/Scala) + ' Y' + str(float(y)/Scala) + '\n') #tolto il Feed sul G00
+                                file_gcode.write('M03; Laser ON\n')         
+                                Laser_ON = True
+                            if  Laser_ON == True :   #DEVO evitare di uscire dalla matrice
+                                if x == w-1 :
+                                    file_gcode.write('G01 X' + str(float(x)/Scala) + ' Y' + str(float(y)/Scala) +' F' + str(F_G01) + '\n')
+                                    file_gcode.write('M05; Laser OFF\n')
+                                    Laser_ON = False
+                                else: 
+                                    if matrice_BN[y][x+1] != N :
+                                        file_gcode.write('G01 X' + str(float(x)/Scala) + ' Y' + str(float(y)/Scala) + ' F' + str(F_G01) +'\n')
+                                        file_gcode.write('M05; Laser OFF\n')
+                                        Laser_ON = False
+                else:
+                    for x in reversed(range(w)):
+                        if matrice_BN[y][x] == N :
+                            if Laser_ON == False :
+                                #file_gcode.write('G00 X' + str(float(x)/Scala) + ' Y' + str(float(y)/Scala) + ' F' + str(F_G00) + '\n')
+                                file_gcode.write('G00 X' + str(float(x)/Scala) + ' Y' + str(float(y)/Scala) + '\n') #tolto il Feed sul G00
+                                file_gcode.write('M03; Laser ON\n')         
+                                Laser_ON = True
+                            if  Laser_ON == True :   #DEVO evitare di uscire dalla matrice
+                                if x == 0 :
+                                    file_gcode.write('G01 X' + str(float(x)/Scala) + ' Y' + str(float(y)/Scala) +' F' + str(F_G01) + '\n')
+                                    file_gcode.write('M05; Laser OFF\n')
+                                    Laser_ON = False
+                                else: 
+                                    if matrice_BN[y][x-1] != N :
+                                        file_gcode.write('G01 X' + str(float(x)/Scala) + ' Y' + str(float(y)/Scala) + ' F' + str(F_G01) +'\n')
+                                        file_gcode.write('M05; Laser OFF\n')
+                                        Laser_ON = False                
+
+        else: ##SCALA DI GRIGI
+            for y in range(h):
+                if y % 2 == 0 :
+                    for x in range(w):
+                        if matrice_BN[y][x] != B :
+                            if Laser_ON == False :
+                                file_gcode.write('G00 X' + str(float(x)/Scala) + ' Y' + str(float(y)/Scala) +'\n')
+                                file_gcode.write('M03 '+ ' S' + str(255 - matrice_BN[y][x]) +' ; Laser ON\n')
+                                Laser_ON = True
+                                
+                            if  Laser_ON == True :   #DEVO evitare di uscire dalla matrice
+                                if x == w-1 : #controllo fine riga
+                                    file_gcode.write('G01 X' + str(float(x)/Scala) + ' Y' + str(float(y)/Scala) +' F' + str(F_G01) + '\n')
+                                    file_gcode.write('M05; Laser OFF\n')
+                                    Laser_ON = False
+                                    
+                                else: 
+                                    if matrice_BN[y][x+1] == B :
+                                        file_gcode.write('G01 X' + str(float(x+1)/Scala) + ' Y' + str(float(y)/Scala) + ' F' + str(F_G01) +'\n')
+                                        file_gcode.write('M05; Laser OFF\n')
+                                        Laser_ON = False
+                                        
+                                    elif matrice_BN[y][x] != matrice_BN[y][x+1] :
+                                        file_gcode.write('G01 X' + str(float(x+1)/Scala) + ' Y' + str(float(y)/Scala) + ' F' + str(F_G01) +'\n')
+                                        file_gcode.write('M03 '+ ' S' + str(255 - matrice_BN[y][x+1]) +' ; Change Laser power\n')                                               
+
+                
+                else:
+                    for x in reversed(range(w)):
+                        if matrice_BN[y][x] != B :
+                            if Laser_ON == False :
+                                file_gcode.write('G00 X' + str(float(x+1)/Scala) + ' Y' + str(float(y)/Scala) +'\n')
+                                file_gcode.write('M03 '+ ' S' + str(255 - matrice_BN[y][x]) +' ; Laser ON\n')
+                                Laser_ON = True
+                                
+                            if  Laser_ON == True :   #DEVO evitare di uscire dalla matrice
+                                if x == 0 : #controllo fine riga ritorno
+                                    file_gcode.write('G01 X' + str(float(x)/Scala) + ' Y' + str(float(y)/Scala) +' F' + str(F_G01) + '\n')
+                                    file_gcode.write('M05; Laser OFF\n')
+                                    Laser_ON = False
+                                    
+                                else: 
+                                    if matrice_BN[y][x-1] == B :
+                                        file_gcode.write('G01 X' + str(float(x)/Scala) + ' Y' + str(float(y)/Scala) + ' F' + str(F_G01) +'\n')
+                                        file_gcode.write('M05; Laser OFF\n')
+                                        Laser_ON = False
+                                        
+                                    elif  matrice_BN[y][x] != matrice_BN[y][x-1] :
+                                        file_gcode.write('G01 X' + str(float(x)/Scala) + ' Y' + str(float(y)/Scala) + ' F' + str(F_G01) +'\n')
+                                        file_gcode.write('M03 '+ ' S' + str(255 - matrice_BN[y][x-1]) +' ; Change Laser power\n')
+
+            
+            
+            #Configurazioni finali standard Gcode
+            file_gcode.write('G00 X0 Y0; home\n')
+            #HOMING
+            homing = 1
+            if homing == 1:
+                file_gcode.write('G28; home all axes\n')
+            elif homing == 2:
+                file_gcode.write('$H; home all axes\n')
+            else:
+                pass
+            
+            file_gcode.close() #Chiudo il file
 
 class PronterApp(wx.App):
 
