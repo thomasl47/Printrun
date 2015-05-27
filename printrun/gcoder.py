@@ -684,6 +684,7 @@ class LightGCode(GCode):
 
 def main():
     if len(sys.argv) < 2:
+        
         print "usage: %s filename.gcode" % sys.argv[0]
         return
 

@@ -2249,14 +2249,13 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         #Scorro l immagine e la faccio diventare una matrice composta da list
 
         #public options
-        speed_ON = 200  #moving speed when laser on 
-        speed_OFF = 200 #moving speed when laser off
+        speed_ON = 100  #moving speed when laser on 
+        speed_OFF = 3000 #moving speed when laser off
         focus_dist = 10
 
         #private options
         grayscale_type = 1
         homing = 1
-        speed_ON = True
         resolution = 10
 
         conversion_type = 1
@@ -2321,6 +2320,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
 
         file_gcode = open(pos_file_gcode, 'w')  #Creo il file
         
+        
         #Configurazioni iniziali standard Gcode
         file_gcode.write('; Generated with:\n; "BEC Gcode generator"\n; by ATOM 3D Printer\n;\n;\n;\n')
         #HOMING
@@ -2349,7 +2349,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
                         if matrice_BN[y][x] == N :
                             if Laser_ON == False :
                                 #file_gcode.write('G00 X' + str(float(x)/Scala) + ' Y' + str(float(y)/Scala) + ' F' + str(F_G00) + '\n')
-                                file_gcode.write('G00 X' + str(float(x)/Scala) + ' Y' + str(float(y)/Scala) + '\n') #tolto il Feed sul G00
+                                file_gcode.write('G00 X' + str(float(x)/Scala) + ' Y' + str(float(y)/Scala) ' F' + str(speed_OFF) + '\n') #tolto il Feed sul G00
                                 file_gcode.write('M03; Laser ON\n')         
                                 Laser_ON = True
                             if  Laser_ON == True :   #DEVO evitare di uscire dalla matrice
@@ -2367,7 +2367,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
                         if matrice_BN[y][x] == N :
                             if Laser_ON == False :
                                 #file_gcode.write('G00 X' + str(float(x)/Scala) + ' Y' + str(float(y)/Scala) + ' F' + str(F_G00) + '\n')
-                                file_gcode.write('G00 X' + str(float(x)/Scala) + ' Y' + str(float(y)/Scala) + '\n') #tolto il Feed sul G00
+                                file_gcode.write('G00 X' + str(float(x)/Scala) + ' Y' + str(float(y)/Scala) + ' F' + str(speed_OFF) + '\n') #tolto il Feed sul G00
                                 file_gcode.write('M03; Laser ON\n')         
                                 Laser_ON = True
                             if  Laser_ON == True :   #DEVO evitare di uscire dalla matrice
@@ -2387,7 +2387,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
                     for x in range(w):
                         if matrice_BN[y][x] != B :
                             if Laser_ON == False :
-                                file_gcode.write('G00 X' + str(float(x)/Scala) + ' Y' + str(float(y)/Scala) +'\n')
+                                file_gcode.write('G00 X' + str(float(x)/Scala) + ' Y' + str(float(y)/Scala) + ' F' + str(speed_OFF) +'\n')
                                 file_gcode.write('M03 '+ ' S' + str(255 - matrice_BN[y][x]) +' ; Laser ON\n')
                                 Laser_ON = True
                                 
@@ -2412,7 +2412,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
                     for x in reversed(range(w)):
                         if matrice_BN[y][x] != B :
                             if Laser_ON == False :
-                                file_gcode.write('G00 X' + str(float(x+1)/Scala) + ' Y' + str(float(y)/Scala) +'\n')
+                                file_gcode.write('G00 X' + str(float(x+1)/Scala) + ' Y' + str(float(y)/Scala) + ' F' + str(speed_OFF) +'\n')
                                 file_gcode.write('M03 '+ ' S' + str(255 - matrice_BN[y][x]) +' ; Laser ON\n')
                                 Laser_ON = True
                                 
