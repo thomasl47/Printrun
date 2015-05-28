@@ -2358,7 +2358,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         gcode_box += 'G21; Set units to millimeters\n'
         gcode_box += 'G90; Use absolute coordinates\n'
         gcode_box += 'G92; Coordinate Offset\n'
-        gcode_box += 'G00 Z'+ str(focus_dist)+'n\n'
+        gcode_box += 'G00 Z'+ str(focus_dist)+'\n'
         gcode_box += 'M05; Laser OFF\n'
         gcode_box += 'G01 X' + str(pGcode_xmax) + ' Y' + str(pGcode_ymax) +' F' + str(F_G01) + '\n'
         gcode_box += 'G01 X' + str(pGcode_xmax) + ' Y' + str(pGcode_ymin) +' F' + str(F_G01) + '\n'
@@ -2384,7 +2384,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         file_gcode.write('G21; Set units to millimeters\n')         
         file_gcode.write('G90; Use absolute coordinates\n')             
         file_gcode.write('G92; Coordinate Offset\n')    
-        file_gcode.write('G00 Z'+ str(focus_dist)+'n\n')    
+        file_gcode.write('G00 Z'+ str(focus_dist)+'\n')    
 
         for y in range(h):
             pGcode_y = (float(y) - float(h)/2. )/Scala
