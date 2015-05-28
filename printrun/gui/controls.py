@@ -34,6 +34,59 @@ class XYZControlsSizer(wx.GridBagSizer):
         self.Add(root.zb, pos = (0, 2), flag = wx.ALIGN_CENTER)
         wx.CallAfter(root.xyb.SetFocus)
 
+def add_laser_controls(self, root, parentpanel):
+
+
+    pos_mapping = {
+        "htemp_label": ( 2, 0),
+        "htemp_off": ( 2, 2),
+        "htemp_val": ( 2, 3),
+        "htemp_set": ( 2, 4),
+    }
+
+    span_mapping = {
+        "htemp_label": (2, 2),
+        "htemp_off": (1, 1),
+        "htemp_val": (1, 1),
+        "htemp_set": (1, 1 if root.display_graph else 2),
+    }
+
+
+    def add(name, widget, *args, **kwargs):
+        kwargs["pos"] = pos_mapping[name]
+        if name in span_mapping:
+            kwargs["span"] = span_mapping[name]
+        if "container" in kwargs:
+            container = kwargs["container"]
+            del kwargs["container"]
+        else:
+            container = self
+        container.Add(widget, *args, **kwargs)
+
+    # Hotend & bed temperatures #
+
+    # Hotend temp
+    add("htemp_label", wx.StaticText(parentpanel, -1, _("Heat:")), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
+    htemp_choices = [root.temps[i] + " (" + i + ")" for i in sorted(root.temps.keys(), key = lambda x:root.temps[x])]
+
+    root.settoff = make_button(parentpanel, _("Off"), lambda e: root.do_settemp("off"), _("Switch Hotend Off"), size = (38, -1), style = wx.BU_EXACTFIT)
+    root.printerControls.append(root.settoff)
+    add("htemp_off", root.settoff)
+
+    if root.settings.last_temperature not in map(float, root.temps.values()):
+        htemp_choices = [str(root.settings.last_temperature)] + htemp_choices
+    root.htemp = wx.ComboBox(parentpanel, -1, choices = htemp_choices,
+                             style = wx.CB_DROPDOWN, size = (80, -1))
+    root.htemp.SetToolTip(wx.ToolTip(_("Select Temperature for Hotend")))
+    root.htemp.Bind(wx.EVT_COMBOBOX, root.htemp_change)
+
+    add("htemp_val", root.htemp)
+    root.settbtn = make_button(parentpanel, _("Set"), root.do_settemp, _("Switch Hotend On"), size = (38, -1), style = wx.BU_EXACTFIT)
+    root.printerControls.append(root.settbtn)
+    add("htemp_set", root.settbtn, flag = wx.EXPAND)
+
+
+
 def add_extra_controls(self, root, parentpanel, extra_buttons = None, mini_mode = False):
     standalone_mode = extra_buttons is not None
     base_line = 1 if standalone_mode else 2
@@ -344,10 +397,11 @@ def add_extra_controls(self, root, parentpanel, extra_buttons = None, mini_mode 
 
 class ControlsSizer(wx.GridBagSizer):
 
-    def __init__(self, root, parentpanel = None, standalone_mode = False, mini_mode = False):
+    def __init__(self, root, parentpanel = None, standalone_mode = False, mini_mode = False, laser_mode = False):
         super(ControlsSizer, self).__init__()
         if not parentpanel: parentpanel = root.panel
         if mini_mode: self.make_mini(root, parentpanel)
+        elif laser_mode: self.make_laser(root, parentpanel)
         else: self.make_standard(root, parentpanel, standalone_mode)
 
     def make_standard(self, root, parentpanel, standalone_mode):
@@ -415,3 +469,22 @@ class ControlsSizer(wx.GridBagSizer):
         self.Add(btn, pos = pos_mapping["motorsoff"], span = span_mapping["motorsoff"], flag = wx.EXPAND)
 
         add_extra_controls(self, root, parentpanel, None, True)
+
+    def make_laser(self, root, parentpanel):
+        root.xyb = XYButtonsMini(parentpanel, root.moveXY, root.homeButtonClicked,
+                                 root.spacebarAction, root.bgcolor,
+                                 zcallback = root.moveZ)
+        self.Add(root.xyb, pos = (1, 0), span = (1, 4), flag = wx.ALIGN_CENTER)
+        root.zb = ZButtonsMini(parentpanel, root.moveZ, root.bgcolor)
+        self.Add(root.zb, pos = (0, 4), span = (2, 1), flag = wx.ALIGN_CENTER)
+        wx.CallAfter(root.xyb.SetFocus)
+
+        pos_mapping = {"motorsoff": (0, 0),
+                       }
+        span_mapping = {"motorsoff": (1, 4),
+                        }
+        btn = make_custom_button(root, parentpanel, root.cpbuttons["motorsoff"])
+        self.Add(btn, pos = pos_mapping["motorsoff"], span = span_mapping["motorsoff"], flag = wx.EXPAND)
+
+        add_laser_controls(self, root, parentpanel)
+

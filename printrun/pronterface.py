@@ -277,6 +277,8 @@ class PronterWindow(MainWindow, pronsole.pronsole):
         # Create UI
         if self.settings.uimode in (_("Tabbed"), _("Tabbed with platers")):
             self.createTabbedGui()
+        elif self.settings.uimode == _("Laser"):
+            self.createLaserGui()
         else:
             self.createGui(self.settings.uimode == _("Compact"),
                            self.settings.controlsmode == "Mini")
@@ -835,7 +837,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         self.settings._add(BooleanSetting("circular_bed", False, _("Circular build platform"), _("Draw a circular (or oval) build platform instead of a rectangular one"), "Printer"), self.update_bed_viz)
         self.settings._add(SpinSetting("extruders", 0, 1, 5, _("Extruders count"), _("Number of extruders"), "Printer"))
         self.settings._add(BooleanSetting("clamp_jogging", False, _("Clamp manual moves"), _("Prevent manual moves from leaving the specified build dimensions"), "Printer"))
-        self.settings._add(ComboSetting("uimode", _("Standard"), [_("Standard"), _("Compact"), _("Tabbed"), _("Tabbed with platers")], _("Interface mode"), _("Standard interface is a one-page, three columns layout with controls/visualization/log\nCompact mode is a one-page, two columns layout with controls + log/visualization\nTabbed mode is a two-pages mode, where the first page shows controls and the second one shows visualization and log.\nTabbed with platers mode is the same as Tabbed, but with two extra pages for the STL and G-Code platers."), "UI"), self.reload_ui)
+        self.settings._add(ComboSetting("uimode", _("Laser"), [_("Standard"), _("Compact"), _("Tabbed"), _("Tabbed with platers"), _("Laser")], _("Interface mode"), _("Standard interface is a one-page, three columns layout with controls/visualization/log\nCompact mode is a one-page, two columns layout with controls + log/visualization\nTabbed mode is a two-pages mode, where the first page shows controls and the second one shows visualization and log.\nTabbed with platers mode is the same as Tabbed, but with two extra pages for the STL and G-Code platers."), "UI"), self.reload_ui)
         self.settings._add(ComboSetting("controlsmode", "Standard", ["Standard", "Mini"], _("Controls mode"), _("Standard controls include all controls needed for printer setup and calibration, while Mini controls are limited to the ones needed for daily printing"), "UI"), self.reload_ui)
         self.settings._add(BooleanSetting("slic3rintegration", False, _("Enable Slic3r integration"), _("Add a menu to select Slic3r profiles directly from Pronterface"), "UI"), self.reload_ui)
         self.settings._add(BooleanSetting("slic3rupdate", False, _("Update Slic3r default presets"), _("When selecting a profile in Slic3r integration menu, also save it as the default Slic3r preset"), "UI"))
@@ -2321,19 +2323,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         file_gcode = open(pos_file_gcode, 'w')  #Creo il file
         
         
-        #Configurazioni iniziali standard Gcode
-        file_gcode.write('; Generated with:\n; "BEC Gcode generator"\n; by ATOM 3D Printer\n;\n;\n;\n')
-        #HOMING
-        if homing == 1:
-            file_gcode.write('G28; home all axes\n')
-        elif homing == 2:
-            file_gcode.write('$H; home all axes\n')
-        else:
-            pass
-        file_gcode.write('G21; Set units to millimeters\n')         
-        file_gcode.write('G90; Use absolute coordinates\n')             
-        file_gcode.write('G92; Coordinate Offset\n')    
-        file_gcode.write('G00 Z'+ str(focus_dist)+'n\n')    
+
 
         #Creazione del Gcode
         
@@ -2382,6 +2372,19 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         file_gcode2.write(gcode_box)
         file_gcode2.close()
 
+        #prepare 
+        file_gcode.write('; Generated with:\n; "BEC Gcode generator"\n; by ATOM 3D Printer\n;\n;\n;\n')
+        #HOMING
+        if homing == 1:
+            file_gcode.write('G28; home all axes\n')
+        elif homing == 2:
+            file_gcode.write('$H; home all axes\n')
+        else:
+            pass
+        file_gcode.write('G21; Set units to millimeters\n')         
+        file_gcode.write('G90; Use absolute coordinates\n')             
+        file_gcode.write('G92; Coordinate Offset\n')    
+        file_gcode.write('G00 Z'+ str(focus_dist)+'n\n')    
 
         for y in range(h):
             pGcode_y = (float(y) - float(h)/2. )/Scala
