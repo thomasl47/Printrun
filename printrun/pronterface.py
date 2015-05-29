@@ -2355,6 +2355,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         pGcode_ymin = (float(ymin) - float(h)/2. )/Scala
 
         gcode_box = '; Generated with:\n; "BEC Gcode generator"\n; by ATOM 3D Printer\n;\n;\n;\n'
+        gcode_box += 'G28; home all axes\n'
         gcode_box += 'G21; Set units to millimeters\n'
         gcode_box += 'G90; Use absolute coordinates\n'
         gcode_box += 'G92; Coordinate Offset\n'
