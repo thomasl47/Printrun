@@ -145,23 +145,23 @@ class MainWindow(wx.Frame):
         self.mainsizer_page1.Add(page1panel1, 0, wx.EXPAND)
 
         print(self.mainsizer_page1)
-        self.m_staticText2 = wx.StaticText( self, wx.ID_ANY, u"Step 1 使用原噴頭做自動校正", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText2 = wx.StaticText( self.panel, wx.ID_ANY, u"Step 1 使用原噴頭做自動校正", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText2.Wrap( -1 )
         self.mainsizer_page1.Add( self.m_staticText2, 0, wx.ALL, 5 )
 
-        self.m_staticline6 = wx.StaticLine( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
+        self.m_staticline6 = wx.StaticLine( self.panel, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
         self.mainsizer_page1.Add( self.m_staticline6, 0, wx.EXPAND |wx.ALL, 5 )
 
         bSizer3 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.m_bitmap1 = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_bitmap1 = wx.StaticBitmap( self.panel, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer3.Add( self.m_bitmap1, 0, wx.ALL, 5 )
 
-        self.m_staticText3 = wx.StaticText( self, wx.ID_ANY, u"Auto\nCorrect", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText3 = wx.StaticText( self.panel, wx.ID_ANY, u"Auto\nCorrect", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText3.Wrap( -1 )
         bSizer3.Add( self.m_staticText3, 0, wx.ALL, 5 )
 
-        self.m_button4 = wx.Button( self, wx.ID_ANY, u"G29", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_button4 = wx.Button( self.panel, wx.ID_ANY, u"G29", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_button4.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), 70, 90, 90, False, wx.EmptyString ) )
         self.m_button4.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_HIGHLIGHTTEXT ) )
         self.m_button4.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOWFRAME ) )
@@ -171,37 +171,37 @@ class MainWindow(wx.Frame):
 
         self.mainsizer_page1.Add( bSizer3, 1, wx.EXPAND, 5 )
 
-        self.m_staticline8 = wx.StaticLine( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
+        self.m_staticline8 = wx.StaticLine( self.panel, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
         self.mainsizer_page1.Add( self.m_staticline8, 0, wx.EXPAND |wx.ALL, 5 )
 
-        self.m_staticText5 = wx.StaticText( self, wx.ID_ANY, u"Step 2 更換雷射噴頭", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText5 = wx.StaticText( self.panel, wx.ID_ANY, u"Step 2 更換雷射噴頭", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText5.Wrap( -1 )
         self.mainsizer_page1.Add( self.m_staticText5, 0, wx.ALL, 5 )
 
-        self.m_staticline9 = wx.StaticLine( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
+        self.m_staticline9 = wx.StaticLine( self.panel, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
         self.mainsizer_page1.Add( self.m_staticline9, 0, wx.EXPAND |wx.ALL, 5 )
 
-        self.m_staticText6 = wx.StaticText( self, wx.ID_ANY, u"Step 3 對焦", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText6 = wx.StaticText( self.panel, wx.ID_ANY, u"Step 3 對焦", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText6.Wrap( -1 )
         self.mainsizer_page1.Add( self.m_staticText6, 0, wx.ALL, 5 )
 
         bSizer5 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.m_bitmap3 = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_bitmap3 = wx.StaticBitmap( self.panel, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer5.Add( self.m_bitmap3, 0, wx.ALL, 5 )
 
-        self.m_staticText7 = wx.StaticText( self, wx.ID_ANY, u"LASER\nFUNCTION", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText7 = wx.StaticText( self.panel, wx.ID_ANY, u"LASER\nFUNCTION", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText7.Wrap( -1 )
         bSizer5.Add( self.m_staticText7, 0, wx.ALL, 5 )
 
-        self.m_toggleBtn1 = wx.ToggleButton( self, wx.ID_ANY, u"ON", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_toggleBtn1 = wx.ToggleButton( self.panel, wx.ID_ANY, u"ON", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_toggleBtn1.SetValue( True )
         self.m_toggleBtn1.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_HIGHLIGHTTEXT ) )
         self.m_toggleBtn1.SetBackgroundColour( wx.Colour( 255, 0, 0 ) )
 
         bSizer5.Add( self.m_toggleBtn1, 0, wx.ALL, 5 )
 
-        self.m_toggleBtn2 = wx.ToggleButton( self, wx.ID_ANY, u"OFF", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_toggleBtn2 = wx.ToggleButton( self.panel, wx.ID_ANY, u"OFF", wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer5.Add( self.m_toggleBtn2, 0, wx.ALL, 5 )
 
 
@@ -209,24 +209,24 @@ class MainWindow(wx.Frame):
 
         bSizer6 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.m_bitmap4 = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_bitmap4 = wx.StaticBitmap( self.panel, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer6.Add( self.m_bitmap4, 0, wx.ALL, 5 )
 
-        self.m_staticText8 = wx.StaticText( self, wx.ID_ANY, u"FOCAL\nDISTANCE", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText8 = wx.StaticText( self.panel, wx.ID_ANY, u"FOCAL\nDISTANCE", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText8.Wrap( -1 )
         bSizer6.Add( self.m_staticText8, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-        self.m_spinCtrl2 = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
+        self.m_spinCtrl2 = wx.SpinCtrl( self.panel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
         bSizer6.Add( self.m_spinCtrl2, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-        self.m_staticText9 = wx.StaticText( self, wx.ID_ANY, u"+ THICKNESS", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText9 = wx.StaticText( self.panel, wx.ID_ANY, u"+ THICKNESS", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_staticText9.Wrap( -1 )
         bSizer6.Add( self.m_staticText9, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-        self.m_textCtrl3 = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_textCtrl3 = wx.TextCtrl( self.panel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer6.Add( self.m_textCtrl3, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
 
-        self.m_button10 = wx.Button( self, wx.ID_ANY, u"TEST", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_button10 = wx.Button( self.panel, wx.ID_ANY, u"TEST", wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer6.Add( self.m_button10, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
 
 
@@ -234,19 +234,19 @@ class MainWindow(wx.Frame):
 
         bSizer7 = wx.BoxSizer( wx.HORIZONTAL )
 
-        self.m_button11 = wx.Button( self, wx.ID_ANY, u"PREVIEW", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_button11 = wx.Button( self.panel, wx.ID_ANY, u"PREVIEW", wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer7.Add( self.m_button11, 0, wx.ALL, 5 )
 
-        self.m_button12 = wx.Button( self, wx.ID_ANY, u"START", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_button12 = wx.Button( self.panel, wx.ID_ANY, u"START", wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer7.Add( self.m_button12, 0, wx.ALL, 5 )
 
-        self.m_button13 = wx.Button( self, wx.ID_ANY, u"PAUSE", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_button13 = wx.Button( self.panel, wx.ID_ANY, u"PAUSE", wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer7.Add( self.m_button13, 0, wx.ALL, 5 )
 
-        self.m_button14 = wx.Button( self, wx.ID_ANY, u"STOP", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_button14 = wx.Button( self.panel, wx.ID_ANY, u"STOP", wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer7.Add( self.m_button14, 0, wx.ALL, 5 )
 
-        self.m_button15 = wx.Button( self, wx.ID_ANY, u"EXPORT", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_button15 = wx.Button( self.panel, wx.ID_ANY, u"EXPORT", wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer7.Add( self.m_button15, 0, wx.ALL, 5 )
 
 
