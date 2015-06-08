@@ -1,4 +1,4 @@
-# This file is part of the Printrun suite.
+﻿# This file is part of the Printrun suite.
 #
 # Printrun is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@ except:
     raise
 
 from printrun.utils import install_locale
+
 install_locale('pronterface')
 
 from .controls import ControlsSizer, add_extra_controls
@@ -29,8 +30,8 @@ from .viz import VizPane
 from .log import LogPane
 from .toolbar import MainToolbar
 
-class ToggleablePane(wx.BoxSizer):
 
+class ToggleablePane(wx.BoxSizer):
     def __init__(self, root, label, parentpanel, parentsizers):
         super(ToggleablePane, self).__init__(wx.HORIZONTAL)
         if not parentpanel: parentpanel = root.panel
@@ -39,7 +40,7 @@ class ToggleablePane(wx.BoxSizer):
         self.parentpanel = parentpanel
         self.parentsizers = parentsizers
         self.panepanel = root.newPanel(parentpanel)
-        self.button = wx.Button(parentpanel, -1, label, size = (22, 18), style = wx.BU_EXACTFIT)
+        self.button = wx.Button(parentpanel, -1, label, size=(22, 18), style=wx.BU_EXACTFIT)
         self.button.Bind(wx.EVT_BUTTON, self.toggle)
 
     def toggle(self, event):
@@ -51,6 +52,7 @@ class ToggleablePane(wx.BoxSizer):
             self.on_show()
         self.visible = not self.visible
         self.button.SetLabel(">" if self.button.GetLabel() == "<" else "<")
+
 
 class LeftPaneToggleable(ToggleablePane):
     def __init__(self, root, parentpanel, parentsizers):
@@ -74,6 +76,7 @@ class LeftPaneToggleable(ToggleablePane):
                     sizer.SetSashPosition(sizer.GetSize()[0] - button_width)
             else:
                 sizer.Layout()
+
 
 class LogPaneToggleable(ToggleablePane):
     def __init__(self, root, parentpanel, parentsizers):
@@ -110,8 +113,8 @@ class LogPaneToggleable(ToggleablePane):
         for sizer in self.parentsizers:
             sizer.Layout()
 
-class MainWindow(wx.Frame):
 
+class MainWindow(wx.Frame):
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         # this list will contain all controls that should be only enabled
@@ -124,16 +127,134 @@ class MainWindow(wx.Frame):
         self.panels = []
         self.printerControls = []
 
-    def newPanel(self, parent, add_to_list = True):
+    def newPanel(self, parent, add_to_list=True):
         panel = wx.Panel(parent)
         self.registerPanel(panel, add_to_list)
         return panel
 
-    def registerPanel(self, panel, add_to_list = True):
+    def registerPanel(self, panel, add_to_list=True):
         panel.SetBackgroundColour(self.bgcolor)
         if add_to_list: self.panels.append(panel)
 
     def createLaserGui(self):
+
+        self.mainsizer_page1 = wx.BoxSizer(wx.VERTICAL)
+        page1panel1 = self.newPanel(self.panel)
+        self.toolbarsizer = MainToolbar(self, page1panel1, use_wrapsizer=True)
+        page1panel1.SetSizer(self.toolbarsizer)
+        self.mainsizer_page1.Add(page1panel1, 0, wx.EXPAND)
+
+        print(self.mainsizer_page1)
+        self.m_staticText2 = wx.StaticText( self, wx.ID_ANY, u"Step 1 使用原噴頭做自動校正", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText2.Wrap( -1 )
+        self.mainsizer_page1.Add( self.m_staticText2, 0, wx.ALL, 5 )
+
+        self.m_staticline6 = wx.StaticLine( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
+        self.mainsizer_page1.Add( self.m_staticline6, 0, wx.EXPAND |wx.ALL, 5 )
+
+        bSizer3 = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.m_bitmap1 = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer3.Add( self.m_bitmap1, 0, wx.ALL, 5 )
+
+        self.m_staticText3 = wx.StaticText( self, wx.ID_ANY, u"Auto\nCorrect", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText3.Wrap( -1 )
+        bSizer3.Add( self.m_staticText3, 0, wx.ALL, 5 )
+
+        self.m_button4 = wx.Button( self, wx.ID_ANY, u"G29", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_button4.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), 70, 90, 90, False, wx.EmptyString ) )
+        self.m_button4.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_HIGHLIGHTTEXT ) )
+        self.m_button4.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOWFRAME ) )
+
+        bSizer3.Add( self.m_button4, 0, wx.ALL, 5 )
+
+
+        self.mainsizer_page1.Add( bSizer3, 1, wx.EXPAND, 5 )
+
+        self.m_staticline8 = wx.StaticLine( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
+        self.mainsizer_page1.Add( self.m_staticline8, 0, wx.EXPAND |wx.ALL, 5 )
+
+        self.m_staticText5 = wx.StaticText( self, wx.ID_ANY, u"Step 2 更換雷射噴頭", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText5.Wrap( -1 )
+        self.mainsizer_page1.Add( self.m_staticText5, 0, wx.ALL, 5 )
+
+        self.m_staticline9 = wx.StaticLine( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
+        self.mainsizer_page1.Add( self.m_staticline9, 0, wx.EXPAND |wx.ALL, 5 )
+
+        self.m_staticText6 = wx.StaticText( self, wx.ID_ANY, u"Step 3 對焦", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText6.Wrap( -1 )
+        self.mainsizer_page1.Add( self.m_staticText6, 0, wx.ALL, 5 )
+
+        bSizer5 = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.m_bitmap3 = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer5.Add( self.m_bitmap3, 0, wx.ALL, 5 )
+
+        self.m_staticText7 = wx.StaticText( self, wx.ID_ANY, u"LASER\nFUNCTION", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText7.Wrap( -1 )
+        bSizer5.Add( self.m_staticText7, 0, wx.ALL, 5 )
+
+        self.m_toggleBtn1 = wx.ToggleButton( self, wx.ID_ANY, u"ON", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_toggleBtn1.SetValue( True )
+        self.m_toggleBtn1.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_HIGHLIGHTTEXT ) )
+        self.m_toggleBtn1.SetBackgroundColour( wx.Colour( 255, 0, 0 ) )
+
+        bSizer5.Add( self.m_toggleBtn1, 0, wx.ALL, 5 )
+
+        self.m_toggleBtn2 = wx.ToggleButton( self, wx.ID_ANY, u"OFF", wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer5.Add( self.m_toggleBtn2, 0, wx.ALL, 5 )
+
+
+        self.mainsizer_page1.Add( bSizer5, 1, wx.EXPAND, 5 )
+
+        bSizer6 = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.m_bitmap4 = wx.StaticBitmap( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer6.Add( self.m_bitmap4, 0, wx.ALL, 5 )
+
+        self.m_staticText8 = wx.StaticText( self, wx.ID_ANY, u"FOCAL\nDISTANCE", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText8.Wrap( -1 )
+        bSizer6.Add( self.m_staticText8, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+
+        self.m_spinCtrl2 = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 0, 10, 0 )
+        bSizer6.Add( self.m_spinCtrl2, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+
+        self.m_staticText9 = wx.StaticText( self, wx.ID_ANY, u"+ THICKNESS", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText9.Wrap( -1 )
+        bSizer6.Add( self.m_staticText9, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+
+        self.m_textCtrl3 = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer6.Add( self.m_textCtrl3, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
+
+        self.m_button10 = wx.Button( self, wx.ID_ANY, u"TEST", wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer6.Add( self.m_button10, 0, wx.ALIGN_CENTER_VERTICAL, 5 )
+
+
+        self.mainsizer_page1.Add( bSizer6, 1, wx.EXPAND, 5 )
+
+        bSizer7 = wx.BoxSizer( wx.HORIZONTAL )
+
+        self.m_button11 = wx.Button( self, wx.ID_ANY, u"PREVIEW", wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer7.Add( self.m_button11, 0, wx.ALL, 5 )
+
+        self.m_button12 = wx.Button( self, wx.ID_ANY, u"START", wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer7.Add( self.m_button12, 0, wx.ALL, 5 )
+
+        self.m_button13 = wx.Button( self, wx.ID_ANY, u"PAUSE", wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer7.Add( self.m_button13, 0, wx.ALL, 5 )
+
+        self.m_button14 = wx.Button( self, wx.ID_ANY, u"STOP", wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer7.Add( self.m_button14, 0, wx.ALL, 5 )
+
+        self.m_button15 = wx.Button( self, wx.ID_ANY, u"EXPORT", wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer7.Add( self.m_button15, 0, wx.ALL, 5 )
+
+
+        self.mainsizer_page1.Add( bSizer7, 1, wx.EXPAND, 5 )
+
+        self.panel.SetSizerAndFit(self.mainsizer_page1)
+
+    def cerateLaserGuiBackup(self):
         self.notesizer = wx.BoxSizer(wx.VERTICAL)
         self.notebook = wx.Notebook(self.panel)
         self.notebook.SetBackgroundColour(self.bgcolor)
@@ -142,7 +263,7 @@ class MainWindow(wx.Frame):
         self.mainsizer_page1 = wx.BoxSizer(wx.VERTICAL)
         page1panel1 = self.newPanel(page1panel)
         page1panel2 = self.newPanel(page1panel)
-        self.toolbarsizer = MainToolbar(self, page1panel1, use_wrapsizer = True)
+        self.toolbarsizer = MainToolbar(self, page1panel1, use_wrapsizer=True)
         page1panel1.SetSizer(self.toolbarsizer)
         self.mainsizer_page1.Add(page1panel1, 0, wx.EXPAND)
         self.lowersizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -151,15 +272,15 @@ class MainWindow(wx.Frame):
         controls_sizer = ControlsSizer(self, page1panel2, True, False, True)
         leftsizer.Add(controls_sizer, 1, wx.ALIGN_CENTER)
         rightsizer = wx.BoxSizer(wx.VERTICAL)
-        #extracontrols = wx.GridBagSizer()
-        #add_extra_controls(extracontrols, self, page1panel2, controls_sizer.extra_buttons)
-        #rightsizer.AddStretchSpacer()
-        #rightsizer.Add(extracontrols, 0, wx.ALIGN_CENTER)
-        self.lowersizer.Add(leftsizer, 0, wx.ALIGN_CENTER | wx.RIGHT, border = 10)
+        # extracontrols = wx.GridBagSizer()
+        # add_extra_controls(extracontrols, self, page1panel2, controls_sizer.extra_buttons)
+        # rightsizer.AddStretchSpacer()
+        # rightsizer.Add(extracontrols, 0, wx.ALIGN_CENTER)
+        self.lowersizer.Add(leftsizer, 0, wx.ALIGN_CENTER | wx.RIGHT, border=10)
         self.lowersizer.Add(rightsizer, 1, wx.ALIGN_CENTER)
         self.mainsizer_page1.Add(page1panel2, 1)
         self.mainsizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.splitterwindow = wx.SplitterWindow(page2panel, style = wx.SP_3D)
+        self.splitterwindow = wx.SplitterWindow(page2panel, style=wx.SP_3D)
         page2sizer1 = wx.BoxSizer(wx.HORIZONTAL)
         page2panel1 = self.newPanel(self.splitterwindow)
         page2sizer2 = wx.BoxSizer(wx.HORIZONTAL)
@@ -185,8 +306,10 @@ class MainWindow(wx.Frame):
         self.Bind(wx.EVT_CLOSE, self.kill)
 
         # Custom buttons
-        if wx.VERSION > (2, 9): self.cbuttonssizer = wx.WrapSizer(wx.HORIZONTAL)
-        else: self.cbuttonssizer = wx.GridBagSizer()
+        if wx.VERSION > (2, 9):
+            self.cbuttonssizer = wx.WrapSizer(wx.HORIZONTAL)
+        else:
+            self.cbuttonssizer = wx.GridBagSizer()
         self.cbuttonssizer = wx.GridBagSizer()
         self.centerpanel = self.newPanel(page1panel2)
         self.centerpanel.SetSizer(self.cbuttonssizer)
@@ -210,7 +333,7 @@ class MainWindow(wx.Frame):
         self.mainsizer_page1 = wx.BoxSizer(wx.VERTICAL)
         page1panel1 = self.newPanel(page1panel)
         page1panel2 = self.newPanel(page1panel)
-        self.toolbarsizer = MainToolbar(self, page1panel1, use_wrapsizer = True)
+        self.toolbarsizer = MainToolbar(self, page1panel1, use_wrapsizer=True)
         page1panel1.SetSizer(self.toolbarsizer)
         self.mainsizer_page1.Add(page1panel1, 0, wx.EXPAND)
         self.lowersizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -223,11 +346,11 @@ class MainWindow(wx.Frame):
         add_extra_controls(extracontrols, self, page1panel2, controls_sizer.extra_buttons)
         rightsizer.AddStretchSpacer()
         rightsizer.Add(extracontrols, 0, wx.ALIGN_CENTER)
-        self.lowersizer.Add(leftsizer, 0, wx.ALIGN_CENTER | wx.RIGHT, border = 10)
+        self.lowersizer.Add(leftsizer, 0, wx.ALIGN_CENTER | wx.RIGHT, border=10)
         self.lowersizer.Add(rightsizer, 1, wx.ALIGN_CENTER)
         self.mainsizer_page1.Add(page1panel2, 1)
         self.mainsizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.splitterwindow = wx.SplitterWindow(page2panel, style = wx.SP_3D)
+        self.splitterwindow = wx.SplitterWindow(page2panel, style=wx.SP_3D)
         page2sizer1 = wx.BoxSizer(wx.HORIZONTAL)
         page2panel1 = self.newPanel(self.splitterwindow)
         page2sizer2 = wx.BoxSizer(wx.HORIZONTAL)
@@ -250,17 +373,18 @@ class MainWindow(wx.Frame):
         if self.settings.uimode == _("Tabbed with platers"):
             from printrun.stlplater import StlPlaterPanel
             from printrun.gcodeplater import GcodePlaterPanel
-            page3panel = StlPlaterPanel(parent = self.notebook,
-                                        callback = self.platecb,
-                                        build_dimensions = self.build_dimensions_list,
-                                        circular_platform = self.settings.circular_bed,
-                                        simarrange_path = self.settings.simarrange_path,
-                                        antialias_samples = int(self.settings.antialias3dsamples))
-            page4panel = GcodePlaterPanel(parent = self.notebook,
-                                          callback = self.platecb,
-                                          build_dimensions = self.build_dimensions_list,
-                                          circular_platform = self.settings.circular_bed,
-                                          antialias_samples = int(self.settings.antialias3dsamples))
+
+            page3panel = StlPlaterPanel(parent=self.notebook,
+                                        callback=self.platecb,
+                                        build_dimensions=self.build_dimensions_list,
+                                        circular_platform=self.settings.circular_bed,
+                                        simarrange_path=self.settings.simarrange_path,
+                                        antialias_samples=int(self.settings.antialias3dsamples))
+            page4panel = GcodePlaterPanel(parent=self.notebook,
+                                          callback=self.platecb,
+                                          build_dimensions=self.build_dimensions_list,
+                                          circular_platform=self.settings.circular_bed,
+                                          antialias_samples=int(self.settings.antialias3dsamples))
             self.registerPanel(page3panel)
             self.registerPanel(page4panel)
             self.notebook.AddPage(page3panel, _("Plater"))
@@ -270,8 +394,10 @@ class MainWindow(wx.Frame):
         self.Bind(wx.EVT_CLOSE, self.kill)
 
         # Custom buttons
-        if wx.VERSION > (2, 9): self.cbuttonssizer = wx.WrapSizer(wx.HORIZONTAL)
-        else: self.cbuttonssizer = wx.GridBagSizer()
+        if wx.VERSION > (2, 9):
+            self.cbuttonssizer = wx.WrapSizer(wx.HORIZONTAL)
+        else:
+            self.cbuttonssizer = wx.GridBagSizer()
         self.cbuttonssizer = wx.GridBagSizer()
         self.centerpanel = self.newPanel(page1panel2)
         self.centerpanel.SetSizer(self.cbuttonssizer)
@@ -286,7 +412,7 @@ class MainWindow(wx.Frame):
         self.SetMinSize(self.ClientToWindowSize(minsize))  # client to window
         self.Fit()
 
-    def createGui(self, compact = False, mini = False):
+    def createGui(self, compact=False, mini=False):
         self.mainsizer = wx.BoxSizer(wx.VERTICAL)
         self.lowersizer = wx.BoxSizer(wx.HORIZONTAL)
         upperpanel = self.newPanel(self.panel, False)
@@ -299,7 +425,7 @@ class MainWindow(wx.Frame):
         leftpanel.SetSizer(left_pane)
         left_real_panel = left_pane.panepanel
         controls_panel = self.newPanel(left_real_panel)
-        controls_sizer = ControlsSizer(self, controls_panel, mini_mode = mini)
+        controls_sizer = ControlsSizer(self, controls_panel, mini_mode=mini)
         controls_panel.SetSizer(controls_sizer)
         left_sizer = wx.BoxSizer(wx.VERTICAL)
         left_sizer.Add(controls_panel, 1, wx.EXPAND)
@@ -309,7 +435,7 @@ class MainWindow(wx.Frame):
             rightpanel = self.newPanel(lowerpanel)
             rightsizer = wx.BoxSizer(wx.VERTICAL)
             rightpanel.SetSizer(rightsizer)
-            self.splitterwindow = wx.SplitterWindow(rightpanel, style = wx.SP_3D)
+            self.splitterwindow = wx.SplitterWindow(rightpanel, style=wx.SP_3D)
             self.splitterwindow.SetMinimumPaneSize(150)
             self.splitterwindow.SetSashGravity(0.8)
             rightsizer.Add(self.splitterwindow, 1, wx.EXPAND)
@@ -323,11 +449,13 @@ class MainWindow(wx.Frame):
             logpanel = self.newPanel(left_real_panel)
         viz_pane = VizPane(self, vizpanel)
         # Custom buttons
-        if wx.VERSION > (2, 9): self.cbuttonssizer = wx.WrapSizer(wx.HORIZONTAL)
-        else: self.cbuttonssizer = wx.GridBagSizer()
+        if wx.VERSION > (2, 9):
+            self.cbuttonssizer = wx.WrapSizer(wx.HORIZONTAL)
+        else:
+            self.cbuttonssizer = wx.GridBagSizer()
         self.centerpanel = self.newPanel(vizpanel)
         self.centerpanel.SetSizer(self.cbuttonssizer)
-        viz_pane.Add(self.centerpanel, 0, flag = wx.ALIGN_CENTER)
+        viz_pane.Add(self.centerpanel, 0, flag=wx.ALIGN_CENTER)
         vizpanel.SetSizer(viz_pane)
         if compact:
             log_pane = LogPane(self, logpanel)
@@ -362,8 +490,8 @@ class MainWindow(wx.Frame):
         self.cbuttons_reload()
 
     def gui_set_connected(self):
-        self.xyb.enable()
-        self.zb.enable()
+        #self.xyb.enable()
+        #self.zb.enable()
         for control in self.printerControls:
             control.Enable()
 
@@ -373,5 +501,5 @@ class MainWindow(wx.Frame):
         self.recoverbtn.Disable()
         for control in self.printerControls:
             control.Disable()
-        self.xyb.disable()
-        self.zb.disable()
+        #self.xyb.disable()
+        #self.zb.disable()

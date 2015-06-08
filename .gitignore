@@ -10,3 +10,4 @@ printrun/gcoder_line.c
 printrun/gcoder_line.so
 dist/
 build/
+.idea/

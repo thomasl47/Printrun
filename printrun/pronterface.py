@@ -2412,7 +2412,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
                     pGcode_x = (float(x) - float(w)/2. )/Scala
                     if matrice_BN[y][x] == N :
                         if Laser_ON == False :
-                            file_gcode.write('G00 X' + str(pGcode_x) + ' Y' + str(pGcode_y) +' F' + str(speed_OFF) + '\n') 
+                            file_gcode.write('G00 X' + str(pGcode_x) + ' Y' + str(pGcode_y) + ' F' + str(speed_OFF) + '\n')
                             file_gcode.write('M03; Laser ON\n')         
                             Laser_ON = True
                         if  Laser_ON == True :   
