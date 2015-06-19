@@ -4,6 +4,6 @@ pyserial
 wxPython
 numpy
 pyglet>=1.1
-pycairo
+--allow-external pycairo
 cairosvg
 psutil>=2.0

@@ -262,7 +262,8 @@ class PronterWindow(MainWindow, pronsole.pronsole):
         # If UI is being recreated, delete current one
         if self.ui_ready:
             # Store log console content
-            logcontent = self.logbox.GetValue()
+            if(self.logbox):
+                logcontent = self.logbox.GetValue()
             # Create a temporary panel to reparent widgets with state we want
             # to retain across UI changes
             temppanel = wx.Panel(self)
@@ -275,6 +276,8 @@ class PronterWindow(MainWindow, pronsole.pronsole):
             self.reset_ui()
 
         # Create UI
+        # Ignore uimode until fix mac menubar issue
+#         self.createLaserGui()
         if self.settings.uimode in (_("Tabbed"), _("Tabbed with platers")):
             self.createTabbedGui()
         elif self.settings.uimode == _("Laser"):
@@ -841,7 +844,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         self.settings._add(ComboSetting("controlsmode", "Standard", ["Standard", "Mini"], _("Controls mode"), _("Standard controls include all controls needed for printer setup and calibration, while Mini controls are limited to the ones needed for daily printing"), "UI"), self.reload_ui)
         self.settings._add(BooleanSetting("slic3rintegration", False, _("Enable Slic3r integration"), _("Add a menu to select Slic3r profiles directly from Pronterface"), "UI"), self.reload_ui)
         self.settings._add(BooleanSetting("slic3rupdate", False, _("Update Slic3r default presets"), _("When selecting a profile in Slic3r integration menu, also save it as the default Slic3r preset"), "UI"))
-        self.settings._add(ComboSetting("mainviz", "3D", ["2D", "3D", "None"], _("Main visualization"), _("Select visualization for main window."), "Viewer"), self.reload_ui)
+        self.settings._add(ComboSetting("mainviz", "2D", ["2D", "3D", "None"], _("Main visualization"), _("Select visualization for main window."), "Viewer"), self.reload_ui)
         self.settings._add(BooleanSetting("viz3d", False, _("Use 3D in GCode viewer window"), _("Use 3D mode instead of 2D layered mode in the visualization window"), "Viewer"), self.reload_ui)
         self.settings._add(StaticTextSetting("separator_3d_viewer", _("3D viewer options"), "", group = "Viewer"))
         self.settings._add(BooleanSetting("light3d", False, _("Use a lighter 3D visualization"), _("Use a lighter visualization with simple lines instead of extruded paths for 3D viewer"), "Viewer"), self.reload_ui)
@@ -1362,13 +1365,15 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
             dlg.Destroy()
 
     def convert_png2gcode(self, filename):
-        self.filename = filename
         # try:
         #     import png2gcode
         # except:
         #     self.logError("load fail\n")
 
+        self.filename = 'out.gcode'
         self.PNGtoGcode(str(filename))
+
+        self.load_gcode_async(self.filename)
 
 
 
@@ -2245,11 +2250,14 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
             with open(configfile, "w") as f:
                 f.write(data)
 
-    def PNGtoGcode(self,pos_file_png_exported,pos_file_png_BW="D:\Bw.png",pos_file_gcode='D:\out.gcode'):
+    #def PNGtoGcode(self,pos_file_png_exported,pos_file_png_BW="D:\Bw.png",pos_file_gcode='D:\out.gcode'):
+    def PNGtoGcode(self,pos_file_png_exported):
         
         ######## GENERO IMMAGINE IN SCALA DI GRIGI ########
         #Scorro l immagine e la faccio diventare una matrice composta da list
 
+        pos_file_gcode = self.filename;
+        self.previewfilename = 'preview.gcode';
         #public options
         speed_ON = 100  #moving speed when laser on 
         speed_OFF = 3000 #moving speed when laser off
@@ -2361,15 +2369,20 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         gcode_box += 'G92; Coordinate Offset\n'
         gcode_box += 'G00 Z'+ str(focus_dist)+'\n'
         gcode_box += 'M05; Laser OFF\n'
-        gcode_box += 'G01 X' + str(pGcode_xmax) + ' Y' + str(pGcode_ymax) +' F' + str(F_G01) + '\n'
-        gcode_box += 'G01 X' + str(pGcode_xmax) + ' Y' + str(pGcode_ymin) +' F' + str(F_G01) + '\n'
-        gcode_box += 'G01 X' + str(pGcode_xmin) + ' Y' + str(pGcode_ymin) +' F' + str(F_G01) + '\n'
-        gcode_box += 'G01 X' + str(pGcode_xmin) + ' Y' + str(pGcode_ymax) +' F' + str(F_G01) + '\n'
-        gcode_box += 'G01 X' + str(pGcode_xmax) + ' Y' + str(pGcode_ymax) +' F' + str(F_G01) + '\n'
+
+        gcode_box += 'G01 X' + str(pGcode_xmin) + ' Y' + str(pGcode_ymin) +' F' + str(speed_OFF) + '\n'
+        repeatlines = 'G01 X' + str(pGcode_xmax) + ' Y' + str(pGcode_ymin) +' F' + str(speed_OFF) + '\n' 
+        repeatlines += 'G01 X' + str(pGcode_xmin) + ' Y' + str(pGcode_ymin) +' F' + str(speed_OFF) + '\n'
+        gcode_box += repeatlines*20
+        #gcode_box += 'G01 X' + str(pGcode_xmax) + ' Y' + str(pGcode_ymax) +' F' + str(F_G01) + '\n'
+        #gcode_box += 'G01 X' + str(pGcode_xmax) + ' Y' + str(pGcode_ymin) +' F' + str(F_G01) + '\n'
+        #gcode_box += 'G01 X' + str(pGcode_xmin) + ' Y' + str(pGcode_ymin) +' F' + str(F_G01) + '\n'
+        #gcode_box += 'G01 X' + str(pGcode_xmin) + ' Y' + str(pGcode_ymax) +' F' + str(F_G01) + '\n'
+        #gcode_box += 'G01 X' + str(pGcode_xmax) + ' Y' + str(pGcode_ymax) +' F' + str(F_G01) + '\n'
         gcode_box += 'G28; home all axes\n'
 
-        print gcode_box
-        file_gcode2 = open('D:\PreviewBox.gcode', 'w') 
+#         print gcode_box
+        file_gcode2 = open(self.previewfilename, 'w') 
         file_gcode2.write(gcode_box)
         file_gcode2.close()
 

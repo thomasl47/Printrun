@@ -253,6 +253,7 @@ class MainWindow(wx.Frame):
         self.mainsizer_page1.Add( bSizer7, 1, wx.EXPAND, 5 )
 
         self.panel.SetSizerAndFit(self.mainsizer_page1)
+        self.Fit();
 
     def cerateLaserGuiBackup(self):
         self.notesizer = wx.BoxSizer(wx.VERTICAL)
