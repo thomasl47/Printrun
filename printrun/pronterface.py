@@ -840,7 +840,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         self.settings._add(BooleanSetting("circular_bed", False, _("Circular build platform"), _("Draw a circular (or oval) build platform instead of a rectangular one"), "Printer"), self.update_bed_viz)
         self.settings._add(SpinSetting("extruders", 0, 1, 5, _("Extruders count"), _("Number of extruders"), "Printer"))
         self.settings._add(BooleanSetting("clamp_jogging", False, _("Clamp manual moves"), _("Prevent manual moves from leaving the specified build dimensions"), "Printer"))
-        self.settings._add(ComboSetting("uimode", _("Laser"), [_("Standard"), _("Compact"), _("Tabbed"), _("Tabbed with platers"), _("Laser")], _("Interface mode"), _("Standard interface is a one-page, three columns layout with controls/visualization/log\nCompact mode is a one-page, two columns layout with controls + log/visualization\nTabbed mode is a two-pages mode, where the first page shows controls and the second one shows visualization and log.\nTabbed with platers mode is the same as Tabbed, but with two extra pages for the STL and G-Code platers."), "UI"), self.reload_ui)
+        self.settings._add(ComboSetting("uimode", _("Standard"), [_("Standard"), _("Compact"), _("Tabbed"), _("Tabbed with platers"), _("Laser")], _("Interface mode"), _("Standard interface is a one-page, three columns layout with controls/visualization/log\nCompact mode is a one-page, two columns layout with controls + log/visualization\nTabbed mode is a two-pages mode, where the first page shows controls and the second one shows visualization and log.\nTabbed with platers mode is the same as Tabbed, but with two extra pages for the STL and G-Code platers."), "UI"), self.reload_ui)
         self.settings._add(ComboSetting("controlsmode", "Standard", ["Standard", "Mini"], _("Controls mode"), _("Standard controls include all controls needed for printer setup and calibration, while Mini controls are limited to the ones needed for daily printing"), "UI"), self.reload_ui)
         self.settings._add(BooleanSetting("slic3rintegration", False, _("Enable Slic3r integration"), _("Add a menu to select Slic3r profiles directly from Pronterface"), "UI"), self.reload_ui)
         self.settings._add(BooleanSetting("slic3rupdate", False, _("Update Slic3r default presets"), _("When selecting a profile in Slic3r integration menu, also save it as the default Slic3r preset"), "UI"))
@@ -2328,14 +2328,8 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         F_G01 = speed_ON
         Scala = resolution
 
-        file_gcode = open(pos_file_gcode, 'w')  #Creo il file
-        
-        
+        file_gcode = open(pos_file_gcode, 'w')
 
-
-        #Creazione del Gcode
-        
-        #allargo la matrice per lavorare su tutta l'immagine
         for y in range(h):
             matrice_BN[y].append(B)
         w = w+1
@@ -2437,7 +2431,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
                                 if matrice_BN[y][x-1] != N :
                                     file_gcode.write('G01 X' + str(pGcode_x) + ' Y' + str(pGcode_y) +' F' + str(F_G01) + '\n')
                                     file_gcode.write('M05; Laser OFF\n')
-                                    Laser_ON = False                
+                                    Laser_ON = False
 
             
         #HOMING
@@ -2450,6 +2444,25 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
             pass
         
         file_gcode.close() #Chiudo il file
+
+    def LaserTest(self, laser_z_dist):
+        gcodelines = '; Generated with:\n; "BEC Gcode generator"\n; by ATOM 3D Printer\n;\n;\n;\n'
+        gcodelines += 'G28; home all axes\n'
+        gcodelines += 'G21; Set units to millimeters\n'
+        gcodelines += 'G90; Use absolute coordinates\n'
+        gcodelines += 'G92; Coordinate Offset\n'
+        gcodelines += 'G00 Z'+ str(laser_z_dist)+'\n'
+        gcodelines += 'M03; Laser ON\n'
+        gcodelines += 'M03; Laser OF\n'
+        gcodelines += 'G28; home all axes\n'
+
+        file_gcode2 = open('lasertest.gcode', 'w')
+        file_gcode2.write(gcodelines)
+        file_gcode2.close()
+
+        self.load_gcode_async('lasertest.gcode')
+
+
 
 class PronterApp(wx.App):
 
