@@ -1372,11 +1372,8 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
 
         self.filename = 'out.gcode'
         self.PNGtoGcode(str(filename))
-
+        self.pngLoaded = True
         self.load_gcode_async(self.filename)
-
-
-
 
     def loadfile(self, event, filename = None):
         if self.slicing and self.slicep is not None:
@@ -2446,6 +2443,8 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         file_gcode.close() #Chiudo il file
 
     def LaserTest(self, laser_z_dist):
+        if self.loading_gcode:
+            return
         gcodelines = '; Generated with:\n; "BEC Gcode generator"\n; by ATOM 3D Printer\n;\n;\n;\n'
         gcodelines += 'G28; home all axes\n'
         gcodelines += 'G21; Set units to millimeters\n'
@@ -2462,7 +2461,10 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
 
         self.load_gcode_async('lasertest.gcode')
 
-
+    def LaserPreview(self):
+        if (self.pngLoaded==False):
+            return
+        self.load_gcode_async(self.previewfilename)
 
 class PronterApp(wx.App):
 

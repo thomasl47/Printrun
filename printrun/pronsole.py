@@ -165,6 +165,7 @@ class pronsole(cmd.Cmd):
                            "fallback": "%(bold)sPC>%(normal)s ",
                            "macro": "%(bold)s..>%(normal)s ",
                            "online": "%(bold)sT:%(extruder_temp_fancy)s%(progress_fancy)s>%(normal)s "}
+        self.pngLoaded = False
 
     #  --------------------------------------------------------------
     #  General console handling
