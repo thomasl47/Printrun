@@ -275,14 +275,20 @@ class MainWindow(wx.Frame):
         bSizer7 = wx.BoxSizer( wx.HORIZONTAL )
         self.m_button11 = wx.Button(page1panel, wx.ID_ANY, u"PREVIEW", wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer7.Add( self.m_button11, 0, wx.ALL, 5 )
+        self.m_button11.Bind(wx.EVT_BUTTON, self.LaserPreview)
+
         self.m_button12 = wx.Button(page1panel, wx.ID_ANY, u"START", wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer7.Add( self.m_button12, 0, wx.ALL, 5 )
+        self.m_button12.Bind(wx.EVT_BUTTON, self.LaserStart)
+
         self.m_button13 = wx.Button(page1panel, wx.ID_ANY, u"PAUSE", wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer7.Add( self.m_button13, 0, wx.ALL, 5 )
         self.m_button14 = wx.Button(page1panel, wx.ID_ANY, u"STOP", wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer7.Add( self.m_button14, 0, wx.ALL, 5 )
         self.m_button15 = wx.Button(page1panel, wx.ID_ANY, u"EXPORT", wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer7.Add( self.m_button15, 0, wx.ALL, 5 )
+
+
 
         self.mainsizer_page1.Add( bSizer7, 0, wx.EXPAND, 5 )
 

@@ -277,14 +277,14 @@ class PronterWindow(MainWindow, pronsole.pronsole):
 
         # Create UI
         # Ignore uimode until fix mac menubar issue
-#         self.createLaserGui()
-        if self.settings.uimode in (_("Tabbed"), _("Tabbed with platers")):
-            self.createTabbedGui()
-        elif self.settings.uimode == _("Laser"):
-            self.createLaserGui()
-        else:
-            self.createGui(self.settings.uimode == _("Compact"),
-                           self.settings.controlsmode == "Mini")
+        self.createLaserGui()
+        # if self.settings.uimode in (_("Tabbed"), _("Tabbed with platers")):
+        #     self.createTabbedGui()
+        # elif self.settings.uimode == _("Laser"):
+        #     self.createLaserGui()
+        # else:
+        #     self.createGui(self.settings.uimode == _("Compact"),
+        #                    self.settings.controlsmode == "Mini")
 
         if hasattr(self, "splitterwindow"):
             self.splitterwindow.SetSashPosition(self.settings.last_sash_position)
@@ -840,7 +840,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         self.settings._add(BooleanSetting("circular_bed", False, _("Circular build platform"), _("Draw a circular (or oval) build platform instead of a rectangular one"), "Printer"), self.update_bed_viz)
         self.settings._add(SpinSetting("extruders", 0, 1, 5, _("Extruders count"), _("Number of extruders"), "Printer"))
         self.settings._add(BooleanSetting("clamp_jogging", False, _("Clamp manual moves"), _("Prevent manual moves from leaving the specified build dimensions"), "Printer"))
-        self.settings._add(ComboSetting("uimode", _("Standard"), [_("Standard"), _("Compact"), _("Tabbed"), _("Tabbed with platers"), _("Laser")], _("Interface mode"), _("Standard interface is a one-page, three columns layout with controls/visualization/log\nCompact mode is a one-page, two columns layout with controls + log/visualization\nTabbed mode is a two-pages mode, where the first page shows controls and the second one shows visualization and log.\nTabbed with platers mode is the same as Tabbed, but with two extra pages for the STL and G-Code platers."), "UI"), self.reload_ui)
+        #self.settings._add(ComboSetting("uimode", _("Standard"), [_("Standard"), _("Compact"), _("Tabbed"), _("Tabbed with platers"), _("Laser")], _("Interface mode"), _("Standard interface is a one-page, three columns layout with controls/visualization/log\nCompact mode is a one-page, two columns layout with controls + log/visualization\nTabbed mode is a two-pages mode, where the first page shows controls and the second one shows visualization and log.\nTabbed with platers mode is the same as Tabbed, but with two extra pages for the STL and G-Code platers."), "UI"), self.reload_ui)
         self.settings._add(ComboSetting("controlsmode", "Standard", ["Standard", "Mini"], _("Controls mode"), _("Standard controls include all controls needed for printer setup and calibration, while Mini controls are limited to the ones needed for daily printing"), "UI"), self.reload_ui)
         self.settings._add(BooleanSetting("slic3rintegration", False, _("Enable Slic3r integration"), _("Add a menu to select Slic3r profiles directly from Pronterface"), "UI"), self.reload_ui)
         self.settings._add(BooleanSetting("slic3rupdate", False, _("Update Slic3r default presets"), _("When selecting a profile in Slic3r integration menu, also save it as the default Slic3r preset"), "UI"))
@@ -1131,6 +1131,12 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         wx.CallAfter(self.toolbarsizer.Layout)
 
     def printfile(self, event):
+        if self.pngLoaded:
+            self.load_gcode_and_print_async('out.gcode')
+        else:
+            self.printfile()
+
+    def printfile(self):
         self.extra_print_time = 0
         if self.paused:
             self.p.paused = 0
@@ -1373,7 +1379,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         self.filename = 'out.gcode'
         self.PNGtoGcode(str(filename))
         self.pngLoaded = True
-        self.load_gcode_async(self.filename)
+       # self.load_gcode_async(self.filename)
 
     def loadfile(self, event, filename = None):
         if self.slicing and self.slicep is not None:
@@ -1423,6 +1429,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
                 self.slice(name)
             else:
                 self.load_gcode_async(name)
+                self.pngLoaded = False
         else:
             dlg.Destroy()
 
@@ -1488,6 +1495,42 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         self.viz_last_layer = None
         if print_stats:
             self.output_gcode_stats()
+
+    def load_gcode_and_print_async(self, filename):
+        self.filename = filename
+        gcode = self.pre_gcode_load()
+        self.log(_("Loading file: %s") % filename)
+        threading.Thread(target = self.load_gcode_and_print_async_thread, args = (gcode,)).start()
+
+    def load_gcode_and_print_async_thread(self, gcode):
+        try:
+            self.load_gcode(self.filename,
+                            layer_callback = self.layer_ready_cb,
+                            gcode = gcode)
+        except PronterfaceQuitException:
+            return
+        wx.CallAfter(self.post_gcode_load)
+
+    def post_gcode_load_and_print(self, print_stats = True):
+        # Must be called in wx.CallAfter for safety
+        self.loading_gcode = False
+        self.SetTitle(_(u"Pronterface - %s") % self.filename)
+        message = _("Loaded %s, %d lines") % (self.filename, len(self.fgcode),)
+        self.log(message)
+        self.statusbar.SetStatusText(message)
+        self.savebtn.Enable(True)
+        self.loadbtn.SetLabel(_("Load File"))
+        self.printbtn.SetLabel(_("Print"))
+        self.pausebtn.SetLabel(_("Pause"))
+        self.pausebtn.Disable()
+        self.recoverbtn.Disable()
+        if self.p.online:
+            self.printbtn.Enable()
+        self.toolbarsizer.Layout()
+        self.viz_last_layer = None
+        if print_stats:
+            self.output_gcode_stats()
+        self.printfile()
 
     def output_gcode_stats(self):
         gcode = self.fgcode
@@ -2459,12 +2502,19 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         file_gcode2.write(gcodelines)
         file_gcode2.close()
 
-        self.load_gcode_async('lasertest.gcode')
+        self.load_gcode_and_print_async('lasertest.gcode')
 
-    def LaserPreview(self):
+    def LaserPreview(self, event):
         if (self.pngLoaded==False):
             return
-        self.load_gcode_async(self.previewfilename)
+        self.load_gcode_and_print_async(self.previewfilename)
+
+    def LaserStart(self, event):
+        if (self.pngLoaded==False):
+            return
+        self.load_gcode_and_print_async('out.gcode')
+
+
 
 class PronterApp(wx.App):
 
