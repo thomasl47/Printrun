@@ -277,14 +277,14 @@ class PronterWindow(MainWindow, pronsole.pronsole):
 
         # Create UI
         # Ignore uimode until fix mac menubar issue
-        self.createLaserGui()
-        # if self.settings.uimode in (_("Tabbed"), _("Tabbed with platers")):
-        #     self.createTabbedGui()
-        # elif self.settings.uimode == _("Laser"):
-        #     self.createLaserGui()
-        # else:
-        #     self.createGui(self.settings.uimode == _("Compact"),
-        #                    self.settings.controlsmode == "Mini")
+        #self.createLaserGui()
+        if self.settings.uimode in (_("Tabbed"), _("Tabbed with platers")):
+            self.createTabbedGui()
+        elif self.settings.uimode == _("Laser"):
+            self.createLaserGui()
+        else:
+            self.createGui(self.settings.uimode == _("Compact"),
+                           self.settings.controlsmode == "Mini")
 
         if hasattr(self, "splitterwindow"):
             self.splitterwindow.SetSashPosition(self.settings.last_sash_position)
@@ -840,7 +840,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         self.settings._add(BooleanSetting("circular_bed", False, _("Circular build platform"), _("Draw a circular (or oval) build platform instead of a rectangular one"), "Printer"), self.update_bed_viz)
         self.settings._add(SpinSetting("extruders", 0, 1, 5, _("Extruders count"), _("Number of extruders"), "Printer"))
         self.settings._add(BooleanSetting("clamp_jogging", False, _("Clamp manual moves"), _("Prevent manual moves from leaving the specified build dimensions"), "Printer"))
-        #self.settings._add(ComboSetting("uimode", _("Standard"), [_("Standard"), _("Compact"), _("Tabbed"), _("Tabbed with platers"), _("Laser")], _("Interface mode"), _("Standard interface is a one-page, three columns layout with controls/visualization/log\nCompact mode is a one-page, two columns layout with controls + log/visualization\nTabbed mode is a two-pages mode, where the first page shows controls and the second one shows visualization and log.\nTabbed with platers mode is the same as Tabbed, but with two extra pages for the STL and G-Code platers."), "UI"), self.reload_ui)
+        self.settings._add(ComboSetting("uimode", _("Standard"), [_("Standard"), _("Compact"), _("Tabbed"), _("Tabbed with platers"), _("Laser")], _("Interface mode"), _("Standard interface is a one-page, three columns layout with controls/visualization/log\nCompact mode is a one-page, two columns layout with controls + log/visualization\nTabbed mode is a two-pages mode, where the first page shows controls and the second one shows visualization and log.\nTabbed with platers mode is the same as Tabbed, but with two extra pages for the STL and G-Code platers."), "UI"), self.reload_ui)
         self.settings._add(ComboSetting("controlsmode", "Standard", ["Standard", "Mini"], _("Controls mode"), _("Standard controls include all controls needed for printer setup and calibration, while Mini controls are limited to the ones needed for daily printing"), "UI"), self.reload_ui)
         self.settings._add(BooleanSetting("slic3rintegration", False, _("Enable Slic3r integration"), _("Add a menu to select Slic3r profiles directly from Pronterface"), "UI"), self.reload_ui)
         self.settings._add(BooleanSetting("slic3rupdate", False, _("Update Slic3r default presets"), _("When selecting a profile in Slic3r integration menu, also save it as the default Slic3r preset"), "UI"))
@@ -1134,9 +1134,9 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         if self.pngLoaded:
             self.load_gcode_and_print_async('out.gcode')
         else:
-            self.printfile()
+            self.printFileNow()
 
-    def printfile(self):
+    def printFileNow(self):
         self.extra_print_time = 0
         if self.paused:
             self.p.paused = 0
@@ -1509,7 +1509,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
                             gcode = gcode)
         except PronterfaceQuitException:
             return
-        wx.CallAfter(self.post_gcode_load)
+        wx.CallAfter(self.post_gcode_load_and_print)
 
     def post_gcode_load_and_print(self, print_stats = True):
         # Must be called in wx.CallAfter for safety
@@ -1530,7 +1530,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         self.viz_last_layer = None
         if print_stats:
             self.output_gcode_stats()
-        self.printfile()
+        self.printFileNow()
 
     def output_gcode_stats(self):
         gcode = self.fgcode
@@ -1825,9 +1825,9 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
             isreport = report_type != REPORT_NONE
             if report_type & REPORT_POS:
                 self.update_pos()
-            elif report_type & REPORT_TEMP:
-                wx.CallAfter(self.tempdisp.SetLabel, self.tempreadings.strip().replace("ok ", ""))
-                self.update_tempdisplay()
+            #elif report_type & REPORT_TEMP:
+            #    wx.CallAfter(self.tempdisp.SetLabel, self.tempreadings.strip().replace("ok ", ""))
+            #    self.update_tempdisplay()
             if not self.p.loud and (l not in ["ok", "wait"] and (not isreport or report_type & REPORT_MANUAL)):
                 wx.CallAfter(self.addtexttolog, l + "\n")
         for listener in self.recvlisteners:
@@ -2301,7 +2301,10 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         #public options
         speed_ON = 100  #moving speed when laser on 
         speed_OFF = 3000 #moving speed when laser off
-        focus_dist = 10
+        if hasattr(self, 'fdist'):
+            focus_dist = self.fdist
+        else:
+            focus_dist = float(10.)
 
         #private options
         grayscale_type = 1
@@ -2401,8 +2404,10 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         gcode_box += 'G21; Set units to millimeters\n'
         gcode_box += 'G90; Use absolute coordinates\n'
         gcode_box += 'G92; Coordinate Offset\n'
-        gcode_box += 'G00 Z'+ str(focus_dist)+'\n'
-        gcode_box += 'M05; Laser OFF\n'
+
+        preview_focus_dist = float(focus_dist) + float(10.)
+        gcode_box += 'G00 Z'+ str(preview_focus_dist)+'\n'
+        gcode_box += 'M03; Laser ON\n'
 
         gcode_box += 'G01 X' + str(pGcode_xmin) + ' Y' + str(pGcode_ymin) +' F' + str(speed_OFF) + '\n'
         repeatlines = 'G01 X' + str(pGcode_xmax) + ' Y' + str(pGcode_ymin) +' F' + str(speed_OFF) + '\n' 
@@ -2413,6 +2418,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         #gcode_box += 'G01 X' + str(pGcode_xmin) + ' Y' + str(pGcode_ymin) +' F' + str(F_G01) + '\n'
         #gcode_box += 'G01 X' + str(pGcode_xmin) + ' Y' + str(pGcode_ymax) +' F' + str(F_G01) + '\n'
         #gcode_box += 'G01 X' + str(pGcode_xmax) + ' Y' + str(pGcode_ymax) +' F' + str(F_G01) + '\n'
+        gcode_box += 'M05; Laser OFF\n'
         gcode_box += 'G28; home all axes\n'
 
 #         print gcode_box
@@ -2504,6 +2510,11 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
 
         self.load_gcode_and_print_async('lasertest.gcode')
 
+    def sendG28(self, e):
+        command = 'G28'
+        line = self.precmd(str(command))
+        self.onecmd(line)
+
     def LaserPreview(self, event):
         if (self.pngLoaded==False):
             return
@@ -2514,6 +2525,8 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
             return
         self.load_gcode_and_print_async('out.gcode')
 
+    def update_focaldist(self, focaldist):
+        self.fdist = float(focaldist)
 
 
 class PronterApp(wx.App):

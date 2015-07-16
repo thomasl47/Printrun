@@ -173,10 +173,11 @@ class MainWindow(wx.Frame):
         self.m_staticText3.Wrap( -1 )
         bSizer3.Add( self.m_staticText3, 0, wx.ALL, 5 )
 
-        self.m_button4 = wx.Button(page1panel, wx.ID_ANY, u"G29", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_button4 = wx.Button(page1panel, wx.ID_ANY, u"G28", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_button4.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), 70, 90, 90, False, wx.EmptyString ) )
         self.m_button4.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_HIGHLIGHTTEXT ) )
         self.m_button4.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOWFRAME ) )
+        self.m_button4.Bind(wx.EVT_BUTTON, self.sendG28)
 
         bSizer3.Add( self.m_button4, 0, wx.ALL, 5 )
 
@@ -246,6 +247,7 @@ class MainWindow(wx.Frame):
 
         def update_fdist(event):
             self.fdist = float(self.fdistspiner.GetValue())
+            self.update_focaldist(self.fdist)
         self.fdistspiner.Bind(floatspin.EVT_FLOATSPIN, update_fdist)
 
         self.m_staticText9 = wx.StaticText(page1panel, wx.ID_ANY, u"+ THICKNESS", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -273,6 +275,10 @@ class MainWindow(wx.Frame):
         self.mainsizer_page1.Add( self.m_staticline10, 0, wx.EXPAND |wx.ALL, 5 )
 
         bSizer7 = wx.BoxSizer( wx.HORIZONTAL )
+        self.m_button_load = wx.Button(page1panel, wx.ID_ANY, u"LOAD", wx.DefaultPosition, wx.DefaultSize, 0 )
+        bSizer7.Add( self.m_button_load, 0, wx.ALL, 5 )
+        self.m_button_load.Bind(wx.EVT_BUTTON, self.loadpng)
+
         self.m_button11 = wx.Button(page1panel, wx.ID_ANY, u"PREVIEW", wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer7.Add( self.m_button11, 0, wx.ALL, 5 )
         self.m_button11.Bind(wx.EVT_BUTTON, self.LaserPreview)
@@ -283,8 +289,12 @@ class MainWindow(wx.Frame):
 
         self.m_button13 = wx.Button(page1panel, wx.ID_ANY, u"PAUSE", wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer7.Add( self.m_button13, 0, wx.ALL, 5 )
+        self.m_button13.Bind(wx.EVT_BUTTON, self.pause)
+
         self.m_button14 = wx.Button(page1panel, wx.ID_ANY, u"STOP", wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer7.Add( self.m_button14, 0, wx.ALL, 5 )
+        self.m_button14.Bind(wx.EVT_BUTTON, self.off)
+
         self.m_button15 = wx.Button(page1panel, wx.ID_ANY, u"EXPORT", wx.DefaultPosition, wx.DefaultSize, 0 )
         bSizer7.Add( self.m_button15, 0, wx.ALL, 5 )
 
