@@ -173,11 +173,11 @@ class MainWindow(wx.Frame):
         self.m_staticText3.Wrap( -1 )
         bSizer3.Add( self.m_staticText3, 0, wx.ALL, 5 )
 
-        self.m_button4 = wx.Button(page1panel, wx.ID_ANY, u"G28", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_button4 = wx.Button(page1panel, wx.ID_ANY, u"G29", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.m_button4.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), 70, 90, 90, False, wx.EmptyString ) )
         self.m_button4.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_HIGHLIGHTTEXT ) )
         self.m_button4.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOWFRAME ) )
-        self.m_button4.Bind(wx.EVT_BUTTON, self.sendG28)
+        self.m_button4.Bind(wx.EVT_BUTTON, self.sendG29)
 
         bSizer3.Add( self.m_button4, 0, wx.ALL, 5 )
 
