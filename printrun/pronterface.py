@@ -2394,6 +2394,9 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
                     if ymin > y :
                         ymin = y
 
+        #Flip image
+        matrice_BN.reverse()
+
         pGcode_xmax = (float(xmax) - float(w)/2. )/Scala
         pGcode_xmin = (float(xmin) - float(w)/2. )/Scala
         pGcode_ymax = (float(ymax) - float(h)/2. )/Scala
@@ -2406,12 +2409,12 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         gcode_box += 'G92; Coordinate Offset\n'
 
         preview_focus_dist = float(focus_dist) + float(10.)
-        gcode_box += 'G00 Z'+ str(preview_focus_dist)+'\n'
+        gcode_box += 'G0 Z'+ str(preview_focus_dist)+'\n'
         gcode_box += 'M03; Laser ON\n'
 
-        gcode_box += 'G01 X' + str(pGcode_xmin) + ' Y' + str(pGcode_ymin) +' F' + str(speed_OFF) + '\n'
-        repeatlines = 'G01 X' + str(pGcode_xmax) + ' Y' + str(pGcode_ymin) +' F' + str(speed_OFF) + '\n' 
-        repeatlines += 'G01 X' + str(pGcode_xmin) + ' Y' + str(pGcode_ymin) +' F' + str(speed_OFF) + '\n'
+        gcode_box += 'G1 X' + str(pGcode_xmin) + ' Y' + str(pGcode_ymin) +' F' + str(speed_OFF) + '\n'
+        repeatlines = 'G1 X' + str(pGcode_xmax) + ' Y' + str(pGcode_ymin) +' F' + str(speed_OFF) + '\n'
+        repeatlines += 'G1 X' + str(pGcode_xmin) + ' Y' + str(pGcode_ymin) +' F' + str(speed_OFF) + '\n'
         gcode_box += repeatlines*20
         #gcode_box += 'G01 X' + str(pGcode_xmax) + ' Y' + str(pGcode_ymax) +' F' + str(F_G01) + '\n'
         #gcode_box += 'G01 X' + str(pGcode_xmax) + ' Y' + str(pGcode_ymin) +' F' + str(F_G01) + '\n'
@@ -2438,7 +2441,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         file_gcode.write('G21; Set units to millimeters\n')         
         file_gcode.write('G90; Use absolute coordinates\n')             
         file_gcode.write('G92; Coordinate Offset\n')    
-        file_gcode.write('G00 Z'+ str(focus_dist)+'\n')    
+        file_gcode.write('G0 Z'+ str(focus_dist)+'\n')
 
         for y in range(h):
             pGcode_y = (float(y) - float(h)/2. )/Scala
@@ -2447,17 +2450,17 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
                     pGcode_x = (float(x) - float(w)/2. )/Scala
                     if matrice_BN[y][x] == N :
                         if Laser_ON == False :
-                            file_gcode.write('G00 X' + str(pGcode_x) + ' Y' + str(pGcode_y) +' F' + str(speed_OFF) + '\n') 
+                            file_gcode.write('G0 X' + str(pGcode_x) + ' Y' + str(pGcode_y) +' F' + str(speed_OFF) + '\n')
                             file_gcode.write('M03; Laser ON\n')
                             Laser_ON = True
                         if  Laser_ON == True :   
                             if x == w-1 :
-                                file_gcode.write('G01 X' + str(pGcode_x) + ' Y' + str(pGcode_y) +' F' + str(F_G01) + '\n')
+                                file_gcode.write('G1 X' + str(pGcode_x) + ' Y' + str(pGcode_y) +' F' + str(F_G01) + '\n')
                                 file_gcode.write('M05; Laser OFF\n')
                                 Laser_ON = False
                             else: 
                                 if matrice_BN[y][x+1] != N :
-                                    file_gcode.write('G01 X' + str(pGcode_x) + ' Y' + str(pGcode_y) +' F' + str(F_G01) + '\n')
+                                    file_gcode.write('G1 X' + str(pGcode_x) + ' Y' + str(pGcode_y) +' F' + str(F_G01) + '\n')
                                     file_gcode.write('M05; Laser OFF\n')
                                     Laser_ON = False
             else:
@@ -2465,17 +2468,17 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
                     pGcode_x = (float(x) - float(w)/2. )/Scala
                     if matrice_BN[y][x] == N :
                         if Laser_ON == False :
-                            file_gcode.write('G00 X' + str(pGcode_x) + ' Y' + str(pGcode_y) + ' F' + str(speed_OFF) + '\n')
+                            file_gcode.write('G0 X' + str(pGcode_x) + ' Y' + str(pGcode_y) + ' F' + str(speed_OFF) + '\n')
                             file_gcode.write('M03; Laser ON\n')         
                             Laser_ON = True
                         if  Laser_ON == True :   
                             if x == 0 :
-                                file_gcode.write('G01 X' + str(pGcode_x) + ' Y' + str(pGcode_y) +' F' + str(F_G01) + '\n')
+                                file_gcode.write('G1 X' + str(pGcode_x) + ' Y' + str(pGcode_y) +' F' + str(F_G01) + '\n')
                                 file_gcode.write('M05; Laser OFF\n')
                                 Laser_ON = False
                             else: 
                                 if matrice_BN[y][x-1] != N :
-                                    file_gcode.write('G01 X' + str(pGcode_x) + ' Y' + str(pGcode_y) +' F' + str(F_G01) + '\n')
+                                    file_gcode.write('G1 X' + str(pGcode_x) + ' Y' + str(pGcode_y) +' F' + str(F_G01) + '\n')
                                     file_gcode.write('M05; Laser OFF\n')
                                     Laser_ON = False
 

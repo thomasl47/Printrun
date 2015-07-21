@@ -452,12 +452,14 @@ class Gviz(wx.Panel):
         if gline.i is not None: target[5] = gline.i
         if gline.j is not None: target[6] = gline.j
 
-        if gline.command in ["G0", "G1"]:
+        if gline.command in ["G1"]:
             line = [self._x(start_pos[0]),
                     self._y(start_pos[1]),
                     self._x(target[0]),
                     self._y(target[1])]
             return target, line, None
+        elif gline.command in ["G0"]:
+            return target, None, None
         elif gline.command in ["G2", "G3"]:
             # startpos, endpos, arc center
             arc = [self._x(start_pos[0]), self._y(start_pos[1]),
