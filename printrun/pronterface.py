@@ -277,7 +277,9 @@ class PronterWindow(MainWindow, pronsole.pronsole):
 
         # Create UI
         # Ignore uimode until fix mac menubar issue
-        self.createLaserGui()
+        #self.createLaserGui()
+        self.cerateNewLaserGui()
+
         #if self.settings.uimode in (_("Tabbed"), _("Tabbed with platers")):
         #    self.createTabbedGui()
         #elif self.settings.uimode == _("Laser"):
