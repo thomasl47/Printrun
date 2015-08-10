@@ -28,23 +28,23 @@ class laserGUI(wx.Panel):
 
         mainSizer.Add(self.gvizPanel, 0, 0, 0)
 
-        self.controlPanel = wx.Panel(self, wx.ID_ANY, wx.DefaultPosition, wx.Size(510, 820), wx.TAB_TRAVERSAL)
+        self.controlPanel = wx.Panel(self, wx.ID_ANY, wx.DefaultPosition, wx.Size(520, 820), wx.TAB_TRAVERSAL)
         self.controlPanel.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW))
 
         ControlSizer = wx.BoxSizer(wx.VERTICAL)
 
-        self.ConnectPanel = wx.Panel(self.controlPanel, wx.ID_ANY, wx.DefaultPosition, wx.Size(510, 115),
+        self.ConnectPanel = wx.Panel(self.controlPanel, wx.ID_ANY, wx.DefaultPosition, wx.Size(520, 115),
                                      wx.TAB_TRAVERSAL)
         self.ConnectPanel.Enable(False)
-        self.ConnectPanel.SetMinSize(wx.Size(510, 115))
-        self.ConnectPanel.SetMaxSize(wx.Size(510, 115))
+        self.ConnectPanel.SetMinSize(wx.Size(520, 115))
+        self.ConnectPanel.SetMaxSize(wx.Size(520, 115))
 
         ConnectGBSizer1 = wx.GridBagSizer(0, 0)
         ConnectGBSizer1.SetFlexibleDirection(wx.BOTH)
         ConnectGBSizer1.SetNonFlexibleGrowMode(wx.FLEX_GROWMODE_SPECIFIED)
         ConnectGBSizer1.SetEmptyCellSize(wx.Size(1, 1))
 
-        ConnectGBSizer1.SetMinSize(wx.Size(510, 115))
+        ConnectGBSizer1.SetMinSize(wx.Size(520, 115))
         self.ConnectImage = wx.StaticBitmap(self.ConnectPanel, wx.ID_ANY,
                                             wx.Bitmap(u"EditIcon/Icon_Connect-01.png", wx.BITMAP_TYPE_ANY),
                                             wx.DefaultPosition, wx.DefaultSize, 0)
@@ -87,7 +87,7 @@ class laserGUI(wx.Panel):
         self.ConnectPanel.Layout()
         ControlSizer.Add(self.ConnectPanel, 0, wx.ALL, 0)
 
-        self.CorrectionPanel = wx.Panel(self.controlPanel, wx.ID_ANY, wx.DefaultPosition, wx.Size(510, 115),
+        self.CorrectionPanel = wx.Panel(self.controlPanel, wx.ID_ANY, wx.DefaultPosition, wx.Size(520, 115),
                                         wx.TAB_TRAVERSAL)
         self.CorrectionPanel.SetBackgroundColour(wx.Colour(230, 230, 230))
 
@@ -150,7 +150,7 @@ class laserGUI(wx.Panel):
         self.CorrectionPanel.Layout()
         ControlSizer.Add(self.CorrectionPanel, 0, wx.EXPAND | wx.ALL, 0)
 
-        self.FocalPanel = wx.Panel(self.controlPanel, wx.ID_ANY, wx.DefaultPosition, wx.Size(510, 115),
+        self.FocalPanel = wx.Panel(self.controlPanel, wx.ID_ANY, wx.DefaultPosition, wx.Size(520, 115),
                                    wx.TAB_TRAVERSAL)
         self.FocalPanel.SetBackgroundColour(wx.Colour(204, 204, 204))
 
@@ -222,19 +222,19 @@ class laserGUI(wx.Panel):
         self.FocalPanel.Layout()
         ControlSizer.Add(self.FocalPanel, 0, wx.EXPAND | wx.ALL, 0)
 
-        self.SetupPanel = wx.Panel(self.controlPanel, wx.ID_ANY, wx.DefaultPosition, wx.Size(510, 270),
+        self.SetupPanel = wx.Panel(self.controlPanel, wx.ID_ANY, wx.DefaultPosition, wx.Size(520, 270),
                                    wx.TAB_TRAVERSAL)
         self.SetupPanel.SetBackgroundColour(wx.Colour(153, 153, 153))
         self.SetupPanel.Enable(False)
-        self.SetupPanel.SetMinSize(wx.Size(510, 270))
-        self.SetupPanel.SetMaxSize(wx.Size(510, 270))
+        self.SetupPanel.SetMinSize(wx.Size(520, 270))
+        self.SetupPanel.SetMaxSize(wx.Size(520, 270))
 
         SetupGBSizer = wx.GridBagSizer(0, 0)
         SetupGBSizer.SetFlexibleDirection(wx.BOTH)
         SetupGBSizer.SetNonFlexibleGrowMode(wx.FLEX_GROWMODE_SPECIFIED)
         SetupGBSizer.SetEmptyCellSize(wx.Size(1, 1))
 
-        SetupGBSizer.SetMinSize(wx.Size(510, 270))
+        SetupGBSizer.SetMinSize(wx.Size(520, 270))
         self.ResolutionImage = wx.StaticBitmap(self.SetupPanel, wx.ID_ANY,
                                                wx.Bitmap(u"EditIcon/Icon_Res-01.png", wx.BITMAP_TYPE_ANY),
                                                wx.DefaultPosition, wx.DefaultSize, 0)
@@ -351,11 +351,11 @@ class laserGUI(wx.Panel):
         self.SetupPanel.Layout()
         ControlSizer.Add(self.SetupPanel, 0, 0, 0)
 
-        self.ImportPanel = wx.Panel(self.controlPanel, wx.ID_ANY, wx.DefaultPosition, wx.Size(510, 90),
+        self.ImportPanel = wx.Panel(self.controlPanel, wx.ID_ANY, wx.DefaultPosition, wx.Size(520, 90),
                                     wx.TAB_TRAVERSAL)
         self.ImportPanel.SetBackgroundColour(wx.Colour(128, 128, 128))
-        self.ImportPanel.SetMinSize(wx.Size(510, 90))
-        self.ImportPanel.SetMaxSize(wx.Size(510, 90))
+        self.ImportPanel.SetMinSize(wx.Size(520, 90))
+        self.ImportPanel.SetMaxSize(wx.Size(520, 90))
 
         ImpotyGBSizer = wx.GridBagSizer(0, 0)
         ImpotyGBSizer.SetFlexibleDirection(wx.BOTH)
@@ -379,27 +379,32 @@ class laserGUI(wx.Panel):
         self.ImportPanel.Layout()
         ControlSizer.Add(self.ImportPanel, 0, wx.EXPAND, 0)
 
-        self.ActionPanel = wx.Panel(self.controlPanel, wx.ID_ANY, wx.DefaultPosition, wx.Size(510, 115),
+        self.ActionPanel = wx.Panel(self.controlPanel, wx.ID_ANY, wx.DefaultPosition, wx.Size(520, 115),
                                     wx.TAB_TRAVERSAL)
         self.ActionPanel.SetBackgroundColour(wx.Colour(102, 102, 102))
-        self.ActionPanel.SetMinSize(wx.Size(510, 115))
-        self.ActionPanel.SetMaxSize(wx.Size(510, 115))
+        self.ActionPanel.SetMinSize(wx.Size(520, 115))
+        self.ActionPanel.SetMaxSize(wx.Size(520, 115))
 
         ActionGBSizer = wx.GridBagSizer(0, 0)
         ActionGBSizer.SetFlexibleDirection(wx.BOTH)
         ActionGBSizer.SetNonFlexibleGrowMode(wx.FLEX_GROWMODE_SPECIFIED)
         ActionGBSizer.SetEmptyCellSize(wx.Size(1, 1))
 
-        ActionGBSizer.SetMinSize(wx.Size(510, 115))
+        ActionGBSizer.SetMinSize(wx.Size(520, 115))
+
+        #self.ActPreviewBtn  = wx.StaticBitmap(self.ActionPanel, wx.ID_ANY,
+        #                                wx.Bitmap(u"EditIcon/Icon_Preview_MouseOn-01.png", wx.BITMAP_TYPE_ANY),
+        #                                wx.DefaultPosition, wx.DefaultSize, 0)
         self.ActPreviewBtn = wx.BitmapButton(self.ActionPanel, wx.ID_ANY,
                                              wx.Bitmap(u"EditIcon/Icon_Preview_MouseOn-01.png", wx.BITMAP_TYPE_ANY),
-                                             wx.DefaultPosition, wx.Size(50, 50), wx.BU_AUTODRAW)
+                                             wx.DefaultPosition, wx.Size(50, 50), 0)
         ActionGBSizer.Add(self.ActPreviewBtn, wx.GBPosition(20, 40), wx.GBSpan(10, 50), 0, 0)
 
         self.ActStartBtn = wx.BitmapButton(self.ActionPanel, wx.ID_ANY,
                                            wx.Bitmap(u"EditIcon/Icon_Start_Preview-01.png", wx.BITMAP_TYPE_ANY),
-                                           wx.DefaultPosition, wx.Size(50, 50), wx.BU_AUTODRAW)
-        ActionGBSizer.Add(self.ActStartBtn, wx.GBPosition(20, 115), wx.GBSpan(10, 50), 0, 5)
+                                           wx.DefaultPosition, wx.Size(60, 60), wx.BU_AUTODRAW)
+        self.ActStartBtn.SetBackgroundColour( wx.Colour(128, 128, 0) )
+        ActionGBSizer.Add(self.ActStartBtn, wx.GBPosition(20, 115), wx.GBSpan(10, 50), wx.EXPAND, 0)
 
         self.ActPauseBtn = wx.BitmapButton(self.ActionPanel, wx.ID_ANY,
                                            wx.Bitmap(u"EditIcon/Icon_Pause-01.png", wx.BITMAP_TYPE_ANY),
@@ -454,7 +459,7 @@ class laserGUI(wx.Panel):
         self.blubIcon = wx.StaticBitmap(self.ActionPanel, wx.ID_ANY,
                                         wx.Bitmap(u"EditIcon/Bulb.png", wx.BITMAP_TYPE_ANY), wx.DefaultPosition,
                                         wx.DefaultSize, 0)
-        ActionGBSizer.Add(self.blubIcon, wx.GBPosition(5, 440), wx.GBSpan(100, 80), 0, 5)
+        ActionGBSizer.Add(self.blubIcon, wx.GBPosition(5, 450), wx.GBSpan(100, 80), 0, 5)
 
         self.ActionPanel.SetSizer(ActionGBSizer)
         self.ActionPanel.Layout()

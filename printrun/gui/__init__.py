@@ -356,17 +356,26 @@ class MainWindow(wx.Frame):
         self.laserpanelSizer = wx.BoxSizer(wx.VERTICAL)
         self.laserpanel = laserGUI(self.panel)
 
+        from .laserGviz import LaserVizPane
+        #vizpane = VizPane(self, self.laserpanel.gvizPanel)
+        vizpane = LaserVizPane(self, self.laserpanel.gvizPanel)
+        page2sizer1 = wx.BoxSizer(wx.HORIZONTAL)
+        page2sizer1.Add(vizpane, 1, wx.EXPAND)
+        self.laserpanel.gvizPanel.SetSizer(page2sizer1)
+
         self.laserpanelSizer.Add(self.laserpanel, 1, wx.EXPAND)
+
+        self.laserLogpanel = LogPane(self, self.laserpanel)
+        self.laserLogpanel.hidden = True;
 
         self.panel.SetMinSize(wx.Size(1440, 820))
         self.panel.SetMaxSize(wx.Size(1440, 820))
         self.panel.Fit()
         self.panel.SetSizerAndFit(self.laserpanelSizer)
-        self.SetMinSize(wx.Size(1450, 880))
-        self.SetMaxSize(wx.Size(1450, 880))
+        self.SetMinSize(wx.Size(1440, 840))
+        self.SetMaxSize(wx.Size(1440, 840))
         self.Fit()
-        #self.Bind(wx.EVT_CLOSE, self.kill)
-
+        self.Bind(wx.EVT_CLOSE, self.kill)
 
     def createTabbedGui(self):
         self.notesizer = wx.BoxSizer(wx.VERTICAL)

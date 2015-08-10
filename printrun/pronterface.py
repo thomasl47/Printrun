@@ -1298,8 +1298,10 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         self.slicep = None
 
     def slice(self, filename):
-        wx.CallAfter(self.loadbtn.SetLabel, _("Cancel"))
-        wx.CallAfter(self.toolbarsizer.Layout)
+        if hasattr(self, 'loadbtn'):
+            wx.CallAfter(self.loadbtn.SetLabel, _("Cancel"))
+        if hasattr( self, 'toolbarsizer'):
+            wx.CallAfter(self.toolbarsizer.Layout)
         self.log(_("Slicing ") + filename)
         self.cout = StringIO.StringIO()
         self.filename = filename
@@ -1486,14 +1488,20 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         self.log(message)
         self.statusbar.SetStatusText(message)
         self.savebtn.Enable(True)
-        self.loadbtn.SetLabel(_("Load File"))
-        self.printbtn.SetLabel(_("Print"))
-        self.pausebtn.SetLabel(_("Pause"))
-        self.pausebtn.Disable()
-        self.recoverbtn.Disable()
+        if hasattr( self, 'loadbtn'):
+            self.loadbtn.SetLabel(_("Load File"))
+        if hasattr( self, 'printbtn'):
+            self.printbtn.SetLabel(_("Print"))
+        if hasattr( self, 'pausebtn'):
+            self.pausebtn.SetLabel(_("Pause"))
+            self.pausebtn.Disable()
+        if hasattr( self, 'recoverbtn'):
+            self.recoverbtn.Disable()
         if self.p.online:
-            self.printbtn.Enable()
-        self.toolbarsizer.Layout()
+            if hasattr( self, 'printbtn'):
+                self.printbtn.Enable()
+        if hasattr( self, 'toolbarsizer'):
+            self.toolbarsizer.Layout()
         self.viz_last_layer = None
         if print_stats:
             self.output_gcode_stats()
@@ -1521,9 +1529,12 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         self.log(message)
         self.statusbar.SetStatusText(message)
         self.savebtn.Enable(True)
-        self.loadbtn.SetLabel(_("Load File"))
-        self.printbtn.SetLabel(_("Print"))
-        self.pausebtn.SetLabel(_("Pause"))
+        if hasattr( self, 'loadbtn'):
+            self.loadbtn.SetLabel(_("Load File"))
+        if hasattr( self, 'printbtn'):
+            self.printbtn.SetLabel(_("Print"))
+        if hasattr( self, 'pausebtn'):
+            self.pausebtn.SetLabel(_("Pause"))
         self.pausebtn.Disable()
         self.recoverbtn.Disable()
         if self.p.online:
