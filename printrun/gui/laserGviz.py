@@ -34,4 +34,4 @@ class LaserVizPane(wx.GridBagSizer):
 
         root.gwindow.Bind(wx.EVT_CLOSE, lambda x: root.gwindow.Hide())
         if not isinstance(root.gviz, NoViz):
-            self.Add(root.gviz.widget, wx.GBPosition(1,1), wx.GBSpan(6,6))
+            self.Add(root.gviz, wx.GBPosition(1,1), wx.GBSpan(6,6))

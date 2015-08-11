@@ -9,23 +9,21 @@
 
 import wx
 import wx.xrc
+from .laserGviz import LaserVizPane
 
 ###########################################################################
 ## Class MyPanel3
 ###########################################################################
 
 class laserGUI(wx.Panel):
-    def __init__(self, parent):
+    def __init__(self, parent, root):
         wx.Panel.__init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition, size=wx.Size(1440, 820),
                           style=wx.TAB_TRAVERSAL)
 
-        self.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_SCROLLBAR))
-
+        self.SetBackgroundColour(wx.Colour(252, 238, 0))
         mainSizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.gvizPanel = wx.Panel(self, wx.ID_ANY, wx.DefaultPosition, wx.Size(910, 820), wx.TAB_TRAVERSAL)
-        self.gvizPanel.SetBackgroundColour(wx.Colour(252, 238, 0))
-
+        self.gvizPanel = LaserVizPane(root, self)
         mainSizer.Add(self.gvizPanel, 0, 0, 0)
 
         self.controlPanel = wx.Panel(self, wx.ID_ANY, wx.DefaultPosition, wx.Size(520, 820), wx.TAB_TRAVERSAL)
@@ -35,7 +33,6 @@ class laserGUI(wx.Panel):
 
         self.ConnectPanel = wx.Panel(self.controlPanel, wx.ID_ANY, wx.DefaultPosition, wx.Size(520, 115),
                                      wx.TAB_TRAVERSAL)
-        self.ConnectPanel.Enable(False)
         self.ConnectPanel.SetMinSize(wx.Size(520, 115))
         self.ConnectPanel.SetMaxSize(wx.Size(520, 115))
 
@@ -225,7 +222,6 @@ class laserGUI(wx.Panel):
         self.SetupPanel = wx.Panel(self.controlPanel, wx.ID_ANY, wx.DefaultPosition, wx.Size(520, 270),
                                    wx.TAB_TRAVERSAL)
         self.SetupPanel.SetBackgroundColour(wx.Colour(153, 153, 153))
-        self.SetupPanel.Enable(False)
         self.SetupPanel.SetMinSize(wx.Size(520, 270))
         self.SetupPanel.SetMaxSize(wx.Size(520, 270))
 
@@ -402,9 +398,9 @@ class laserGUI(wx.Panel):
 
         self.ActStartBtn = wx.BitmapButton(self.ActionPanel, wx.ID_ANY,
                                            wx.Bitmap(u"EditIcon/Icon_Start_Preview-01.png", wx.BITMAP_TYPE_ANY),
-                                           wx.DefaultPosition, wx.Size(60, 60), wx.BU_AUTODRAW)
-        self.ActStartBtn.SetBackgroundColour( wx.Colour(128, 128, 0) )
-        ActionGBSizer.Add(self.ActStartBtn, wx.GBPosition(20, 115), wx.GBSpan(10, 50), wx.EXPAND, 0)
+                                           wx.DefaultPosition, wx.Size(50, 50), wx.BU_AUTODRAW)
+        self.ActStartBtn.SetBackgroundColour( wx.Colour(128, 128, 0))
+        ActionGBSizer.Add(self.ActStartBtn, wx.GBPosition(20, 115), wx.GBSpan(10, 50), 0, 0)
 
         self.ActPauseBtn = wx.BitmapButton(self.ActionPanel, wx.ID_ANY,
                                            wx.Bitmap(u"EditIcon/Icon_Pause-01.png", wx.BITMAP_TYPE_ANY),
@@ -479,5 +475,13 @@ class laserGUI(wx.Panel):
         self.SetSizer(mainSizer)
         self.Layout()
 
+        self.BindCommand(root)
+
     def __del__(self):
         pass
+
+    def test(self, event):
+        print 'HAHA'
+
+    def BindCommand(self, root):
+        self.ConnectButton.Bind(wx.EVT_BUTTON, root.connect)
