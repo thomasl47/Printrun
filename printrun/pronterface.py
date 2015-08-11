@@ -2314,15 +2314,20 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         #public options
         speed_ON = 100  #moving speed when laser on 
         speed_OFF = 3000 #moving speed when laser off
-        if hasattr(self, 'fdist'):
-            focus_dist = self.fdist
+
+        if hasattr(self, 'FDValue'):
+            focus_dist = float(self.FDValue.GetValue())
         else:
             focus_dist = float(10.)
+
+        if hasattr(self, 'Thickness'):
+            focus_dist += float( self.Thickness.GetValue())
 
         #private options
         grayscale_type = 1
         homing = 1
-        resolution = 10
+        if not hasattr(self, 'resolution'):
+            self.resolution = 10
 
         conversion_type = 1
         BW_threshold = 128
@@ -2382,7 +2387,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         Laser_ON = False
 
         F_G01 = speed_ON
-        Scala = resolution
+        Scala = self.resolution
 
         file_gcode = open(pos_file_gcode, 'w')
 
@@ -2526,8 +2531,29 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
 
         self.load_gcode_and_print_async('lasertest.gcode')
 
+    def setHighResolution(self, e):
+        self.resolution = 10
+
+    def setLowResolution(self, e):
+        self.resolution = 2
+
+    def sendZFocalDist(self, e):
+        command = 'G0 Z'+str(self.FDValue.GetValue())
+        line = self.precmd(str(command))
+        self.onecmd(line)
+
     def sendG29(self, e):
         command = 'G29'
+        line = self.precmd(str(command))
+        self.onecmd(line)
+
+    def sendLaserOn(self, e):
+        command = 'M03'
+        line = self.precmd(str(command))
+        self.onecmd(line)
+
+    def sendLaserOff(self, e):
+        command = 'M05'
         line = self.precmd(str(command))
         self.onecmd(line)
 

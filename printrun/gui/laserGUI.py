@@ -9,6 +9,8 @@
 
 import wx
 import wx.xrc
+from wx.lib.masked import NumCtrl
+
 from .laserGviz import LaserVizPane
 
 ###########################################################################
@@ -47,38 +49,43 @@ class laserGUI(wx.Panel):
                                             wx.DefaultPosition, wx.DefaultSize, 0)
         ConnectGBSizer1.Add(self.ConnectImage, wx.GBPosition(10, 30), wx.GBSpan(10, 50), wx.ALL, 5)
 
-        self.PortButton = wx.Button(self.ConnectPanel, wx.ID_ANY, u"Port", wx.DefaultPosition, wx.Size(60, 25),
+        root.rescanbtn = wx.Button(self.ConnectPanel, wx.ID_ANY, u"Port", wx.DefaultPosition, wx.Size(60, 25),
                                     wx.NO_BORDER)
-        self.PortButton.SetBackgroundColour(wx.Colour(230, 230, 230))
+        root.rescanbtn.SetBackgroundColour(wx.Colour(230, 230, 230))
 
-        ConnectGBSizer1.Add(self.PortButton, wx.GBPosition(12, 140), wx.GBSpan(4, 60), 0, 5)
+        ConnectGBSizer1.Add(root.rescanbtn, wx.GBPosition(12, 140), wx.GBSpan(4, 60), 0, 5)
 
-        self.ConnectButton = wx.Button(self.ConnectPanel, wx.ID_ANY, u"Connect", wx.DefaultPosition, wx.Size(80, 25),
+        root.connectbtn = wx.Button(self.ConnectPanel, wx.ID_ANY, u"Connect", wx.DefaultPosition, wx.Size(80, 25),
                                        wx.NO_BORDER)
-        self.ConnectButton.SetBackgroundColour(wx.Colour(230, 230, 230))
+        root.connectbtn.SetBackgroundColour(wx.Colour(230, 230, 230))
 
-        ConnectGBSizer1.Add(self.ConnectButton, wx.GBPosition(18, 140), wx.GBSpan(4, 80), 0, 5)
+        ConnectGBSizer1.Add(root.connectbtn, wx.GBPosition(18, 140), wx.GBSpan(4, 80), 0, 5)
 
-        self.ResetButton = wx.Button(self.ConnectPanel, wx.ID_ANY, u"Reset", wx.DefaultPosition, wx.Size(80, 25),
+        root.resetbtn = wx.Button(self.ConnectPanel, wx.ID_ANY, u"Reset", wx.DefaultPosition, wx.Size(80, 25),
                                      wx.NO_BORDER)
-        self.ResetButton.SetBackgroundColour(wx.Colour(230, 230, 230))
+        root.resetbtn.SetBackgroundColour(wx.Colour(230, 230, 230))
 
-        ConnectGBSizer1.Add(self.ResetButton, wx.GBPosition(18, 230), wx.GBSpan(4, 80), 0, 5)
+        ConnectGBSizer1.Add(root.resetbtn, wx.GBPosition(18, 230), wx.GBSpan(4, 80), 0, 5)
 
         self.ConnectText = wx.StaticText(self.ConnectPanel, wx.ID_ANY, u"Connect", wx.DefaultPosition, wx.DefaultSize,
                                          wx.ALIGN_CENTRE)
         self.ConnectText.Wrap(-1)
         ConnectGBSizer1.Add(self.ConnectText, wx.GBPosition(20, 30), wx.GBSpan(10, 50), wx.ALIGN_CENTER_HORIZONTAL, 0)
 
-        PortBoxChoices = []
-        self.PortBox = wx.ComboBox(self.ConnectPanel, wx.ID_ANY, u"Combo!", wx.DefaultPosition, wx.DefaultSize,
-                                   PortBoxChoices, 0)
-        ConnectGBSizer1.Add(self.PortBox, wx.GBPosition(12, 205), wx.GBSpan(4, 100), 0, 5)
+        root.serialport = wx.ComboBox(self.ConnectPanel, -1, choices=root.scanserial(), style=wx.CB_DROPDOWN)
 
-        BoundRateBoxChoices = []
-        self.BoundRateBox = wx.ComboBox(self.ConnectPanel, wx.ID_ANY, u"Combo!", wx.DefaultPosition, wx.DefaultSize,
-                                        BoundRateBoxChoices, 0)
-        ConnectGBSizer1.Add(self.BoundRateBox, wx.GBPosition(12, 325), wx.GBSpan(4, 100), 0, 5)
+        ConnectGBSizer1.Add(root.serialport, wx.GBPosition(12, 205), wx.GBSpan(4, 100), 0, 5)
+
+        root.baud = wx.ComboBox(self.ConnectPanel, -1, choices=["2400", "9600", "19200", "38400",
+                                                          "57600", "115200", "250000"],
+                                style=wx.CB_DROPDOWN, size=(100, -1))
+        try:
+            root.baud.SetValue("115200")
+            root.baud.SetValue(str(root.settings.baudrate))
+        except:
+            pass
+
+        ConnectGBSizer1.Add(root.baud, wx.GBPosition(12, 325), wx.GBSpan(4, 100), 0, 5)
 
         self.ConnectPanel.SetSizer(ConnectGBSizer1)
         self.ConnectPanel.Layout()
@@ -184,8 +191,9 @@ class laserGUI(wx.Panel):
 
         FocalGBSizer.Add(self.FDBtnOn, wx.GBPosition(12, 240), wx.GBSpan(4, 60), 0, 5)
 
-        self.FDValue = wx.TextCtrl(self.FocalPanel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size(60, 25), 0)
-        FocalGBSizer.Add(self.FDValue, wx.GBPosition(19, 240), wx.GBSpan(4, 60), 0, 5)
+        root.FDValue = NumCtrl(self.FocalPanel, wx.ID_ANY, 10, wx.DefaultPosition, size=wx.Size(60, 25), integerWidth=3,
+                               fractionWidth = 2)
+        FocalGBSizer.Add(root.FDValue, wx.GBPosition(19, 240), wx.GBSpan(4, 60), 0, 5)
 
         self.FDBtnUp = wx.BitmapButton(self.FocalPanel, wx.ID_ANY,
                                        wx.Bitmap(u"EditIcon/Button_Up.png", wx.BITMAP_TYPE_ANY), wx.DefaultPosition,
@@ -319,7 +327,8 @@ class laserGUI(wx.Panel):
 
         SetupGBSizer.Add(self.FDMText2, wx.GBPosition(61, 300), wx.GBSpan(3, 80), wx.ALL, 5)
 
-        self.FDMtextCtrl = wx.TextCtrl(self.SetupPanel, wx.ID_ANY, u"8.5", wx.DefaultPosition, wx.Size(50, 50), 0)
+        self.FDMtextCtrl = wx.StaticText(self.SetupPanel, wx.ID_ANY, "10.00", wx.DefaultPosition, wx.Size(80, 50), 0)
+        #wx.TextCtrl(self.SetupPanel, wx.ID_ANY, 10.00, wx.DefaultPosition, wx.Size(50, 50), 0)
         self.FDMtextCtrl.SetFont(wx.Font(18, 74, 90, 90, False, "Segoe UI Symbol"))
         self.FDMtextCtrl.SetForegroundColour(wx.Colour(255, 255, 255))
         self.FDMtextCtrl.SetBackgroundColour(wx.Colour(153, 153, 153))
@@ -331,17 +340,17 @@ class laserGUI(wx.Panel):
                                             wx.DefaultPosition, wx.DefaultSize, 0)
         SetupGBSizer.Add(self.FDMPlusImage, wx.GBPosition(66, 260), wx.GBSpan(5, 25), 0, 5)
 
-        self.EngSpeedtextCtrl = wx.TextCtrl(self.SetupPanel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                            wx.Size(110, 25), 0)
-        SetupGBSizer.Add(self.EngSpeedtextCtrl, wx.GBPosition(39, 140), wx.GBSpan(6, 100), 0, 5)
+        root.EngSpeed = NumCtrl(self.SetupPanel, wx.ID_ANY, 200, wx.DefaultPosition, size=wx.Size(110, 25),
+                                        integerWidth=4, autoSize=False)
+        SetupGBSizer.Add(root.EngSpeed, wx.GBPosition(39, 140), wx.GBSpan(6, 100), 0, 5)
 
-        self.TraSpeedtextCtrl = wx.TextCtrl(self.SetupPanel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                            wx.Size(110, 25), 0)
-        SetupGBSizer.Add(self.TraSpeedtextCtrl, wx.GBPosition(39, 300), wx.GBSpan(6, 100), 0, 5)
+        root.TraSpeed = NumCtrl(self.SetupPanel, wx.ID_ANY, 3000, wx.DefaultPosition, size=wx.Size(110, 25),
+                                        integerWidth=4, autoSize=False)
+        SetupGBSizer.Add(root.TraSpeed, wx.GBPosition(39, 300), wx.GBSpan(6, 100), 0, 5)
 
-        self.ThicknesstextCtrl = wx.TextCtrl(self.SetupPanel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-                                             wx.Size(110, 25), 0)
-        SetupGBSizer.Add(self.ThicknesstextCtrl, wx.GBPosition(65, 300), wx.GBSpan(8, 100), wx.ALL, 5)
+        root.Thickness = NumCtrl(self.SetupPanel, wx.ID_ANY, 0, wx.DefaultPosition, size=wx.Size(110, 25),
+                                        integerWidth=3, fractionWidth=2, autoSize=False)
+        SetupGBSizer.Add( root.Thickness, wx.GBPosition(65, 300), wx.GBSpan(8, 100), wx.ALL, 5)
 
         self.SetupPanel.SetSizer(SetupGBSizer)
         self.SetupPanel.Layout()
@@ -370,6 +379,12 @@ class laserGUI(wx.Panel):
         self.ImportText.SetForegroundColour(wx.Colour(255, 255, 255))
 
         ImpotyGBSizer.Add(self.ImportText, wx.GBPosition(20, 30), wx.GBSpan(10, 50), 0, 5)
+
+        self.ImportBtn = wx.Button(self.ImportPanel, wx.ID_ANY, u"Import", wx.DefaultPosition, wx.Size(60, 25),
+                                   wx.NO_BORDER)
+        self.ImportBtn.SetForegroundColour(wx.Colour(0, 0, 0))
+        self.ImportBtn.SetBackgroundColour(wx.Colour(230, 230, 230))
+        ImpotyGBSizer.Add(self.ImportBtn, wx.GBPosition(14, 140), wx.GBSpan(5, 60), 0, 5)
 
         self.ImportPanel.SetSizer(ImpotyGBSizer)
         self.ImportPanel.Layout()
@@ -402,15 +417,15 @@ class laserGUI(wx.Panel):
         self.ActStartBtn.SetBackgroundColour( wx.Colour(128, 128, 0))
         ActionGBSizer.Add(self.ActStartBtn, wx.GBPosition(20, 115), wx.GBSpan(10, 50), 0, 0)
 
-        self.ActPauseBtn = wx.BitmapButton(self.ActionPanel, wx.ID_ANY,
+        root.pausebtn = wx.BitmapButton(self.ActionPanel, wx.ID_ANY,
                                            wx.Bitmap(u"EditIcon/Icon_Pause-01.png", wx.BITMAP_TYPE_ANY),
                                            wx.DefaultPosition, wx.Size(50, 50), wx.BU_AUTODRAW)
-        ActionGBSizer.Add(self.ActPauseBtn, wx.GBPosition(20, 190), wx.GBSpan(10, 50), 0, 5)
+        ActionGBSizer.Add(root.pausebtn, wx.GBPosition(20, 190), wx.GBSpan(10, 50), 0, 5)
 
-        self.ActStopBtn = wx.BitmapButton(self.ActionPanel, wx.ID_ANY,
+        root.offbtn = wx.BitmapButton(self.ActionPanel, wx.ID_ANY,
                                           wx.Bitmap(u"EditIcon/Icon_Stop-01.png", wx.BITMAP_TYPE_ANY),
                                           wx.DefaultPosition, wx.Size(50, 50), wx.BU_AUTODRAW)
-        ActionGBSizer.Add(self.ActStopBtn, wx.GBPosition(20, 270), wx.GBSpan(10, 50), 0, 5)
+        ActionGBSizer.Add(root.offbtn, wx.GBPosition(20, 270), wx.GBSpan(10, 50), 0, 5)
 
         self.ActExportBtn = wx.BitmapButton(self.ActionPanel, wx.ID_ANY,
                                             wx.Bitmap(u"EditIcon/Icon_Export-01.png", wx.BITMAP_TYPE_ANY),
@@ -480,8 +495,36 @@ class laserGUI(wx.Panel):
     def __del__(self):
         pass
 
-    def test(self, event):
-        print 'HAHA'
 
     def BindCommand(self, root):
-        self.ConnectButton.Bind(wx.EVT_BUTTON, root.connect)
+        root.rescanbtn.Bind(wx.EVT_BUTTON, root.rescanports)
+        root.connectbtn.Bind(wx.EVT_BUTTON, root.connect)
+        root.resetbtn.Bind(wx.EVT_BUTTON, root.reset)
+
+        self.CorrectionButton.Bind(wx.EVT_BUTTON, root.sendG29)
+
+        self.FDBtnOn.Bind(wx.EVT_BUTTON, root.sendLaserOn)
+        self.FDBtnOff.Bind(wx.EVT_BUTTON, root.sendLaserOn)
+
+        def addValue(value):
+            def addvalue(event):
+                newValue = str(float(root.FDValue.GetValue())+float(value))
+                root.FDValue.SetValue(newValue)
+                root.FDValue.Refresh()
+                self.FDMtextCtrl.SetLabel(newValue)
+            return addvalue
+        root.FDValue.Bind(wx.EVT_LEAVE_WINDOW, addValue(0))
+        self.FDBtnUp.Bind(wx.EVT_BUTTON, addValue(0.1))
+        self.FDBtnDown.Bind(wx.EVT_BUTTON, addValue(-0.1))
+        self.FDBtnSet.Bind(wx.EVT_BUTTON, root.sendZFocalDist)
+
+        self.ResBtnHigh.Bind(wx.EVT_BUTTON, root.setHighResolution)
+        self.ResBtnLow.Bind(wx.EVT_BUTTON, root.setLowResolution)
+
+        self.ImportBtn.Bind(wx.EVT_BUTTON, root.loadpng)
+
+        self.ActPreviewBtn.Bind(wx.EVT_BUTTON, root.LaserPreview)
+        self.ActStartBtn.Bind(wx.EVT_BUTTON, root.LaserStart)
+        root.pausebtn.Bind(wx.EVT_BUTTON, root.pause)
+        root.offbtn.Bind(wx.EVT_BUTTON, root.off)
+
