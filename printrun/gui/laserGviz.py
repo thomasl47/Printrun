@@ -18,14 +18,15 @@ class LaserVizPane(wx.GridBagSizer):
         self.SetEmptyCellSize( wx.Size( 114,  103 ))
         self.SetMinSize( wx.Size( 910, 820 ))
 
-        root.gviz = LaserGviz(parentpanel, (300, 300),
-                              build_dimensions = root.build_dimensions_list,
+        root.gviz = LaserGviz(parentpanel, (600, 600),
+                              build_dimensions = [200, 200, 100, -100, -100, 0],
                               grid = (root.settings.preview_grid_step1, root.settings.preview_grid_step2),
                               extrusion_width = root.settings.preview_extrusion_width,
                               bgcolor = "#FCEE00")
-        root.gviz.SetToolTip(wx.ToolTip(_("Click to examine / edit\n  layers of loaded file")))
+
+        #root.gviz.SetToolTip(wx.ToolTip(_("Click to examine / edit\n  layers of loaded file")))
         root.gviz.showall = 1
-        root.gviz.Bind(wx.EVT_LEFT_DOWN, root.show_viz_window)
+        #root.gviz.Bind(wx.EVT_LEFT_DOWN, root.show_viz_window)
 
         root.gwindow = GvizWindow(build_dimensions = root.build_dimensions_list,
                                        grid = (root.settings.preview_grid_step1, root.settings.preview_grid_step2),

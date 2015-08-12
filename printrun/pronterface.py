@@ -1130,7 +1130,8 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         wx.CallAfter(self.pausebtn.SetLabel, _("Pause"))
         wx.CallAfter(self.pausebtn.Enable)
         wx.CallAfter(self.printbtn.SetLabel, _("Restart"))
-        wx.CallAfter(self.toolbarsizer.Layout)
+        if hasattr(self, 'toolbarsizer'):
+            wx.CallAfter(self.toolbarsizer.Layout)
 
     def printfile(self, event):
         if self.pngLoaded:
@@ -1206,7 +1207,8 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
             # self.p.runSmallScript(self.pauseScript)
             self.extra_print_time += int(time.time() - self.starttime)
             wx.CallAfter(self.pausebtn.SetLabel, _("Resume"))
-            wx.CallAfter(self.toolbarsizer.Layout)
+            if hasattr(self, 'toolbarsizer'):
+                wx.CallAfter(self.toolbarsizer.Layout)
         else:
             self.log(_("Resuming."))
             self.paused = False
@@ -1215,7 +1217,8 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
             else:
                 self.p.resume()
             wx.CallAfter(self.pausebtn.SetLabel, _("Pause"))
-            wx.CallAfter(self.toolbarsizer.Layout)
+            if hasattr(self, 'toolbarsizer'):
+                wx.CallAfter(self.toolbarsizer.Layout)
 
     def recover(self, event):
         self.extra_print_time = 0
@@ -1375,15 +1378,11 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
             dlg.Destroy()
 
     def convert_png2gcode(self, filename):
-        # try:
-        #     import png2gcode
-        # except:
-        #     self.logError("load fail\n")
-
+        self.FilePathLabel.SetLabel(str(filename))
         self.filename = 'out.gcode'
         self.PNGtoGcode(str(filename))
         self.pngLoaded = True
-       # self.load_gcode_async(self.filename)
+        self.load_gcode_async(self.filename)
 
     def loadfile(self, event, filename = None):
         if self.slicing and self.slicep is not None:
@@ -1539,7 +1538,8 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         self.recoverbtn.Disable()
         if self.p.online:
             self.printbtn.Enable()
-        self.toolbarsizer.Layout()
+        if hasattr(self, 'toolbarsizer'):
+            self.toolbarsizer.Layout()
         self.viz_last_layer = None
         if print_stats:
             self.output_gcode_stats()
@@ -2537,25 +2537,10 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
     def setLowResolution(self, e):
         self.resolution = 2
 
-    def sendZFocalDist(self, e):
-        command = 'G0 Z'+str(self.FDValue.GetValue())
-        line = self.precmd(str(command))
-        self.onecmd(line)
-
-    def sendG29(self, e):
-        command = 'G29'
-        line = self.precmd(str(command))
-        self.onecmd(line)
-
-    def sendLaserOn(self, e):
-        command = 'M03'
-        line = self.precmd(str(command))
-        self.onecmd(line)
-
-    def sendLaserOff(self, e):
-        command = 'M05'
-        line = self.precmd(str(command))
-        self.onecmd(line)
+    def sendGCodeCommand(self, command):
+        if self.p.online:
+            line = self.precmd(str(command))
+            self.onecmd(line)
 
     def LaserPreview(self, event):
         if (self.pngLoaded==False):
