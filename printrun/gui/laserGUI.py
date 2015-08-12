@@ -551,4 +551,5 @@ class laserGUI(wx.Panel):
         self.ActStartBtn.Bind(wx.EVT_BUTTON, root.LaserStart)
         root.pausebtn.Bind(wx.EVT_BUTTON, root.pause)
         root.offbtn.Bind(wx.EVT_BUTTON, root.off)
+        self.ActExportBtn.Bind(wx.EVT_BUTTON, root.savefile)
 

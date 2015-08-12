@@ -1600,6 +1600,8 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
     #  --------------------------------------------------------------
 
     def savefile(self, event):
+        if not self.pngLoaded:
+            return
         basedir = self.settings.last_file_path
         if not os.path.exists(basedir):
             basedir = "."
