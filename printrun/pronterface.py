@@ -131,6 +131,8 @@ class PronterWindow(MainWindow, pronsole.pronsole):
     def _get_display_graph(self):
         return self.settings.tempgraph
     display_graph = property(_get_display_graph)
+    #Display Graph = False for Laser GUI
+    display_graph = False
 
     def _get_display_gauges(self):
         return self.settings.tempgauges
@@ -1457,6 +1459,10 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
             raise PronterfaceQuitException
         if not self.settings.refreshwhenloading:
             return
+        if hasattr(self, 'isPreview'):
+            if self.isPreview:
+                self.isPreview=False
+                return
         self.viz_last_layer = layer
         if time.time() - self.viz_last_yield > 1.0:
             time.sleep(0.2)
@@ -1474,9 +1480,14 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
             gcode = gcoder.LightGCode(deferred = True)
         else:
             gcode = gcoder.GCode(deferred = True)
-        self.viz_last_yield = 0
-        self.viz_last_layer = -1
-        self.start_viz_thread(gcode)
+        reloadViz = True
+        if hasattr(self, 'isPreview'):
+            if self.isPreview:
+                reloadViz=False
+        if reloadViz:
+            self.viz_last_yield = 0
+            self.viz_last_layer = -1
+            self.start_viz_thread(gcode)
         return gcode
 
     def post_gcode_load(self, print_stats = True):
@@ -1613,7 +1624,9 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         dlg.SetWildcard(_("GCODE files (*.gcode;*.gco;*.g)|*.gcode;*.gco;*.g|All Files (*.*)|*.*"))
         if dlg.ShowModal() == wx.ID_OK:
             name = dlg.GetPath()
-            open(name, "w").write("\n".join((line.raw for line in self.fgcode)))
+            file_out_gcode = open('out.gcode', 'r').read()
+            #open(name, "w").write("\n".join((line.raw for line in self.fgcode)))
+            open(name, "w").write(file_out_gcode)
             self.log(_("G-Code succesfully saved to %s") % name)
         dlg.Destroy()
 
@@ -2422,27 +2435,22 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         pGcode_ymax = (float(ymax) - float(h)/2. )/Scala
         pGcode_ymin = (float(ymin) - float(h)/2. )/Scala
 
-        gcode_box = '; Generated with:\n; "BEC Gcode generator"\n; by ATOM 3D Printer\n;\n;\n;\n'
-        gcode_box += 'G28; home all axes\n'
+        gcode_box = 'G28; home all axes\n'
         gcode_box += 'G21; Set units to millimeters\n'
         gcode_box += 'G90; Use absolute coordinates\n'
         gcode_box += 'G92; Coordinate Offset\n'
 
-        preview_focus_dist = float(focus_dist) + float(10.)
-        gcode_box += 'G0 Z'+ str(preview_focus_dist)+'\n'
+        preview_focus_dist = float(focus_dist) + float(25.)
+        gcode_box += 'G0 Z'+ str(preview_focus_dist)+' F10000' +'\n'
         gcode_box += 'M03; Laser ON\n'
 
-        gcode_box += 'G1 X' + str(pGcode_xmin) + ' Y' + str(pGcode_ymin) +' F' + str(speed_OFF) + '\n'
-        repeatlines = 'G1 X' + str(pGcode_xmax) + ' Y' + str(pGcode_ymin) +' F' + str(speed_OFF) + '\n'
-        repeatlines += 'G1 X' + str(pGcode_xmin) + ' Y' + str(pGcode_ymin) +' F' + str(speed_OFF) + '\n'
-        gcode_box += repeatlines*20
-        #gcode_box += 'G01 X' + str(pGcode_xmax) + ' Y' + str(pGcode_ymax) +' F' + str(F_G01) + '\n'
-        #gcode_box += 'G01 X' + str(pGcode_xmax) + ' Y' + str(pGcode_ymin) +' F' + str(F_G01) + '\n'
-        #gcode_box += 'G01 X' + str(pGcode_xmin) + ' Y' + str(pGcode_ymin) +' F' + str(F_G01) + '\n'
-        #gcode_box += 'G01 X' + str(pGcode_xmin) + ' Y' + str(pGcode_ymax) +' F' + str(F_G01) + '\n'
-        #gcode_box += 'G01 X' + str(pGcode_xmax) + ' Y' + str(pGcode_ymax) +' F' + str(F_G01) + '\n'
+        repeatlines = 'G1 X' + str(pGcode_xmax) + ' Y' + str(pGcode_ymax) +' F' + str(speed_OFF) + '\n'
+        repeatlines += 'M0 S1\n'
+        repeatlines += 'G1 X' + str(pGcode_xmin) + ' Y' + str(pGcode_ymax) +' F' + str(speed_OFF) + '\n'
+        repeatlines += 'M0 S1\n'
+        gcode_box += repeatlines*10
         gcode_box += 'M05; Laser OFF\n'
-        gcode_box += 'G28; home all axes\n'
+        gcode_box += 'G28; home all axes'
 
 #         print gcode_box
         file_gcode2 = open(self.previewfilename, 'w') 
@@ -2461,7 +2469,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         file_gcode.write('G21; Set units to millimeters\n')         
         file_gcode.write('G90; Use absolute coordinates\n')             
         file_gcode.write('G92; Coordinate Offset\n')    
-        file_gcode.write('G0 Z'+ str(focus_dist)+'\n')
+        file_gcode.write('G0 Z'+ str(focus_dist)+' F10000'+'\n')
 
         for y in range(h):
             pGcode_y = (float(y) - float(h)/2. )/Scala
@@ -2547,7 +2555,9 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
     def LaserPreview(self, event):
         if (self.pngLoaded==False):
             return
+        self.isPreview = True;
         self.load_gcode_and_print_async(self.previewfilename)
+        #self.p.runSmallScript(self.previewfilename)
 
     def LaserStart(self, event):
         if (self.pngLoaded==False):
