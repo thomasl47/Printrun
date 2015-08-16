@@ -205,7 +205,7 @@ class laserGUI(wx.Panel):
 
         self.FDBtnUp = wx.BitmapButton(self.FocalPanel, wx.ID_ANY,
                                        wx.Bitmap(u"EditIcon/Button_Up.png", wx.BITMAP_TYPE_ANY), wx.DefaultPosition,
-                                       wx.Size(24, 18), wx.BU_AUTODRAW)
+                                       wx.Size(24, 18), wx.NO_BORDER)
         self.FDBtnUp.SetMinSize(wx.Size(24, 18))
         self.FDBtnUp.SetMaxSize(wx.Size(24, 18))
 
@@ -213,7 +213,7 @@ class laserGUI(wx.Panel):
 
         self.FDBtnDown = wx.BitmapButton(self.FocalPanel, wx.ID_ANY,
                                          wx.Bitmap(u"EditIcon/Button_Down.png", wx.BITMAP_TYPE_ANY), wx.DefaultPosition,
-                                         wx.Size(24, 18), wx.BU_AUTODRAW)
+                                         wx.Size(24, 18), wx.NO_BORDER)
         self.FDBtnDown.SetMinSize(wx.Size(24, 18))
         self.FDBtnDown.SetMaxSize(wx.Size(24, 18))
 
@@ -425,28 +425,28 @@ class laserGUI(wx.Panel):
         #                                wx.DefaultPosition, wx.DefaultSize, 0)
         self.ActPreviewBtn = wx.BitmapButton(self.ActionPanel, wx.ID_ANY,
                                              wx.Bitmap(u"EditIcon/Icon_Preview_MouseOn-01.png", wx.BITMAP_TYPE_ANY),
-                                             wx.DefaultPosition, wx.Size(50, 50), 0)
+                                             wx.DefaultPosition, wx.Size(50, 50), wx.NO_BORDER)
         ActionGBSizer.Add(self.ActPreviewBtn, wx.GBPosition(20, 40), wx.GBSpan(10, 50), 0, 0)
 
-        self.ActStartBtn = wx.BitmapButton(self.ActionPanel, wx.ID_ANY,
+        root.printbtn = wx.BitmapButton(self.ActionPanel, wx.ID_ANY,
                                            wx.Bitmap(u"EditIcon/Icon_Start_Preview-01.png", wx.BITMAP_TYPE_ANY),
-                                           wx.DefaultPosition, wx.Size(50, 50), wx.BU_AUTODRAW)
-        self.ActStartBtn.SetBackgroundColour( wx.Colour(128, 128, 0))
-        ActionGBSizer.Add(self.ActStartBtn, wx.GBPosition(20, 115), wx.GBSpan(10, 50), 0, 0)
+                                           wx.DefaultPosition, wx.Size(50, 50), wx.NO_BORDER)
+        root.printbtn.SetBackgroundColour( wx.Colour(128, 128, 0))
+        ActionGBSizer.Add(root.printbtn, wx.GBPosition(20, 115), wx.GBSpan(10, 50), 0, 0)
 
         root.pausebtn = wx.BitmapButton(self.ActionPanel, wx.ID_ANY,
                                            wx.Bitmap(u"EditIcon/Icon_Pause-01.png", wx.BITMAP_TYPE_ANY),
-                                           wx.DefaultPosition, wx.Size(50, 50), wx.BU_AUTODRAW)
+                                           wx.DefaultPosition, wx.Size(50, 50), wx.NO_BORDER)
         ActionGBSizer.Add(root.pausebtn, wx.GBPosition(20, 190), wx.GBSpan(10, 50), 0, 5)
 
         root.offbtn = wx.BitmapButton(self.ActionPanel, wx.ID_ANY,
                                           wx.Bitmap(u"EditIcon/Icon_Stop-01.png", wx.BITMAP_TYPE_ANY),
-                                          wx.DefaultPosition, wx.Size(50, 50), wx.BU_AUTODRAW)
+                                          wx.DefaultPosition, wx.Size(50, 50), wx.NO_BORDER)
         ActionGBSizer.Add(root.offbtn, wx.GBPosition(20, 270), wx.GBSpan(10, 50), 0, 5)
 
         self.ActExportBtn = wx.BitmapButton(self.ActionPanel, wx.ID_ANY,
                                             wx.Bitmap(u"EditIcon/Icon_Export-01.png", wx.BITMAP_TYPE_ANY),
-                                            wx.DefaultPosition, wx.Size(50, 50), wx.BU_AUTODRAW)
+                                            wx.DefaultPosition, wx.Size(50, 50), wx.NO_BORDER)
         ActionGBSizer.Add(self.ActExportBtn, wx.GBPosition(20, 350), wx.GBSpan(10, 50), 0, 5)
 
         self.ActPreviewLabel = wx.StaticText(self.ActionPanel, wx.ID_ANY, u"Preview", wx.DefaultPosition,
@@ -548,7 +548,7 @@ class laserGUI(wx.Panel):
         self.ImportBtn.Bind(wx.EVT_BUTTON, root.loadpng)
 
         self.ActPreviewBtn.Bind(wx.EVT_BUTTON, root.LaserPreview)
-        self.ActStartBtn.Bind(wx.EVT_BUTTON, root.LaserStart)
+        root.printbtn.Bind(wx.EVT_BUTTON, root.LaserStart)
         root.pausebtn.Bind(wx.EVT_BUTTON, root.pause)
         root.offbtn.Bind(wx.EVT_BUTTON, root.off)
         self.ActExportBtn.Bind(wx.EVT_BUTTON, root.savefile)

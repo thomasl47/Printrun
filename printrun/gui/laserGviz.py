@@ -2,6 +2,7 @@
 
 from printrun.gviz import *
 from .viz import *
+from .log import LogPane
 
 class LaserGviz( Gviz ):
     def __init__(self, parent, size = (200, 200), build_dimensions = [200, 200, 100, 0, 0, 0], grid = (10, 50), extrusion_width = 0.5, bgcolor = "#000000", realparent = None):
@@ -36,3 +37,7 @@ class LaserVizPane(wx.GridBagSizer):
         root.gwindow.Bind(wx.EVT_CLOSE, lambda x: root.gwindow.Hide())
         if not isinstance(root.gviz, NoViz):
             self.Add(root.gviz, wx.GBPosition(1,1), wx.GBSpan(6,6))
+
+        root.laserLogpanel = LogPane(root, parentpanel)
+        root.laserLogpanel.SetMinSize( wx.Size(-1, 80))
+        self.Add(root.laserLogpanel, wx.GBPosition(7,1), wx.GBSpan(1,6), wx.EXPAND)

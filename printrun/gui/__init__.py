@@ -358,8 +358,6 @@ class MainWindow(wx.Frame):
 
         self.laserpanelSizer.Add(self.laserpanel, 1, wx.EXPAND)
 
-        self.laserLogpanel = LogPane(self, self.laserpanel)
-
         self.panel.SetMinSize(wx.Size(1440, 820))
         self.panel.SetMaxSize(wx.Size(1440, 820))
         #self.panel.Fit()
