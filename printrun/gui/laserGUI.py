@@ -165,7 +165,7 @@ class laserGUI(wx.Panel):
 
         self.DoneButton = wx.Button(self.CorrectionPanel, wx.ID_ANY, u"Done", wx.DefaultPosition,
                                           wx.Size(60, 25), wx.NO_BORDER)
-        self.DoneButton.SetFont(wx.Font(9, 74, 90, 92, False, "Segoe UI Symbol"))
+        self.DoneButton.SetFont(wx.Font(9, 74, 90, 90, False, "Segoe UI Symbol"))
         self.DoneButton.SetForegroundColour(wx.Colour(255, 255, 255))
         self.DoneButton.SetBackgroundColour(wx.Colour(251, 176, 59))
 

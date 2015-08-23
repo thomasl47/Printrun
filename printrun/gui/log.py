@@ -38,3 +38,4 @@ class LogPane(wx.BoxSizer):
         root.sendbtn = make_button(bottom_panel, _("Send"), root.sendline, _("Send Command to Printer"), style = wx.BU_EXACTFIT, container = lbrs)
         bottom_panel.SetSizer(lbrs)
         self.Add(bottom_panel, 0, wx.EXPAND)
+
