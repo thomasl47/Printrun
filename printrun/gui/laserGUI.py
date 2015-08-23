@@ -55,7 +55,7 @@ class laserGUI(wx.Panel):
         root.toolbarsizer.SetEmptyCellSize(wx.Size(1, 1))
 
         # Set Fonts
-        labelfont = wx.Font(9, 74, 90, 92, False)
+        labelfont = wx.Font(10, 74, 90, 92, False)
 
 
         # Right Panel 1
@@ -88,7 +88,8 @@ class laserGUI(wx.Panel):
         #
         # root.toolbarsizer.Add(root.resetbtn, wx.GBPosition(17, 230), wx.GBSpan(4, 80), 0, 5)
 
-        root.serialport = wx.ComboBox(self.ConnectPanel, -1, choices=root.scanserial(), style=wx.CB_DROPDOWN)
+        root.serialport = wx.ComboBox(self.ConnectPanel, -1, choices=root.scanserial(), style=wx.CB_DROPDOWN,
+                                size=(200, -1))
 
         root.toolbarsizer.Add(root.serialport, wx.GBPosition(11, 190), wx.GBSpan(4, 80), 0, 5)
 
@@ -242,7 +243,7 @@ class laserGUI(wx.Panel):
         self.FDBtnSet.SetForegroundColour(wx.Colour(255, 255, 255))
         self.FDBtnSet.SetBackgroundColour(wx.Colour(251, 176, 59))
 
-        FocalGBSizer.Add(self.FDBtnSet, wx.GBPosition(12, 420), wx.GBSpan(6, 40), 0, 0)
+        FocalGBSizer.Add(self.FDBtnSet, wx.GBPosition(12, 414), wx.GBSpan(6, 40), 0, 0)
 
         self.FocalPanel.SetSizer(FocalGBSizer)
         self.FocalPanel.Layout()
@@ -290,7 +291,7 @@ class laserGUI(wx.Panel):
         # SetupGBSizer.Add(self.ResBtnHigh, wx.GBPosition(24, BUTTONGPX2+60+5), wx.GBSpan(5, 60), 0, 0)
 
         self.respicker = wx.ComboBox(self.SetupPanel, -1, choices=["High", "Low"],
-                                style=wx.CB_READONLY, size=(80, 25))
+                                style=wx.CB_READONLY, size=(80, -1))
         self.respicker.SetValue("High")
         root.setHighResolution(None)
         SetupGBSizer.Add(self.respicker, wx.GBPosition(24, BUTTONGPX2), wx.GBSpan(4, 80), 0, 0)

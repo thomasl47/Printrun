@@ -100,7 +100,7 @@ class LaserVizPane(wx.GridBagSizer):
 
         pathLabel = wx.StaticText(parentpanel, wx.ID_ANY, u"Paths", wx.DefaultPosition, wx.Size(70, 30),
                                            wx.ALIGN_CENTRE)
-        pathLabel.SetFont(wx.Font(9, 74, 90, 92, False))
+        pathLabel.SetFont(wx.Font(10, 74, 90, 92, False))
         self.Add(pathLabel, wx.GBPosition(1, 0), wx.GBSpan(1, 1), 0, 5)
 
         root.consolebtn = wx.BitmapButton(parentpanel, wx.ID_ANY,
@@ -110,7 +110,7 @@ class LaserVizPane(wx.GridBagSizer):
         self.Add(root.consolebtn, wx.GBPosition(0, 1), wx.GBSpan(1, 1), 0, 0)
         consoleLabel = wx.StaticText(parentpanel, wx.ID_ANY, u"Console", wx.DefaultPosition, wx.Size(70, 30),
                                            wx.ALIGN_CENTRE)
-        consoleLabel.SetFont(wx.Font(9, 74, 90, 92, False))
+        consoleLabel.SetFont(wx.Font(10, 74, 90, 92, False))
         self.Add(consoleLabel, wx.GBPosition(1, 1), wx.GBSpan(1, 1), 0, 0)
 
         # Bind Events
