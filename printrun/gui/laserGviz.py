@@ -16,10 +16,8 @@ class LaserGviz( Gviz ):
         self.blitmap = wx.EmptyBitmap(width + 1, height + 1, -1)
         dc = wx.MemoryDC()
         dc.SelectObject(self.blitmap)
-        # dc.SetBackground(wx.Brush((250, 250, 200)))
         dc.SetBackground(wx.Brush((252, 238, 0)))
         dc.Clear()
-        # dc.SetPen(wx.Pen(wx.Colour(180, 180, 150)))
         dc.SetPen(wx.Pen(wx.Colour(252, 238, 0)))
         center_x = self.build_dimensions[0]*self.scale[0]/2.
         center_y = self.build_dimensions[1]*self.scale[1]/2.
@@ -34,7 +32,6 @@ class LaserGviz( Gviz ):
                     draw_y = self.scale[1] * (self.build_dimensions[1] - y * grid_unit)
                     dc.DrawLine(0, draw_y, width, draw_y)
             dc.SetPen(wx.Pen(wx.Colour(252, 238, 0)))
-            # dc.SetPen(wx.Pen(wx.Colour(0, 0, 0)))
 
         if not self.showall:
             # Draw layer gauge
@@ -81,7 +78,6 @@ class LaserVizPane(wx.GridBagSizer):
 
         #root.gviz.SetToolTip(wx.ToolTip(_("Click to examine / edit\n  layers of loaded file")))
         root.gviz.showall = 1
-
         root.gwindow = GvizWindow(build_dimensions = root.build_dimensions_list,
                                   grid = (root.settings.preview_grid_step1, root.settings.preview_grid_step2),
                                   extrusion_width = root.settings.preview_extrusion_width,
@@ -104,7 +100,7 @@ class LaserVizPane(wx.GridBagSizer):
 
         pathLabel = wx.StaticText(parentpanel, wx.ID_ANY, u"Paths", wx.DefaultPosition, wx.Size(70, 30),
                                            wx.ALIGN_CENTRE)
-        pathLabel.SetFont(wx.Font(9, 74, 90, 92, False, "Segoe UI Symbol"))
+        pathLabel.SetFont(wx.Font(9, 74, 90, 92, False))
         self.Add(pathLabel, wx.GBPosition(1, 0), wx.GBSpan(1, 1), 0, 5)
 
         root.consolebtn = wx.BitmapButton(parentpanel, wx.ID_ANY,
@@ -114,7 +110,7 @@ class LaserVizPane(wx.GridBagSizer):
         self.Add(root.consolebtn, wx.GBPosition(0, 1), wx.GBSpan(1, 1), 0, 0)
         consoleLabel = wx.StaticText(parentpanel, wx.ID_ANY, u"Console", wx.DefaultPosition, wx.Size(70, 30),
                                            wx.ALIGN_CENTRE)
-        consoleLabel.SetFont(wx.Font(9, 74, 90, 92, False, "Segoe UI Symbol"))
+        consoleLabel.SetFont(wx.Font(9, 74, 90, 92, False))
         self.Add(consoleLabel, wx.GBPosition(1, 1), wx.GBSpan(1, 1), 0, 0)
 
         # Bind Events

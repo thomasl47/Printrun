@@ -54,6 +54,10 @@ class laserGUI(wx.Panel):
         root.toolbarsizer.SetNonFlexibleGrowMode(wx.FLEX_GROWMODE_SPECIFIED)
         root.toolbarsizer.SetEmptyCellSize(wx.Size(1, 1))
 
+        # Set Fonts
+        labelfont = wx.Font(9, 74, 90, 92, False)
+
+
         # Right Panel 1
         root.toolbarsizer.SetMinSize(wx.Size(WIDTH_P2, HEIGHT_P3_1))
         self.ConnectImage = wx.StaticBitmap(self.ConnectPanel, wx.ID_ANY,
@@ -63,7 +67,7 @@ class laserGUI(wx.Panel):
 
         self.ConnectText = wx.StaticText(self.ConnectPanel, wx.ID_ANY, u"Connect", wx.DefaultPosition, wx.Size(60, -1),
                                          wx.ALIGN_CENTRE)
-        self.ConnectText.SetFont(wx.Font(9, 74, 90, 92, False, "Segoe UI Symbol"))
+        self.ConnectText.SetFont(labelfont)
         root.toolbarsizer.Add(self.ConnectText, wx.GBPosition(20, 20), wx.GBSpan(4, 60), wx.ALIGN_CENTER_HORIZONTAL, 0)
 
         root.rescanbtn = wx.Button(self.ConnectPanel, wx.ID_ANY, u"Port", wx.DefaultPosition, wx.Size(60, 25),
@@ -120,21 +124,19 @@ class laserGUI(wx.Panel):
 
         self.CorrectionText = wx.StaticText(self.CorrectionPanel, wx.ID_ANY, u"Auto\nCorrect", wx.DefaultPosition,
                                             wx.Size(60, -1), wx.ALIGN_CENTRE)
-        self.CorrectionText.Wrap(-1)
-        self.CorrectionText.SetFont(wx.Font(9, 74, 90, 92, False, "Segoe UI Symbol"))
+        self.CorrectionText.SetFont(labelfont)
 
         CorrectionGBSizer.Add(self.CorrectionText, wx.GBPosition(20, 20), wx.GBSpan(10, 60), wx.ALIGN_CENTER_HORIZONTAL,
                               0)
 
         self.G29Text = wx.StaticText(self.CorrectionPanel, wx.ID_ANY, u"G29", wx.DefaultPosition, wx.Size(40,25), 0)
-        self.G29Text.Wrap(-1)
-        self.G29Text.SetFont(wx.Font(12, 74, 90, 92, False, "Segoe UI Symbol"))
+        self.G29Text.SetFont(wx.Font(12, 74, 90, 92, False))
 
         CorrectionGBSizer.Add(self.G29Text, wx.GBPosition(12, BUTTONGPX2), wx.GBSpan(5, 20), wx.ALIGN_BOTTOM, 5)
 
         self.CorrectionButton = wx.Button(self.CorrectionPanel, wx.ID_ANY, u"Auto Correct", wx.DefaultPosition,
                                           wx.Size(100, 25), wx.NO_BORDER)
-        # self.CorrectionButton.SetFont(wx.Font(9, 74, 90, 92, False, "Segoe UI Symbol"))
+        self.CorrectionButton.SetFont(labelfont)
         self.CorrectionButton.SetForegroundColour(wx.Colour(255, 255, 255))
         self.CorrectionButton.SetBackgroundColour(wx.Colour(0, 146, 69))
 
@@ -143,14 +145,14 @@ class laserGUI(wx.Panel):
         self.ACText1 = wx.StaticText(self.CorrectionPanel, wx.ID_ANY, u"Install Laser Module", wx.DefaultPosition,
                                      wx.DefaultSize, 0)
         self.ACText1.Wrap(-1)
-        self.ACText1.SetFont(wx.Font(9, 74, 90, 90, False, "Segoe UI Symbol"))
+        self.ACText1.SetFont(labelfont)
 
         CorrectionGBSizer.Add(self.ACText1, wx.GBPosition(12, 240), wx.GBSpan(5, 50), wx.ALIGN_CENTER_VERTICAL, 5)
 
         self.ACText2 = wx.StaticText(self.CorrectionPanel, wx.ID_ANY, u"CAUTION!", wx.DefaultPosition, wx.DefaultSize,
                                      0)
         self.ACText2.Wrap(-1)
-        self.ACText2.SetFont(wx.Font(9, 74, 90, 92, False, "Segoe UI Symbol"))
+        self.ACText2.SetFont(labelfont)
         self.ACText2.SetForegroundColour(wx.Colour(237, 28, 36))
 
         CorrectionGBSizer.Add(self.ACText2, wx.GBPosition(18, 240), wx.GBSpan(5, 50), 0, 5)
@@ -158,14 +160,14 @@ class laserGUI(wx.Panel):
         self.ACText3 = wx.StaticText(self.CorrectionPanel, wx.ID_ANY, u"Use eye protection before continue...",
                                      wx.DefaultPosition, wx.DefaultSize, 0)
         self.ACText3.Wrap(-1)
-        self.ACText3.SetFont(wx.Font(9, 74, 90, 90, False, "Segoe UI Symbol"))
+        self.ACText3.SetFont(wx.Font(9, 74, 90, 90, False))
         self.ACText3.SetForegroundColour(wx.Colour(237, 28, 36))
 
         CorrectionGBSizer.Add(self.ACText3, wx.GBPosition(23, 240), wx.GBSpan(1, 100), 0, 0)
 
         self.DoneButton = wx.Button(self.CorrectionPanel, wx.ID_ANY, u"Done", wx.DefaultPosition,
                                           wx.Size(60, 25), wx.NO_BORDER)
-        self.DoneButton.SetFont(wx.Font(9, 74, 90, 90, False, "Segoe UI Symbol"))
+        self.DoneButton.SetFont(labelfont)
         self.DoneButton.SetForegroundColour(wx.Colour(255, 255, 255))
         self.DoneButton.SetBackgroundColour(wx.Colour(251, 176, 59))
 
@@ -192,12 +194,12 @@ class laserGUI(wx.Panel):
 
         self.FocalText = wx.StaticText(self.FocalPanel, wx.ID_ANY, u"Focal\nDistance", wx.DefaultPosition,
                                        wx.Size(60, -1), wx.ALIGN_CENTRE)
-        self.FocalText.SetFont(wx.Font(9, 74, 90, 92, False, "Segoe UI Symbol"))
-        FocalGBSizer.Add(self.FocalText, wx.GBPosition(20, 20), wx.GBSpan(7, 60), 0, 0)
+        self.FocalText.SetFont(labelfont)
+        FocalGBSizer.Add(self.FocalText, wx.GBPosition(20, 20), wx.GBSpan(10, 60), 0, 0)
 
         self.FDText1 = wx.StaticText(self.FocalPanel, wx.ID_ANY, u"Laser\nFunction", wx.DefaultPosition,
                                      wx.Size(60, 40), 0)
-        self.FDText1.SetFont(wx.Font(9, 74, 90, 90, False, "Segoe UI Symbol"))
+        self.FDText1.SetFont(labelfont)
 
         FocalGBSizer.Add(self.FDText1, wx.GBPosition(12, BUTTONGPX2), wx.GBSpan(10, 60), wx.ALIGN_CENTER_HORIZONTAL, 0)
 
@@ -215,7 +217,7 @@ class laserGUI(wx.Panel):
 
         self.FDText2 = wx.StaticText(self.FocalPanel, wx.ID_ANY, u"Focal\nDistance", wx.DefaultPosition,
                                      wx.Size(60, 40), 0)
-        self.FDText2.SetFont(wx.Font(9, 74, 90, 90, False, "Segoe UI Symbol"))
+        self.FDText2.SetFont(labelfont)
         FocalGBSizer.Add(self.FDText2, wx.GBPosition(12, 260), wx.GBSpan(10, 60), 0, 0)
 
         root.FDValue = NumCtrl(self.FocalPanel, wx.ID_ANY, 10, wx.DefaultPosition, size=wx.Size(60, 24), integerWidth=3,
@@ -268,14 +270,16 @@ class laserGUI(wx.Panel):
                                                wx.DefaultPosition, wx.DefaultSize, 0)
         SetupGBSizer.Add(self.ResolutionImage, wx.GBPosition(20, BUTTONGPX1), wx.GBSpan(10, 40), 0, 0)
 
-        self.ResText = wx.StaticText(self.SetupPanel, wx.ID_ANY, u'Resolution', wx.DefaultPosition, wx.Size(60, -1),
+        self.ResText = wx.StaticText(self.SetupPanel, wx.ID_ANY, u'Resolution', wx.DefaultPosition, wx.Size(80, -1),
                                      wx.ALIGN_CENTRE)
+        self.ResText.SetFont(labelfont)
         self.ResText.SetForegroundColour(wx.Colour(255, 255, 255))
 
-        SetupGBSizer.Add(self.ResText, wx.GBPosition(30, 20), wx.GBSpan(10, 60), 0, 0)
+        SetupGBSizer.Add(self.ResText, wx.GBPosition(30, 10), wx.GBSpan(10, 80), 0, 0)
 
         self.ResBtnLow = wx.Button(self.SetupPanel, wx.ID_ANY, u"Low", wx.DefaultPosition, wx.Size(60, 25),
                                    wx.NO_BORDER)
+        self.ResBtnLow.SetFont(labelfont)
         self.ResBtnLow.SetForegroundColour(wx.Colour(0, 0, 0))
         self.ResBtnLow.SetBackgroundColour(wx.Colour(230, 230, 230))
 
@@ -283,10 +287,11 @@ class laserGUI(wx.Panel):
 
         self.ResBtnHigh = wx.Button(self.SetupPanel, wx.ID_ANY, u"High", wx.DefaultPosition, wx.Size(60, 25),
                                     wx.NO_BORDER)
+        self.ResBtnHigh.SetFont(labelfont)
         self.ResBtnHigh.SetForegroundColour(wx.Colour(0, 0, 0))
         self.ResBtnHigh.SetBackgroundColour(wx.Colour(230, 230, 230))
 
-        SetupGBSizer.Add(self.ResBtnHigh, wx.GBPosition(24, BUTTONGPX2+60), wx.GBSpan(5, 60), 0, 0)
+        SetupGBSizer.Add(self.ResBtnHigh, wx.GBPosition(24, BUTTONGPX2+60+5), wx.GBSpan(5, 60), 0, 0)
 
         # Right Panel 4-2
         self.SpeedImage = wx.StaticBitmap(self.SetupPanel, wx.ID_ANY,
@@ -296,16 +301,16 @@ class laserGUI(wx.Panel):
 
         self.SpeedText = wx.StaticText(self.SetupPanel, wx.ID_ANY, u"Speed", wx.DefaultPosition, wx.Size(60, -1),
                                        wx.ALIGN_CENTRE)
+        self.SpeedText.SetFont(labelfont)
         self.SpeedText.SetForegroundColour(wx.Colour(255, 255, 255))
 
         SetupGBSizer.Add(self.SpeedText, wx.GBPosition(60, 20), wx.GBSpan(10, 60), wx.ALIGN_CENTER_HORIZONTAL, 0)
 
         self.SpeedText1 = wx.StaticText(self.SetupPanel, wx.ID_ANY, u"Engrave Speed (mm/s)", wx.DefaultPosition,
-                                        wx.Size(140, 15), 0)
-        self.SpeedText1.Wrap(-1)
+                                        wx.Size(160, 15), 0)
+        self.SpeedText1.SetFont(labelfont)
         self.SpeedText1.SetForegroundColour(wx.Colour(255, 255, 255))
-
-        SetupGBSizer.Add(self.SpeedText1, wx.GBPosition(51, BUTTONGPX2), wx.GBSpan(3, 140), 0, 0)
+        SetupGBSizer.Add(self.SpeedText1, wx.GBPosition(50, BUTTONGPX2), wx.GBSpan(3, 140), 0, 0)
 
         root.EngSpeed = NumCtrl(self.SetupPanel, wx.ID_ANY, 200, wx.DefaultPosition, size=wx.Size(80, 25),
                                         integerWidth=4, autoSize=False)
@@ -318,11 +323,10 @@ class laserGUI(wx.Panel):
         #SetupGBSizer.Add(self.SpeedText2, wx.GBPosition(40, BUTTONGPX2+100), wx.GBSpan(4, 30), 0, 0)
 
         self.SpeedText3 = wx.StaticText(self.SetupPanel, wx.ID_ANY, u"Travel Speed (mm/s)", wx.DefaultPosition,
-                                        wx.Size(140, 15), 0)
-        self.SpeedText3.Wrap(-1)
+                                        wx.Size(160, 15), 0)
+        self.SpeedText3.SetFont(labelfont)
         self.SpeedText3.SetForegroundColour(wx.Colour(255, 255, 255))
-
-        SetupGBSizer.Add(self.SpeedText3, wx.GBPosition(51, BUTTONGPX2+140+10), wx.GBSpan(3, 140), 0, 5)
+        SetupGBSizer.Add(self.SpeedText3, wx.GBPosition(50, BUTTONGPX2+140+10), wx.GBSpan(3, 140), 0, 5)
 
         root.TraSpeed = NumCtrl(self.SetupPanel, wx.ID_ANY, 3000, wx.DefaultPosition, size=wx.Size(80, 25),
                                         integerWidth=4, autoSize=False)
@@ -341,24 +345,22 @@ class laserGUI(wx.Panel):
 
         self.FDMText = wx.StaticText(self.SetupPanel, wx.ID_ANY, u"Focal Distance\nwith Material", wx.DefaultPosition,
                                      wx.Size(70, -1), wx.ALIGN_CENTRE)
-        self.FDMText.Wrap(-1)
+        self.FDMText.SetFont(labelfont)
         self.FDMText.SetForegroundColour(wx.Colour(255, 255, 255))
-
         SetupGBSizer.Add(self.FDMText, wx.GBPosition(90, 15), wx.GBSpan(10, 70), wx.ALIGN_CENTER_HORIZONTAL, 0)
 
         self.FDMText1 = wx.StaticText(self.SetupPanel, wx.ID_ANY, u"Focal", wx.DefaultPosition, wx.Size(100, 15), 0)
+        self.FDMText1.SetFont(labelfont)
         self.FDMText1.SetForegroundColour(wx.Colour(255, 255, 255))
-
-        SetupGBSizer.Add(self.FDMText1, wx.GBPosition(81, BUTTONGPX2), wx.GBSpan(3, 80), 0, 5)
+        SetupGBSizer.Add(self.FDMText1, wx.GBPosition(80, BUTTONGPX2), wx.GBSpan(3, 100), 0, 5)
 
         self.FDMText2 = wx.StaticText(self.SetupPanel, wx.ID_ANY, u"Thickness", wx.DefaultPosition, wx.Size(100, 15), 0)
+        self.FDMText2.SetFont(labelfont)
         self.FDMText2.SetForegroundColour(wx.Colour(255, 255, 255))
-
-        SetupGBSizer.Add(self.FDMText2, wx.GBPosition(81, BUTTONGPX2+140+10), wx.GBSpan(3, 100), wx.ALL, 5)
+        SetupGBSizer.Add(self.FDMText2, wx.GBPosition(80, BUTTONGPX2+140+10), wx.GBSpan(3, 100), wx.ALL, 5)
 
         self.FDMtextCtrl = wx.StaticText(self.SetupPanel, wx.ID_ANY, "10.0", wx.DefaultPosition, wx.Size(80, 30), 0)
-        #wx.TextCtrl(self.SetupPanel, wx.ID_ANY, 10.00, wx.DefaultPosition, wx.Size(50, 50), 0)
-        self.FDMtextCtrl.SetFont(wx.Font(18, 74, 90, 90, False, "Segoe UI Symbol"))
+        self.FDMtextCtrl.SetFont(wx.Font(18, 74, 90, 90, False))
         self.FDMtextCtrl.SetForegroundColour(wx.Colour(255, 255, 255))
         self.FDMtextCtrl.SetBackgroundColour(wx.Colour(153, 153, 153))
 
@@ -397,7 +399,7 @@ class laserGUI(wx.Panel):
 
         self.ImportText = wx.StaticText(self.ImportPanel, wx.ID_ANY, u"Import", wx.DefaultPosition, wx.Size(60, -1),
                                         wx.ALIGN_CENTRE)
-        self.ImportText.Wrap(-1)
+        self.ImportText.SetFont(labelfont)
         self.ImportText.SetForegroundColour(wx.Colour(255, 255, 255))
 
         ImpotyGBSizer.Add(self.ImportText, wx.GBPosition(20, 20), wx.GBSpan(10, 60), 0, 0)
@@ -446,6 +448,7 @@ class laserGUI(wx.Panel):
 
         self.ActPreviewLabel = wx.StaticText(self.ActionPanel, wx.ID_ANY, u"Preview", wx.DefaultPosition,
                                              wx.Size(60, 20), wx.ALIGN_CENTRE)
+        self.ActPreviewLabel.SetFont(labelfont)
         self.ActPreviewLabel.SetForegroundColour(wx.Colour(255, 255, 255))
         ActionGBSizer.Add(self.ActPreviewLabel, wx.GBPosition(30, BTNXPOS-10), wx.GBSpan(10, 60), 0, 5)
 
@@ -459,6 +462,7 @@ class laserGUI(wx.Panel):
 
         self.ActStartLabel = wx.StaticText(self.ActionPanel, wx.ID_ANY, u"Start", wx.DefaultPosition, wx.Size(60, 20),
                                            wx.ALIGN_CENTRE)
+        self.ActStartLabel.SetFont(labelfont)
         self.ActStartLabel.SetForegroundColour(wx.Colour(255, 255, 255))
         ActionGBSizer.Add(self.ActStartLabel, wx.GBPosition(30, BTNXPOS-10), wx.GBSpan(10, 60), 0, 5)
 
@@ -471,6 +475,7 @@ class laserGUI(wx.Panel):
 
         self.ActPauseLabel = wx.StaticText(self.ActionPanel, wx.ID_ANY, u"Pause", wx.DefaultPosition, wx.Size(60, 20),
                                            wx.ALIGN_CENTRE)
+        self.ActPauseLabel.SetFont(labelfont)
         self.ActPauseLabel.SetForegroundColour(wx.Colour(255, 255, 255))
         ActionGBSizer.Add(self.ActPauseLabel, wx.GBPosition(30, BTNXPOS-10), wx.GBSpan(10, 60), 0, 5)
 
@@ -483,6 +488,7 @@ class laserGUI(wx.Panel):
 
         self.ActStopLabel = wx.StaticText(self.ActionPanel, wx.ID_ANY, u"Stop", wx.DefaultPosition, wx.Size(60, 20),
                                           wx.ALIGN_CENTRE)
+        self.ActStopLabel.SetFont(labelfont)
         self.ActStopLabel.SetForegroundColour(wx.Colour(255, 255, 255))
         ActionGBSizer.Add(self.ActStopLabel, wx.GBPosition(30, BTNXPOS-10), wx.GBSpan(10, 60), 0, 5)
 
@@ -495,6 +501,7 @@ class laserGUI(wx.Panel):
 
         self.ActExportLabel = wx.StaticText(self.ActionPanel, wx.ID_ANY, u"Export", wx.DefaultPosition, wx.Size(60, 20),
                                             wx.ALIGN_CENTRE)
+        self.ActExportLabel.SetFont(labelfont)
         self.ActExportLabel.SetForegroundColour(wx.Colour(255, 255, 255))
         ActionGBSizer.Add(self.ActExportLabel, wx.GBPosition(30, BTNXPOS-10), wx.GBSpan(10, 60), 0, 5)
 
@@ -511,12 +518,12 @@ class laserGUI(wx.Panel):
         self.controlPanel.Layout()
         mainSizer.Add(self.controlPanel, 0, 0, 0)
 
-        self.rightcolorpanel = wx.Panel(self, wx.ID_ANY, wx.DefaultPosition, wx.Size(10, 820), wx.TAB_TRAVERSAL)
-        self.rightcolorpanel.SetBackgroundColour(wx.Colour(252, 238, 0))
-        self.rightcolorpanel.SetMinSize(wx.Size(10, 820))
-        self.rightcolorpanel.SetMaxSize(wx.Size(10, 820))
-
-        mainSizer.Add(self.rightcolorpanel, 0, 0, 0)
+        # self.rightcolorpanel = wx.Panel(self, wx.ID_ANY, wx.DefaultPosition, wx.Size(10, 820), wx.TAB_TRAVERSAL)
+        # self.rightcolorpanel.SetBackgroundColour(wx.Colour(252, 238, 0))
+        # self.rightcolorpanel.SetMinSize(wx.Size(10, 820))
+        # self.rightcolorpanel.SetMaxSize(wx.Size(10, 820))
+        #
+        # mainSizer.Add(self.rightcolorpanel, 0, 0, 0)
 
         self.SetSizer(mainSizer)
         self.Layout()
