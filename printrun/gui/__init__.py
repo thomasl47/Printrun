@@ -358,12 +358,12 @@ class MainWindow(wx.Frame):
 
         self.laserpanelSizer.Add(self.laserpanel, 1, wx.EXPAND)
 
-        self.panel.SetMinSize(wx.Size(1440, 820))
-        self.panel.SetMaxSize(wx.Size(1440, 820))
+        self.panel.SetMinSize(wx.Size(1200, 700))
+        self.panel.SetMaxSize(wx.Size(1200, 700))
         #self.panel.Fit()
         self.panel.SetSizer(self.laserpanelSizer)
-        self.SetMinSize(wx.Size(1460, 880))
-        self.SetMaxSize(wx.Size(1460, 880))
+        #self.SetMinSize(wx.Size(1200, 720))
+        #self.SetMaxSize(wx.Size(1200, 720))
         self.Fit()
         self.Bind(wx.EVT_CLOSE, self.kill)
 

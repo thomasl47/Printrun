@@ -7,8 +7,8 @@ from .log import LogPane
 class LaserGviz( Gviz ):
     def __init__(self, parent, size = (200, 200), build_dimensions = [200, 200, 100, 0, 0, 0], grid = (10, 50), extrusion_width = 0.5, bgcolor = "#000000", realparent = None):
         super( LaserGviz, self).__init__(parent, size, build_dimensions, grid, extrusion_width, bgcolor, realparent)
-        self.SetMinSize( wx.Size( 600, 600 ))
-        self.SetMaxSize( wx.Size( 600, 600 ))
+        self.SetMinSize( wx.Size( 560, 560 ))
+        self.SetMaxSize( wx.Size( 560, 560 ))
 
     def repaint_everything(self):
         width = self.scale[0] * self.build_dimensions[0]
@@ -62,11 +62,11 @@ class LaserGviz( Gviz ):
 class LaserVizPane(wx.GridBagSizer):
     def __init__(self, root, parentpanel = None):
         super(LaserVizPane, self).__init__(0, 0)
-        self.SetFlexibleDirection( wx.BOTH )
-        self.SetEmptyCellSize( wx.Size( 114,  103 ))
-        self.SetMinSize( wx.Size( 910, 820 ))
+        self.SetFlexibleDirection(wx.BOTH)
+        self.SetEmptyCellSize( wx.Size(70, 70))
+        self.SetMinSize( wx.Size(700, 700))
 
-        root.gviz = LaserGviz(parentpanel, (600, 600),
+        root.gviz = LaserGviz(parentpanel, (560, 560),
                               build_dimensions = [200, 200, 100, -100, -100, 0],
                               grid = (root.settings.preview_grid_step1, root.settings.preview_grid_step2),
                               extrusion_width = root.settings.preview_extrusion_width,
@@ -83,8 +83,8 @@ class LaserVizPane(wx.GridBagSizer):
 
         root.gwindow.Bind(wx.EVT_CLOSE, lambda x: root.gwindow.Hide())
         if not isinstance(root.gviz, NoViz):
-            self.Add(root.gviz, wx.GBPosition(1,1), wx.GBSpan(6,6))
+            self.Add(root.gviz, wx.GBPosition(1,1), wx.GBSpan(8,8))
 
         root.laserLogpanel = LogPane(root, parentpanel)
         root.laserLogpanel.SetMinSize( wx.Size(-1, 80))
-        self.Add(root.laserLogpanel, wx.GBPosition(7,1), wx.GBSpan(1,6), wx.EXPAND)
+        self.Add(root.laserLogpanel, wx.GBPosition(10,1), wx.GBSpan(1,8), wx.EXPAND)
