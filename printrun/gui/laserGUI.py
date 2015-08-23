@@ -136,7 +136,7 @@ class laserGUI(wx.Panel):
 
         self.CorrectionButton = wx.Button(self.CorrectionPanel, wx.ID_ANY, u"Auto Correct", wx.DefaultPosition,
                                           wx.Size(100, 25), wx.NO_BORDER)
-        self.CorrectionButton.SetFont(labelfont)
+        # self.CorrectionButton.SetFont(labelfont)
         self.CorrectionButton.SetForegroundColour(wx.Colour(255, 255, 255))
         self.CorrectionButton.SetBackgroundColour(wx.Colour(0, 146, 69))
 
@@ -167,7 +167,7 @@ class laserGUI(wx.Panel):
 
         self.DoneButton = wx.Button(self.CorrectionPanel, wx.ID_ANY, u"Done", wx.DefaultPosition,
                                           wx.Size(60, 25), wx.NO_BORDER)
-        self.DoneButton.SetFont(labelfont)
+        # self.DoneButton.SetFont(labelfont)
         self.DoneButton.SetForegroundColour(wx.Colour(255, 255, 255))
         self.DoneButton.SetBackgroundColour(wx.Colour(251, 176, 59))
 
@@ -279,7 +279,7 @@ class laserGUI(wx.Panel):
 
         self.ResBtnLow = wx.Button(self.SetupPanel, wx.ID_ANY, u"Low", wx.DefaultPosition, wx.Size(60, 25),
                                    wx.NO_BORDER)
-        self.ResBtnLow.SetFont(labelfont)
+        # self.ResBtnLow.SetFont(labelfont)
         self.ResBtnLow.SetForegroundColour(wx.Colour(0, 0, 0))
         self.ResBtnLow.SetBackgroundColour(wx.Colour(230, 230, 230))
 
@@ -287,7 +287,7 @@ class laserGUI(wx.Panel):
 
         self.ResBtnHigh = wx.Button(self.SetupPanel, wx.ID_ANY, u"High", wx.DefaultPosition, wx.Size(60, 25),
                                     wx.NO_BORDER)
-        self.ResBtnHigh.SetFont(labelfont)
+        # self.ResBtnHigh.SetFont(labelfont)
         self.ResBtnHigh.SetForegroundColour(wx.Colour(0, 0, 0))
         self.ResBtnHigh.SetBackgroundColour(wx.Colour(230, 230, 230))
 
