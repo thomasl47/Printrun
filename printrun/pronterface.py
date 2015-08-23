@@ -2542,9 +2542,11 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         self.load_gcode_and_print_async('lasertest.gcode')
 
     def setHighResolution(self, e):
+        self.log('Set Resolution to High')
         self.resolution = 10
 
     def setLowResolution(self, e):
+        self.log('Set Resolution to Low')
         self.resolution = 2
 
     def sendGCodeCommand(self, command):

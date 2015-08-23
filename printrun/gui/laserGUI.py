@@ -206,13 +206,11 @@ class laserGUI(wx.Panel):
         self.FDBtnOn = wx.Button(self.FocalPanel, wx.ID_ANY, u"On", wx.DefaultPosition, wx.Size(40, 24), wx.NO_BORDER)
         self.FDBtnOn.SetForegroundColour(wx.Colour(255, 255, 255))
         self.FDBtnOn.SetBackgroundColour(wx.Colour(0, 146, 69))
-
         FocalGBSizer.Add(self.FDBtnOn, wx.GBPosition(12, BUTTONGPX2+60), wx.GBSpan(6, 40), 0, 0)
 
         self.FDBtnOff = wx.Button(self.FocalPanel, wx.ID_ANY, u"Off", wx.DefaultPosition, wx.Size(40, 24), wx.NO_BORDER)
         self.FDBtnOff.SetForegroundColour(wx.Colour(255, 255, 255))
         self.FDBtnOff.SetBackgroundColour(wx.Colour(237, 28, 36))
-
         FocalGBSizer.Add(self.FDBtnOff, wx.GBPosition(12, BUTTONGPX2+60+40), wx.GBSpan(6, 40), 0, 0)
 
         self.FDText2 = wx.StaticText(self.FocalPanel, wx.ID_ANY, u"Focal\nDistance", wx.DefaultPosition,
@@ -277,21 +275,25 @@ class laserGUI(wx.Panel):
 
         SetupGBSizer.Add(self.ResText, wx.GBPosition(30, 10), wx.GBSpan(10, 80), 0, 0)
 
-        self.ResBtnLow = wx.Button(self.SetupPanel, wx.ID_ANY, u"Low", wx.DefaultPosition, wx.Size(60, 25),
-                                   wx.NO_BORDER)
-        # self.ResBtnLow.SetFont(labelfont)
-        self.ResBtnLow.SetForegroundColour(wx.Colour(0, 0, 0))
-        self.ResBtnLow.SetBackgroundColour(wx.Colour(230, 230, 230))
+        # self.ResBtnLow = wx.Button(self.SetupPanel, wx.ID_ANY, u"Low", wx.DefaultPosition, wx.Size(60, 25),
+        #                            wx.NO_BORDER)
+        # # self.ResBtnLow.SetFont(labelfont)
+        # self.ResBtnLow.SetForegroundColour(wx.Colour(0, 0, 0))
+        # self.ResBtnLow.SetBackgroundColour(wx.Colour(230, 230, 230))
+        # SetupGBSizer.Add(self.ResBtnLow, wx.GBPosition(24, BUTTONGPX2), wx.GBSpan(5, 60), 0, 0)
+        #
+        # self.ResBtnHigh = wx.Button(self.SetupPanel, wx.ID_ANY, u"High", wx.DefaultPosition, wx.Size(60, 25),
+        #                             wx.NO_BORDER)
+        # # self.ResBtnHigh.SetFont(labelfont)
+        # self.ResBtnHigh.SetForegroundColour(wx.Colour(0, 0, 0))
+        # self.ResBtnHigh.SetBackgroundColour(wx.Colour(230, 230, 230))
+        # SetupGBSizer.Add(self.ResBtnHigh, wx.GBPosition(24, BUTTONGPX2+60+5), wx.GBSpan(5, 60), 0, 0)
 
-        SetupGBSizer.Add(self.ResBtnLow, wx.GBPosition(24, BUTTONGPX2), wx.GBSpan(5, 60), 0, 0)
-
-        self.ResBtnHigh = wx.Button(self.SetupPanel, wx.ID_ANY, u"High", wx.DefaultPosition, wx.Size(60, 25),
-                                    wx.NO_BORDER)
-        # self.ResBtnHigh.SetFont(labelfont)
-        self.ResBtnHigh.SetForegroundColour(wx.Colour(0, 0, 0))
-        self.ResBtnHigh.SetBackgroundColour(wx.Colour(230, 230, 230))
-
-        SetupGBSizer.Add(self.ResBtnHigh, wx.GBPosition(24, BUTTONGPX2+60+5), wx.GBSpan(5, 60), 0, 0)
+        self.respicker = wx.ComboBox(self.SetupPanel, -1, choices=["High", "Low"],
+                                style=wx.CB_READONLY, size=(80, 25))
+        self.respicker.SetValue("High")
+        root.setHighResolution(None)
+        SetupGBSizer.Add(self.respicker, wx.GBPosition(24, BUTTONGPX2), wx.GBSpan(4, 80), 0, 0)
 
         # Right Panel 4-2
         self.SpeedImage = wx.StaticBitmap(self.SetupPanel, wx.ID_ANY,
@@ -395,29 +397,29 @@ class laserGUI(wx.Panel):
         self.ImportImage = wx.StaticBitmap(self.ImportPanel, wx.ID_ANY,
                                            wx.Bitmap(u"EditIcon/Icon_Import-01.png", wx.BITMAP_TYPE_ANY),
                                            wx.DefaultPosition, wx.DefaultSize, 0)
-        ImpotyGBSizer.Add(self.ImportImage, wx.GBPosition(10, BUTTONGPX1), wx.GBSpan(10, 40), 0, 0)
+        ImpotyGBSizer.Add(self.ImportImage, wx.GBPosition(20, BUTTONGPX1), wx.GBSpan(10, 40), 0, 0)
 
         self.ImportText = wx.StaticText(self.ImportPanel, wx.ID_ANY, u"Import", wx.DefaultPosition, wx.Size(60, -1),
                                         wx.ALIGN_CENTRE)
         self.ImportText.SetFont(labelfont)
         self.ImportText.SetForegroundColour(wx.Colour(255, 255, 255))
 
-        ImpotyGBSizer.Add(self.ImportText, wx.GBPosition(20, 20), wx.GBSpan(10, 60), 0, 0)
+        ImpotyGBSizer.Add(self.ImportText, wx.GBPosition(30, 20), wx.GBSpan(10, 60), 0, 0)
 
-        root.FilePathLabel = wx.StaticText(self.ImportPanel, wx.ID_ANY, "", wx.DefaultPosition, wx.Size(280, 25), 0)
+        root.FilePathLabel = wx.TextCtrl(self.ImportPanel, wx.ID_ANY, "", wx.DefaultPosition, wx.Size(280, 25),
+                                         wx.TE_READONLY)
         #self.FilePathText.SetFont(wx.Font(18, 74, 90, 90, False, "Segoe UI Symbol"))
         root.FilePathLabel.SetForegroundColour(wx.Colour(0, 0, 0))
         root.FilePathLabel.SetBackgroundColour(wx.Colour(255, 255, 255))
         root.FilePathLabel.SetMaxSize(wx.Size(280, 25))
         root.FilePathLabel.SetMinSize(wx.Size(280, 25))
-        #root.FilePathLabel.SetWrap(1)
-        ImpotyGBSizer.Add(root.FilePathLabel, wx.GBPosition(14, BUTTONGPX2), wx.GBSpan(5, 280), 0, 0)
+        ImpotyGBSizer.Add(root.FilePathLabel, wx.GBPosition(24, BUTTONGPX2), wx.GBSpan(5, 280), 0, 0)
 
         self.ImportBtn = wx.Button(self.ImportPanel, wx.ID_ANY, u"Open", wx.DefaultPosition, wx.Size(60, 25),
                                    wx.NO_BORDER)
         self.ImportBtn.SetForegroundColour(wx.Colour(0, 0, 0))
         self.ImportBtn.SetBackgroundColour(wx.Colour(230, 230, 230))
-        ImpotyGBSizer.Add(self.ImportBtn, wx.GBPosition(14, BUTTONGPX2+280+5), wx.GBSpan(5, 60), 0, 0)
+        ImpotyGBSizer.Add(self.ImportBtn, wx.GBPosition(24, BUTTONGPX2+280+5), wx.GBSpan(5, 60), 0, 0)
 
         self.ImportPanel.SetSizer(ImpotyGBSizer)
         self.ImportPanel.Layout()
@@ -562,8 +564,14 @@ class laserGUI(wx.Panel):
         self.FDBtnDown.Bind(wx.EVT_BUTTON, addValue(-0.1))
         #self.FDBtnSet.Bind(wx.EVT_BUTTON, root.sendZFocalDist)
 
-        self.ResBtnHigh.Bind(wx.EVT_BUTTON, root.setHighResolution)
-        self.ResBtnLow.Bind(wx.EVT_BUTTON, root.setLowResolution)
+        # self.ResBtnHigh.Bind(wx.EVT_BUTTON, root.setHighResolution)
+        # self.ResBtnLow.Bind(wx.EVT_BUTTON, root.setLowResolution)
+        def SetResolution(event):
+            if self.respicker.GetValue() == "High":
+                root.setHighResolution(event)
+            else:
+                root.setLowResolution(event)
+        self.respicker.Bind(wx.EVT_COMBOBOX, SetResolution)
 
         self.ImportBtn.Bind(wx.EVT_BUTTON, root.loadpng)
 
