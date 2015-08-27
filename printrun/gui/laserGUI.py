@@ -44,6 +44,8 @@ class laserGUI(wx.Panel):
 
         ControlSizer = wx.BoxSizer(wx.VERTICAL)
 
+        # Right Panel 1
+        Y_BASELINE = 15
         self.ConnectPanel = wx.Panel(self.controlPanel, wx.ID_ANY, wx.DefaultPosition, wx.Size(WIDTH_P2, HEIGHT_P3_1),
                                      wx.TAB_TRAVERSAL)
         self.ConnectPanel.SetMinSize(wx.Size(WIDTH_P2, HEIGHT_P3_1))
@@ -57,30 +59,29 @@ class laserGUI(wx.Panel):
         # Set Fonts
         labelfont = wx.Font(10, 74, 90, 92, False)
 
-
-        # Right Panel 1
         root.toolbarsizer.SetMinSize(wx.Size(WIDTH_P2, HEIGHT_P3_1))
         self.ConnectImage = wx.StaticBitmap(self.ConnectPanel, wx.ID_ANY,
                                             wx.Bitmap(u"EditIcon/Icon_Connect-01.png", wx.BITMAP_TYPE_ANY),
                                             wx.DefaultPosition, wx.DefaultSize, 0)
-        root.toolbarsizer.Add(self.ConnectImage, wx.GBPosition(10, BUTTONGPX1), wx.GBSpan(10, 40), 0, 0)
+        root.toolbarsizer.Add(self.ConnectImage, wx.GBPosition(Y_BASELINE, BUTTONGPX1), wx.GBSpan(40, 40), 0, 0)
 
         self.ConnectText = wx.StaticText(self.ConnectPanel, wx.ID_ANY, u"Connect", wx.DefaultPosition, wx.Size(60, -1),
                                          wx.ALIGN_CENTRE)
         self.ConnectText.SetFont(labelfont)
-        root.toolbarsizer.Add(self.ConnectText, wx.GBPosition(20, 20), wx.GBSpan(4, 60), wx.ALIGN_CENTER_HORIZONTAL, 0)
+        root.toolbarsizer.Add(self.ConnectText, wx.GBPosition(Y_BASELINE+40, 20), wx.GBSpan(20, 60),
+                              wx.ALIGN_CENTER_HORIZONTAL, 0)
 
-        root.rescanbtn = wx.Button(self.ConnectPanel, wx.ID_ANY, u"Port", wx.DefaultPosition, wx.Size(60, 25),
-                                    wx.NO_BORDER)
-        root.rescanbtn.SetBackgroundColour(wx.Colour(230, 230, 230))
+        root.rescanbtn = wx.BitmapButton(self.ConnectPanel, wx.ID_ANY,wx.Bitmap(u"Button/Button_port.png",
+                                                                                 wx.BITMAP_TYPE_ANY),
+                                          wx.DefaultPosition,wx.DefaultSize , wx.NO_BORDER)
+        root.rescanbtn.SetBitmapHover(wx.Bitmap(u"Button/Button_port_MouseOn.png", wx.BITMAP_TYPE_ANY ))
+        root.toolbarsizer.Add(root.rescanbtn, wx.GBPosition(Y_BASELINE+5, BUTTONGPX2), wx.GBSpan(21, 60), 0, 5)
 
-        root.toolbarsizer.Add(root.rescanbtn, wx.GBPosition(11, BUTTONGPX2), wx.GBSpan(4, 60), 0, 5)
-
-        root.connectbtn = wx.Button(self.ConnectPanel, wx.ID_ANY, u"Connect", wx.DefaultPosition, wx.Size(80, 25),
-                                       wx.NO_BORDER)
-        root.connectbtn.SetBackgroundColour(wx.Colour(230, 230, 230))
-
-        root.toolbarsizer.Add(root.connectbtn, wx.GBPosition(17, BUTTONGPX2), wx.GBSpan(4, 80), 0, 5)
+        root.connectbtn = wx.BitmapButton(self.ConnectPanel, wx.ID_ANY,wx.Bitmap(u"Button/Button_connect.png",
+                                                                                 wx.BITMAP_TYPE_ANY),
+                                          wx.DefaultPosition,wx.DefaultSize , wx.NO_BORDER)
+        root.connectbtn.SetBitmapHover(wx.Bitmap(u"Button/Button_connect_MouseOn.png", wx.BITMAP_TYPE_ANY ))
+        root.toolbarsizer.Add(root.connectbtn, wx.GBPosition(Y_BASELINE+35, BUTTONGPX2), wx.GBSpan(21, 60), 0, 5)
 
         # root.resetbtn = wx.Button(self.ConnectPanel, wx.ID_ANY, u"Reset", wx.DefaultPosition, wx.Size(80, 25),
         #                              wx.NO_BORDER)
@@ -89,9 +90,8 @@ class laserGUI(wx.Panel):
         # root.toolbarsizer.Add(root.resetbtn, wx.GBPosition(17, 230), wx.GBSpan(4, 80), 0, 5)
 
         root.serialport = wx.ComboBox(self.ConnectPanel, -1, choices=root.scanserial(), style=wx.CB_DROPDOWN,
-                                size=(200, -1))
-
-        root.toolbarsizer.Add(root.serialport, wx.GBPosition(11, 190), wx.GBSpan(4, 80), 0, 5)
+                                size=(160, -1))
+        root.toolbarsizer.Add(root.serialport, wx.GBPosition(Y_BASELINE+5, BUTTONGPX2+60+5), wx.GBSpan(21, 160), 0, 5)
 
         root.baud = wx.ComboBox(self.ConnectPanel, -1, choices=["2400", "9600", "19200", "38400",
                                                           "57600", "115200", "250000"],
@@ -101,17 +101,19 @@ class laserGUI(wx.Panel):
             root.baud.SetValue(str(root.settings.baudrate))
         except:
             pass
-
-        root.toolbarsizer.Add(root.baud, wx.GBPosition(11, 280), wx.GBSpan(4, 100), 0, 5)
+        root.toolbarsizer.Add(root.baud, wx.GBPosition(Y_BASELINE+5, BUTTONGPX2+60+5+160+5), wx.GBSpan(21, 100), 0, 5)
 
         self.ConnectPanel.SetSizer(root.toolbarsizer)
         self.ConnectPanel.Layout()
         ControlSizer.Add(self.ConnectPanel, 0, wx.ALL, 0)
 
         # Right Panel 2
-        self.CorrectionPanel = wx.Panel(self.controlPanel, wx.ID_ANY, wx.DefaultPosition, wx.Size(WIDTH_P2, HEIGHT_P3_1),
-                                        wx.TAB_TRAVERSAL)
+        Y_BASELINE = 12
+        self.CorrectionPanel = wx.Panel(self.controlPanel, wx.ID_ANY, wx.DefaultPosition,
+                                        wx.Size(WIDTH_P2, HEIGHT_P3_1), wx.TAB_TRAVERSAL)
         self.CorrectionPanel.SetBackgroundColour(wx.Colour(230, 230, 230))
+        self.CorrectionPanel.SetMinSize(wx.Size(WIDTH_P2, HEIGHT_P3_1))
+        self.CorrectionPanel.SetMaxSize(wx.Size(WIDTH_P2, HEIGHT_P3_1))
 
         CorrectionGBSizer = wx.GridBagSizer(0, 0)
         CorrectionGBSizer.SetFlexibleDirection(wx.BOTH)
@@ -121,67 +123,56 @@ class laserGUI(wx.Panel):
         self.CorrectionImage = wx.StaticBitmap(self.CorrectionPanel, wx.ID_ANY,
                                                wx.Bitmap(u"EditIcon/Icon_AutoLevel-01.png", wx.BITMAP_TYPE_ANY),
                                                wx.DefaultPosition, wx.DefaultSize, 0)
-        CorrectionGBSizer.Add(self.CorrectionImage, wx.GBPosition(10, 30), wx.GBSpan(10, 40), 0, 0)
+        CorrectionGBSizer.Add(self.CorrectionImage, wx.GBPosition(Y_BASELINE, 30), wx.GBSpan(40, 40), 0, 0)
 
         self.CorrectionText = wx.StaticText(self.CorrectionPanel, wx.ID_ANY, u"Auto\nCorrect", wx.DefaultPosition,
-                                            wx.Size(60, -1), wx.ALIGN_CENTRE)
+                                            wx.Size(60, 30), wx.ALIGN_CENTRE)
         self.CorrectionText.SetFont(labelfont)
+        CorrectionGBSizer.Add(self.CorrectionText, wx.GBPosition(Y_BASELINE+40, 20), wx.GBSpan(30, 60),
+                              wx.ALIGN_CENTER_HORIZONTAL, 0)
 
-        CorrectionGBSizer.Add(self.CorrectionText, wx.GBPosition(20, 20), wx.GBSpan(10, 60), wx.ALIGN_CENTER_HORIZONTAL,
-                              0)
+        self.G29Text = wx.StaticBitmap(self.CorrectionPanel, wx.ID_ANY,
+                                               wx.Bitmap(u"Button/Icon_G29.png", wx.BITMAP_TYPE_ANY),
+                                               wx.DefaultPosition, wx.Size(25., 25), 0)
 
-        self.G29Text = wx.StaticText(self.CorrectionPanel, wx.ID_ANY, u"G29", wx.DefaultPosition, wx.Size(40,25), 0)
-        self.G29Text.SetFont(wx.Font(12, 74, 90, 92, False))
+        CorrectionGBSizer.Add(self.G29Text, wx.GBPosition(Y_BASELINE+20, BUTTONGPX2), wx.GBSpan(25, 25), wx.ALIGN_BOTTOM, 0)
 
-        CorrectionGBSizer.Add(self.G29Text, wx.GBPosition(12, BUTTONGPX2), wx.GBSpan(5, 20), wx.ALIGN_BOTTOM, 5)
-
-        self.CorrectionButton = wx.Button(self.CorrectionPanel, wx.ID_ANY, u"Auto Correct", wx.DefaultPosition,
-                                          wx.Size(100, 25), wx.NO_BORDER)
-        # self.CorrectionButton.SetFont(labelfont)
-        self.CorrectionButton.SetForegroundColour(wx.Colour(255, 255, 255))
-        self.CorrectionButton.SetBackgroundColour(wx.Colour(0, 146, 69))
-
-        CorrectionGBSizer.Add(self.CorrectionButton, wx.GBPosition(12, 130), wx.GBSpan(5, 100), wx.ALIGN_BOTTOM, 0)
+        self.CorrectionButton = wx.BitmapButton(self.CorrectionPanel, wx.ID_ANY,wx.Bitmap(u"Button/Button_autolevel.png",
+                                                                                 wx.BITMAP_TYPE_ANY),
+                                          wx.DefaultPosition,wx.DefaultSize , wx.NO_BORDER)
+        self.CorrectionButton.SetBitmapHover(wx.Bitmap(u"Button/Button_autolevel_MouseOn.png", wx.BITMAP_TYPE_ANY))
+        CorrectionGBSizer.Add(self.CorrectionButton, wx.GBPosition(Y_BASELINE+20, BUTTONGPX2+50), wx.GBSpan(21, 100), wx.ALIGN_BOTTOM, 0)
 
         self.ACText1 = wx.StaticText(self.CorrectionPanel, wx.ID_ANY, u"Install Laser Module", wx.DefaultPosition,
                                      wx.DefaultSize, 0)
-        self.ACText1.Wrap(-1)
         self.ACText1.SetFont(labelfont)
+        CorrectionGBSizer.Add(self.ACText1, wx.GBPosition(Y_BASELINE+20, BUTTONGPX2+150), wx.GBSpan(20, 50),
+                              wx.ALIGN_CENTER_VERTICAL, 5)
 
-        CorrectionGBSizer.Add(self.ACText1, wx.GBPosition(12, 240), wx.GBSpan(5, 50), wx.ALIGN_CENTER_VERTICAL, 5)
-
-        self.ACText2 = wx.StaticText(self.CorrectionPanel, wx.ID_ANY, u"CAUTION!", wx.DefaultPosition, wx.DefaultSize,
-                                     0)
-        self.ACText2.Wrap(-1)
-        self.ACText2.SetFont(labelfont)
+        self.ACText2 = wx.StaticText(self.CorrectionPanel, wx.ID_ANY,
+                                     u"CAUTION! Use eye protection before continuing...",
+                                     wx.DefaultPosition, wx.Size(300, 15), 0)
+        self.ACText2.SetFont(wx.Font(7, 74, 90, 92, False))
         self.ACText2.SetForegroundColour(wx.Colour(237, 28, 36))
+        CorrectionGBSizer.Add(self.ACText2, wx.GBPosition(Y_BASELINE+45, BUTTONGPX2+150), wx.GBSpan(15, 300), 0, 0)
 
-        CorrectionGBSizer.Add(self.ACText2, wx.GBPosition(18, 240), wx.GBSpan(5, 50), 0, 5)
-
-        self.ACText3 = wx.StaticText(self.CorrectionPanel, wx.ID_ANY, u"Use eye protection before continue...",
-                                     wx.DefaultPosition, wx.DefaultSize, 0)
-        self.ACText3.Wrap(-1)
-        self.ACText3.SetFont(wx.Font(9, 74, 90, 90, False))
-        self.ACText3.SetForegroundColour(wx.Colour(237, 28, 36))
-
-        CorrectionGBSizer.Add(self.ACText3, wx.GBPosition(23, 240), wx.GBSpan(1, 100), 0, 0)
-
-        self.DoneButton = wx.Button(self.CorrectionPanel, wx.ID_ANY, u"Done", wx.DefaultPosition,
-                                          wx.Size(60, 25), wx.NO_BORDER)
-        # self.DoneButton.SetFont(labelfont)
-        self.DoneButton.SetForegroundColour(wx.Colour(255, 255, 255))
-        self.DoneButton.SetBackgroundColour(wx.Colour(251, 176, 59))
-
-        CorrectionGBSizer.Add(self.DoneButton, wx.GBPosition(12, 300), wx.GBSpan(5, 50), wx.ALIGN_BOTTOM, 0)
+        self.DoneButton = wx.BitmapButton(self.CorrectionPanel, wx.ID_ANY, wx.Bitmap(u"Button/Button_home.png",
+                                                                                 wx.BITMAP_TYPE_ANY),
+                                          wx.DefaultPosition,wx.DefaultSize , wx.NO_BORDER)
+        self.DoneButton.SetBitmapHover(wx.Bitmap(u"Button/Button_home_MouseOn.png", wx.BITMAP_TYPE_ANY))
+        CorrectionGBSizer.Add(self.DoneButton, wx.GBPosition(Y_BASELINE+20, BUTTONGPX2+220), wx.GBSpan(21, 50), wx.ALIGN_BOTTOM, 0)
 
         self.CorrectionPanel.SetSizer(CorrectionGBSizer)
         self.CorrectionPanel.Layout()
         ControlSizer.Add(self.CorrectionPanel, 0, wx.EXPAND | wx.ALL, 0)
 
         # Right Panel 3
+        Y_BASELINE = 12
         self.FocalPanel = wx.Panel(self.controlPanel, wx.ID_ANY, wx.DefaultPosition, wx.Size(WIDTH_P2, HEIGHT_P3_1),
                                    wx.TAB_TRAVERSAL)
         self.FocalPanel.SetBackgroundColour(wx.Colour(204, 204, 204))
+        self.FocalPanel.SetMinSize(wx.Size(WIDTH_P2, HEIGHT_P3_1))
+        self.FocalPanel.SetMaxSize(wx.Size(WIDTH_P2, HEIGHT_P3_1))
 
         FocalGBSizer = wx.GridBagSizer(0, 0)
         FocalGBSizer.SetFlexibleDirection(wx.BOTH)
@@ -190,8 +181,8 @@ class laserGUI(wx.Panel):
 
         self.FocalImage = wx.StaticBitmap(self.FocalPanel, wx.ID_ANY,
                                           wx.Bitmap(u"EditIcon/Icon_Focal-01.png", wx.BITMAP_TYPE_ANY),
-                                          wx.DefaultPosition, wx.DefaultSize, 0)
-        FocalGBSizer.Add(self.FocalImage, wx.GBPosition(10, 30), wx.GBSpan(10, 40), 0, 0)
+                                          wx.DefaultPosition, wx.Size(40,40), 0)
+        FocalGBSizer.Add(self.FocalImage, wx.GBPosition(Y_BASELINE, BUTTONGPX1), wx.GBSpan(40, 40), 0, 0)
 
         self.FocalText = wx.StaticText(self.FocalPanel, wx.ID_ANY, u"Focal\nDistance", wx.DefaultPosition,
                                        wx.Size(60, -1), wx.ALIGN_CENTRE)
