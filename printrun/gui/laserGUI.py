@@ -9,6 +9,7 @@
 
 import wx
 import wx.xrc
+import platform
 from wx.lib.masked import NumCtrl
 
 from .laserGviz import LaserVizPane
@@ -45,6 +46,8 @@ class laserGUI(wx.Panel):
         ControlSizer = wx.BoxSizer(wx.VERTICAL)
 
         # Right Panel 1
+        GRAYSCALE_1 = wx.Colour(230, 230, 230)
+        Y_BASELINE = 5
         Y_BASELINE = 10
         self.ConnectPanel = wx.Panel(self.controlPanel, wx.ID_ANY, wx.DefaultPosition, wx.Size(WIDTH_P2, HEIGHT_P3_1),
                                      wx.TAB_TRAVERSAL)
@@ -58,6 +61,8 @@ class laserGUI(wx.Panel):
 
         # Set Fonts
         labelfont = wx.Font(9, 74, 90, 90, False)
+        if platform.system() == "Darwin":
+            labelfont = wx.Font(12, 74, 90, 90, False)
 
         root.toolbarsizer.SetMinSize(wx.Size(WIDTH_P2, HEIGHT_P3_1))
         self.ConnectImage = wx.StaticBitmap(self.ConnectPanel, wx.ID_ANY,
@@ -91,7 +96,8 @@ class laserGUI(wx.Panel):
 
         root.serialport = wx.ComboBox(self.ConnectPanel, -1, choices=root.scanserial(), style=wx.CB_DROPDOWN,
                                 size=(160, -1))
-        root.toolbarsizer.Add(root.serialport, wx.GBPosition(Y_BASELINE+5, BUTTONGPX2+60+5), wx.GBSpan(21, 160), 0, 5)
+        root.serialport.SetBackgroundColour(GRAYSCALE_1)
+        root.toolbarsizer.Add(root.serialport, wx.GBPosition(Y_BASELINE+5, BUTTONGPX2+60+5), wx.GBSpan(21, 160), 0, 0)
 
         root.baud = wx.ComboBox(self.ConnectPanel, -1, choices=["2400", "9600", "19200", "38400",
                                                           "57600", "115200", "250000"],
@@ -101,7 +107,8 @@ class laserGUI(wx.Panel):
             root.baud.SetValue(str(root.settings.baudrate))
         except:
             pass
-        root.toolbarsizer.Add(root.baud, wx.GBPosition(Y_BASELINE+5, BUTTONGPX2+60+5+160+5), wx.GBSpan(21, 100), 0, 5)
+        root.baud.SetBackgroundColour(GRAYSCALE_1)
+        root.toolbarsizer.Add(root.baud, wx.GBPosition(Y_BASELINE+5, BUTTONGPX2+60+5+160+5), wx.GBSpan(21, 100), 0, 0)
 
         self.ConnectPanel.SetSizer(root.toolbarsizer)
         self.ConnectPanel.Layout()
@@ -135,9 +142,8 @@ class laserGUI(wx.Panel):
         Y_BASELINE = 12
         self.G29Text = wx.StaticBitmap(self.CorrectionPanel, wx.ID_ANY,
                                                wx.Bitmap(u"Button/Icon_G29.png", wx.BITMAP_TYPE_ANY),
-                                               wx.DefaultPosition, wx.Size(25., 25), 0)
-
-        CorrectionGBSizer.Add(self.G29Text, wx.GBPosition(Y_BASELINE+20, BUTTONGPX2), wx.GBSpan(25, 25), wx.ALIGN_BOTTOM, 0)
+                                               wx.DefaultPosition, wx.DefaultSize, 0)
+        CorrectionGBSizer.Add(self.G29Text, wx.GBPosition(Y_BASELINE+20, BUTTONGPX2), wx.GBSpan(25, 30), 0, 0)
 
         self.CorrectionButton = wx.BitmapButton(self.CorrectionPanel,
                                                 wx.ID_ANY,wx.Bitmap(u"Button/Button_autolevel.png", wx.BITMAP_TYPE_ANY),
@@ -156,7 +162,11 @@ class laserGUI(wx.Panel):
         self.ACText2 = wx.StaticText(self.CorrectionPanel, wx.ID_ANY,
                                      u"CAUTION! Use eye protection before continuing...",
                                      wx.DefaultPosition, wx.Size(300, 15), 0)
-        self.ACText2.SetFont(wx.Font(7, 74, 90, 92, False))
+
+        if platform.system() == "Darwin":
+            self.ACText2.SetFont(wx.Font(9, 74, 90, 92, False))
+        else:
+            self.ACText2.SetFont(wx.Font(7, 74, 90, 92, False))
         self.ACText2.SetForegroundColour(wx.Colour(237, 28, 36))
         CorrectionGBSizer.Add(self.ACText2, wx.GBPosition(Y_BASELINE+45, BUTTONGPX2+150), wx.GBSpan(15, 300), 0, 0)
 
@@ -197,9 +207,9 @@ class laserGUI(wx.Panel):
 
         Y_BASELINE = 32
         self.FDText1 = wx.StaticText(self.FocalPanel, wx.ID_ANY, u"Laser\nFunction", wx.DefaultPosition,
-                                     wx.Size(50, 40), 0)
+                                     wx.Size(55, 40), 0)
         self.FDText1.SetFont(labelfont)
-        FocalGBSizer.Add(self.FDText1, wx.GBPosition(Y_BASELINE, BUTTONGPX2), wx.GBSpan(40, 50),
+        FocalGBSizer.Add(self.FDText1, wx.GBPosition(Y_BASELINE, BUTTONGPX2), wx.GBSpan(40, 55),
                          wx.ALIGN_CENTER_HORIZONTAL, 0)
 
         self.FDBtnOn = wx.BitmapButton(self.FocalPanel, wx.ID_ANY, wx.Bitmap(u"Button/Button_on.png",
@@ -223,6 +233,7 @@ class laserGUI(wx.Panel):
 
         root.FDValue = NumCtrl(self.FocalPanel, wx.ID_ANY, 10, wx.DefaultPosition, size=wx.Size(60, 24), integerWidth=3,
                                fractionWidth = 2)
+        root.FDValue.SetBackgroundColour(GRAYSCALE_1)
         FocalGBSizer.Add(root.FDValue, wx.GBPosition(BUTTONGPX1+10, BUTTONGPX2+210), wx.GBSpan(24, 60), 0, 0)
 
         self.FDBtnUp = wx.BitmapButton(self.FocalPanel, wx.ID_ANY,
@@ -314,6 +325,7 @@ class laserGUI(wx.Panel):
 
         root.EngSpeed = NumCtrl(self.SetupPanel, wx.ID_ANY, 200, wx.DefaultPosition, size=wx.Size(100, 20),
                                         integerWidth=4, autoSize=False)
+        root.EngSpeed.SetBackgroundColour(GRAYSCALE_1)
         SetupGBSizer.Add(root.EngSpeed, wx.GBPosition(Y_BASELINE+20, BUTTONGPX2), wx.GBSpan(20 , 100), 0, 0)
 
         self.SpeedText2 = wx.StaticText(self.SetupPanel, wx.ID_ANY, u"mm/s", wx.DefaultPosition, wx.Size(40, 15), 0)
@@ -329,6 +341,7 @@ class laserGUI(wx.Panel):
 
         root.TraSpeed = NumCtrl(self.SetupPanel, wx.ID_ANY, 3000, wx.DefaultPosition, size=wx.Size(100, 20),
                                         integerWidth=4, autoSize=False)
+        root.TraSpeed.SetBackgroundColour(GRAYSCALE_1)
         SetupGBSizer.Add(root.TraSpeed, wx.GBPosition(Y_BASELINE+20, BUTTONGPX2+165), wx.GBSpan(20, 100), 0, 0)
 
         self.SpeedText4 = wx.StaticText(self.SetupPanel, wx.ID_ANY, u"mm/s", wx.DefaultPosition, wx.Size(40, 15), 0)
@@ -360,7 +373,10 @@ class laserGUI(wx.Panel):
         SetupGBSizer.Add(self.FDMText2, wx.GBPosition(Y_BASELINE+20, BUTTONGPX2+165), wx.GBSpan(15, 100), 0, 0)
 
         self.FDMtextCtrl = wx.StaticText(self.SetupPanel, wx.ID_ANY, "10.0", wx.DefaultPosition, wx.Size(80, 30), 0)
-        self.FDMtextCtrl.SetFont(wx.Font(18, 74, 90, 90, False))
+        if platform.system() == "Darwin":
+            self.FDMtextCtrl.SetFont(wx.Font(24, 74, 90, 90, False))
+        else:
+            self.FDMtextCtrl.SetFont(wx.Font(18, 74, 90, 90, False))
         self.FDMtextCtrl.SetForegroundColour(wx.Colour(255, 255, 255))
         self.FDMtextCtrl.SetBackgroundColour(wx.Colour(153, 153, 153))
         SetupGBSizer.Add(self.FDMtextCtrl, wx.GBPosition(Y_BASELINE+40, BUTTONGPX2), wx.GBSpan(30, 80), 0, 0)
@@ -372,6 +388,7 @@ class laserGUI(wx.Panel):
 
         root.Thickness = NumCtrl(self.SetupPanel, wx.ID_ANY, 0, wx.DefaultPosition, size=wx.Size(110, 20),
                                         integerWidth=3, fractionWidth=2, autoSize=False)
+        root.Thickness.SetBackgroundColour(GRAYSCALE_1)
         SetupGBSizer.Add( root.Thickness, wx.GBPosition(Y_BASELINE+40, BUTTONGPX2+165), wx.GBSpan(20, 110), 0, 0)
 
         self.SetupPanel.SetSizer(SetupGBSizer)
@@ -406,11 +423,11 @@ class laserGUI(wx.Panel):
 
         root.FilePathLabel = wx.TextCtrl(self.ImportPanel, wx.ID_ANY, "", wx.DefaultPosition, wx.Size(280, 25),
                                          wx.TE_READONLY)
-        #self.FilePathText.SetFont(wx.Font(18, 74, 90, 90, False, "Segoe UI Symbol"))
         root.FilePathLabel.SetForegroundColour(wx.Colour(0, 0, 0))
         root.FilePathLabel.SetBackgroundColour(wx.Colour(255, 255, 255))
         root.FilePathLabel.SetMaxSize(wx.Size(280, 25))
         root.FilePathLabel.SetMinSize(wx.Size(280, 25))
+        root.FilePathLabel.SetBackgroundColour(GRAYSCALE_1)
         ImpotyGBSizer.Add(root.FilePathLabel, wx.GBPosition(Y_BASELINE+15, BUTTONGPX2), wx.GBSpan(25, 280), 0, 0)
 
         self.ImportBtn = wx.Button(self.ImportPanel, wx.ID_ANY, u"Open", wx.DefaultPosition, wx.Size(60, 25),
