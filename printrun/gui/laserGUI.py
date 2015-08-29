@@ -142,7 +142,7 @@ class laserGUI(wx.Panel):
         Y_BASELINE = 12
         self.G29Text = wx.StaticBitmap(self.CorrectionPanel, wx.ID_ANY,
                                                wx.Bitmap(u"Button/Icon_G29.png", wx.BITMAP_TYPE_ANY),
-                                               wx.DefaultPosition, wx.DefaultSize, 0)
+                                               wx.DefaultPosition, wx.Size(30, 25), 0)
         CorrectionGBSizer.Add(self.G29Text, wx.GBPosition(Y_BASELINE+20, BUTTONGPX2), wx.GBSpan(25, 30), 0, 0)
 
         self.CorrectionButton = wx.BitmapButton(self.CorrectionPanel,
