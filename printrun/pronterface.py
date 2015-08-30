@@ -2327,8 +2327,8 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         pos_file_gcode = self.filename;
         self.previewfilename = 'preview.gcode';
         #public options
-        speed_ON = 100  #moving speed when laser on 
-        speed_OFF = 3000 #moving speed when laser off
+        speed_ON = self.EngSpeed.GetValue()  #moving speed when laser on
+        speed_OFF = self.TraSpeed.GetValue() #moving speed when laser off
 
         if hasattr(self, 'FDValue'):
             focus_dist = float(self.FDValue.GetValue())

@@ -7,8 +7,8 @@ from .log import LogPane
 class LaserGviz( Gviz ):
     def __init__(self, parent, size = (200, 200), build_dimensions = [200, 200, 100, 0, 0, 0], grid = (10, 50), extrusion_width = 0.5, bgcolor = "#000000", realparent = None):
         super( LaserGviz, self).__init__(parent, size, build_dimensions, grid, extrusion_width, bgcolor, realparent)
-        self.SetMinSize( wx.Size( 560, 560 ))
-        self.SetMaxSize( wx.Size( 560, 560 ))
+        self.SetMinSize(wx.Size(560, 560))
+        self.SetMaxSize(wx.Size(560, 560))
 
     def repaint_everything(self):
         width = self.scale[0] * self.build_dimensions[0]
@@ -67,8 +67,8 @@ class LaserVizPane(wx.GridBagSizer):
     def __init__(self, root, parentpanel = None):
         super(LaserVizPane, self).__init__(0, 0)
         self.SetFlexibleDirection(wx.BOTH)
-        self.SetEmptyCellSize( wx.Size(1, 1))
-        self.SetMinSize( wx.Size(700, 700))
+        self.SetEmptyCellSize(wx.Size(1, 1))
+        self.SetMinSize(wx.Size(700, 700))
 
         root.gviz = LaserGviz(parentpanel, (560, 560),
                               build_dimensions = [200, 200, 100, -100, -100, 0],
@@ -85,35 +85,45 @@ class LaserVizPane(wx.GridBagSizer):
 
         root.gwindow.Bind(wx.EVT_CLOSE, lambda x: root.gwindow.Hide())
         if not isinstance(root.gviz, NoViz):
-            self.Add(root.gviz, wx.GBPosition(2,1), wx.GBSpan(8,8))
+            self.Add(root.gviz, wx.GBPosition(70, 100), wx.GBSpan(560, 1))
 
         root.laserLogpanel = LogPane(root, parentpanel)
-        root.laserLogpanel.SetMinSize( wx.Size(560, 560))
-        self.Add(root.laserLogpanel, wx.GBPosition(10, 1), wx.GBSpan(1,8), wx.EXPAND)
+        root.laserLogpanel.SetMinSize( wx.Size(610, 700))
+        self.Add(root.laserLogpanel, wx.GBPosition(0, 91), wx.GBSpan(700, 1), wx.EXPAND)
         root.laserLogpanel.ShowItems(False)
 
+        X_BASELINE = 20
+        Y_BASELINE = 20
         root.pathbtn = wx.BitmapButton(parentpanel, wx.ID_ANY,
-                                       wx.Bitmap(u"EditIcon/Pathd.png", wx.BITMAP_TYPE_ANY),
-                                       wx.DefaultPosition, wx.Size(70, 60), wx.NO_BORDER)
+                                       wx.Bitmap(u"Button/Button_path.png", wx.BITMAP_TYPE_ANY),
+                                       wx.DefaultPosition, wx.DefaultSize, wx.NO_BORDER)
+        root.pathbtn.SetBitmapHover(wx.Bitmap(u"Button/Button_path_MouseOn.png"))
         root.pathbtn.SetBackgroundColour( wx.Colour(252, 238, 0))
-        self.Add(root.pathbtn, wx.GBPosition(0, 0), wx.GBSpan(1, 1), 0, 0)
+        self.Add(root.pathbtn, wx.GBPosition(Y_BASELINE, X_BASELINE), wx.GBSpan(50, 50), 0, 0)
 
-        pathLabel = wx.StaticText(parentpanel, wx.ID_ANY, u"Paths", wx.DefaultPosition, wx.Size(70, 30),
+        pathLabel = wx.StaticText(parentpanel, wx.ID_ANY, u"Paths", wx.DefaultPosition, wx.Size(70, 15),
                                            wx.ALIGN_CENTRE)
         pathLabel.SetFont(wx.Font(10, 74, 90, 92, False))
-        self.Add(pathLabel, wx.GBPosition(1, 0), wx.GBSpan(1, 1), 0, 5)
+        self.Add(pathLabel, wx.GBPosition(Y_BASELINE+50, X_BASELINE-10), wx.GBSpan(15, 70), 0, 5)
 
         root.consolebtn = wx.BitmapButton(parentpanel, wx.ID_ANY,
-                                          wx.Bitmap(u"EditIcon/Console.png", wx.BITMAP_TYPE_ANY),
-                                          wx.DefaultPosition, wx.Size(70, 60), wx.NO_BORDER)
+                                          wx.Bitmap(u"Button/Button_console.png", wx.BITMAP_TYPE_ANY),
+                                          wx.DefaultPosition, wx.DefaultSize, wx.NO_BORDER)
+        root.consolebtn.SetBitmapHover(wx.Bitmap(u"Button/Button_console_MouseOn.png"))
         root.consolebtn.SetBackgroundColour( wx.Colour(252, 238, 0))
-        self.Add(root.consolebtn, wx.GBPosition(0, 1), wx.GBSpan(1, 1), 0, 0)
-        consoleLabel = wx.StaticText(parentpanel, wx.ID_ANY, u"Console", wx.DefaultPosition, wx.Size(70, 30),
+        self.Add(root.consolebtn, wx.GBPosition(Y_BASELINE+80, X_BASELINE), wx.GBSpan(50, 50), 0, 0)
+
+        consoleLabel = wx.StaticText(parentpanel, wx.ID_ANY, u"Console", wx.DefaultPosition, wx.Size(70, 15),
                                            wx.ALIGN_CENTRE)
         consoleLabel.SetFont(wx.Font(10, 74, 90, 92, False))
-        self.Add(consoleLabel, wx.GBPosition(1, 1), wx.GBSpan(1, 1), 0, 0)
+        self.Add(consoleLabel, wx.GBPosition(Y_BASELINE+130, X_BASELINE-10), wx.GBSpan(15, 70), 0, 0)
+
+        CCIcon = wx.StaticBitmap(parentpanel, wx.ID_ANY, wx.Bitmap(u"Button/CC.png", wx.BITMAP_TYPE_ANY),
+                                            wx.DefaultPosition, wx.DefaultSize, 0)
+        self.Add(CCIcon, wx.GBPosition(600, 15), wx.GBSpan(90, 60), 0, 0)
 
         # Bind Events
+
         def ShowConsole(event):
             root.gviz.Hide()
             root.laserLogpanel.ShowItems(True)
