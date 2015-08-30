@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
+import math
 
 from printrun.gviz import *
 from .viz import *
 from .log import LogPane
 
 class LaserGviz( Gviz ):
-    def __init__(self, parent, size = (200, 200), build_dimensions = [200, 200, 100, 0, 0, 0], grid = (10, 50), extrusion_width = 0.5, bgcolor = "#000000", realparent = None):
+    def __init__(self, parent, size = (200, 200), build_dimensions = [200, 200, 100, 0, 0, 0], grid = (10, 50),
+                 extrusion_width = 0.5, bgcolor = "#000000", realparent = None):
         super( LaserGviz, self).__init__(parent, size, build_dimensions, grid, extrusion_width, bgcolor, realparent)
         self.SetMinSize(wx.Size(560, 560))
         self.SetMaxSize(wx.Size(560, 560))
@@ -18,20 +20,29 @@ class LaserGviz( Gviz ):
         dc.SelectObject(self.blitmap)
         dc.SetBackground(wx.Brush((252, 238, 0)))
         dc.Clear()
-        dc.SetPen(wx.Pen(wx.Colour(252, 238, 0)))
+        dc.SetBrush(wx.Brush(colour='black', style=wx.TRANSPARENT))
+        # dc.SetPen(wx.Pen(wx.Colour(252, 238, 0)))
         center_x = self.build_dimensions[0]*self.scale[0]/2.
         center_y = self.build_dimensions[1]*self.scale[1]/2.
         radius = self.build_dimensions[0]*self.scale[0]/2.
+        dc.SetPen(wx.Pen(colour='black', width=2))
         dc.DrawCircle(center_x, center_y, radius)
+        dc.SetPen(wx.Pen(colour='black', width=3))
+        dc.DrawLine(center_x, 0, center_x, radius*2-3)
+        dc.DrawLine(0, center_y, radius*2-2, center_y)
+        dc.SetPen(wx.Pen(colour='black', width=1))
         for grid_unit in self.grid:
             if grid_unit > 0:
                 for x in xrange(int(self.build_dimensions[0] / grid_unit) + 1):
                     draw_x = self.scale[0] * x * grid_unit
-                    dc.DrawLine(draw_x, 0, draw_x, height)
+                    chordlength = radius*radius - (center_x - draw_x)*(center_x - draw_x)
+                    chordlength = math.sqrt(chordlength)*2
+                    dc.DrawLine(draw_x, center_y-chordlength/2., draw_x, center_y+chordlength/2.)
                 for y in xrange(int(self.build_dimensions[1] / grid_unit) + 1):
                     draw_y = self.scale[1] * (self.build_dimensions[1] - y * grid_unit)
-                    dc.DrawLine(0, draw_y, width, draw_y)
-            dc.SetPen(wx.Pen(wx.Colour(252, 238, 0)))
+                    chordlength = radius*radius - (center_y - draw_y)*(center_y - draw_y)
+                    chordlength = math.sqrt(chordlength)*2
+                    dc.DrawLine(center_x-chordlength/2., draw_y, center_x+chordlength/2., draw_y)
 
         if not self.showall:
             # Draw layer gauge
@@ -71,7 +82,7 @@ class LaserVizPane(wx.GridBagSizer):
         self.SetMinSize(wx.Size(700, 700))
 
         root.gviz = LaserGviz(parentpanel, (560, 560),
-                              build_dimensions = [200, 200, 100, -100, -100, 0],
+                              build_dimensions = [220, 220, 100, -110, -110, 0],
                               grid = (root.settings.preview_grid_step1, root.settings.preview_grid_step2),
                               extrusion_width = root.settings.preview_extrusion_width,
                               bgcolor = "#FCEE00")
