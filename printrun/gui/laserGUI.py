@@ -364,7 +364,7 @@ class laserGUI(wx.Panel):
         self.FDMText1 = wx.StaticText(self.SetupPanel, wx.ID_ANY, u"Focal", wx.DefaultPosition, wx.Size(100, 15), 0)
         self.FDMText1.SetFont(labelfont)
         self.FDMText1.SetForegroundColour(wx.Colour(255, 255, 255))
-        SetupGBSizer.Add(self.FDMText1, wx.GBPosition(Y_BASELINE+20, BUTTONGPX2), wx.GBSpan(15, 100), 0, 5)
+        SetupGBSizer.Add(self.FDMText1, wx.GBPosition(Y_BASELINE+20, BUTTONGPX2), wx.GBSpan(10, 100), 0, 0)
 
         self.FDMText2 = wx.StaticText(self.SetupPanel, wx.ID_ANY, u"Thickness", wx.DefaultPosition, wx.Size(100, 15), 0)
         self.FDMText2.SetFont(labelfont)
@@ -373,12 +373,12 @@ class laserGUI(wx.Panel):
 
         self.FDMtextCtrl = wx.StaticText(self.SetupPanel, wx.ID_ANY, "10.0", wx.DefaultPosition, wx.Size(80, 30), 0)
         if platform.system() == "Darwin":
-            self.FDMtextCtrl.SetFont(wx.Font(24, 74, 90, 90, False))
+            self.FDMtextCtrl.SetFont(wx.Font(28, 74, 90, 90, False))
         else:
             self.FDMtextCtrl.SetFont(wx.Font(18, 74, 90, 90, False))
         self.FDMtextCtrl.SetForegroundColour(wx.Colour(255, 255, 255))
         self.FDMtextCtrl.SetBackgroundColour(wx.Colour(153, 153, 153))
-        SetupGBSizer.Add(self.FDMtextCtrl, wx.GBPosition(Y_BASELINE+40, BUTTONGPX2), wx.GBSpan(30, 80), 0, 0)
+        SetupGBSizer.Add(self.FDMtextCtrl, wx.GBPosition(Y_BASELINE+30, BUTTONGPX2), wx.GBSpan(30, 80), 0, 0)
 
         self.FDMPlusImage = wx.StaticBitmap(self.SetupPanel, wx.ID_ANY,
                                             wx.Bitmap(u"Button/Icon_Plus.png", wx.BITMAP_TYPE_ANY),
