@@ -67,6 +67,7 @@ class laserGUI(wx.Panel):
         self.ConnectImage = wx.StaticBitmap(self.ConnectPanel, wx.ID_ANY,
                                             wx.Bitmap(u"Button/Icon_01.png", wx.BITMAP_TYPE_ANY),
                                             wx.DefaultPosition, wx.DefaultSize, 0)
+        self.ConnectImage.SetBackgroundColour(wx.Colour(255, 255, 255))
         root.toolbarsizer.Add(self.ConnectImage, wx.GBPosition(Y_BASELINE, BUTTONGPX1), wx.GBSpan(50, 50), 0, 0)
 
         self.ConnectText = wx.StaticText(self.ConnectPanel, wx.ID_ANY, u"Connect", wx.DefaultPosition, wx.Size(60, -1),
