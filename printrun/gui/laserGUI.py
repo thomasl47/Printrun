@@ -398,9 +398,10 @@ class laserGUI(wx.Panel):
         ControlSizer.Add(self.SetupPanel, 0, 0, 0)
 
         # Right Panel 5
+        BGCOLOR = wx.Colour(128, 128, 128)
         self.ImportPanel = wx.Panel(self.controlPanel, wx.ID_ANY, wx.DefaultPosition, wx.Size(WIDTH_P2, 90),
                                     wx.TAB_TRAVERSAL)
-        self.ImportPanel.SetBackgroundColour(wx.Colour(128, 128, 128))
+        self.ImportPanel.SetBackgroundColour(BGCOLOR)
         self.ImportPanel.SetMinSize(wx.Size(WIDTH_P2, 90))
         self.ImportPanel.SetMaxSize(wx.Size(WIDTH_P2, 90))
 
@@ -432,11 +433,12 @@ class laserGUI(wx.Panel):
         root.FilePathLabel.SetBackgroundColour(GRAYSCALE_1)
         ImpotyGBSizer.Add(root.FilePathLabel, wx.GBPosition(Y_BASELINE+20, BUTTONGPX2), wx.GBSpan(25, 280), 0, 0)
 
-        self.ImportBtn = wx.Button(self.ImportPanel, wx.ID_ANY, u"Open", wx.DefaultPosition, wx.Size(60, 25),
-                                   wx.NO_BORDER)
-        self.ImportBtn.SetForegroundColour(wx.Colour(0, 0, 0))
-        self.ImportBtn.SetBackgroundColour(wx.Colour(230, 230, 230))
-        ImpotyGBSizer.Add(self.ImportBtn, wx.GBPosition(Y_BASELINE+20, BUTTONGPX2+280+5), wx.GBSpan(25, 60), 0, 0)
+        self.ImportBtn = wx.BitmapButton(self.ImportPanel, wx.ID_ANY,
+                                       wx.Bitmap(u"Button/Button_open.png", wx.BITMAP_TYPE_ANY), wx.DefaultPosition,
+                                       wx.DefaultSize, wx.NO_BORDER)
+        self.ImportBtn.SetBitmapHover(wx.Bitmap(u"Button/Button_open_MouseOn.png", wx.BITMAP_TYPE_ANY))
+        self.ImportBtn.SetBackgroundColour(BGCOLOR)
+        ImpotyGBSizer.Add(self.ImportBtn, wx.GBPosition(Y_BASELINE+22, BUTTONGPX2+280+5), wx.GBSpan(20, 60), 0, 0)
 
         self.ImportPanel.SetSizer(ImpotyGBSizer)
         self.ImportPanel.Layout()
