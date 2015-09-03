@@ -143,6 +143,8 @@ class LaserVizPane(wx.GridBagSizer):
         def ShowConsole(event):
             root.gviz.Hide()
             root.laserLogpanel.ShowItems(True)
+            root.logbox.SetMinSize((610, 600))
+            root.logbox.SetMinSize((610, 600))
             self.Layout()
 
         def ShowPath(event):
