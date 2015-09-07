@@ -232,7 +232,7 @@ class laserGUI(wx.Panel):
         FocalGBSizer.Add(self.FDText2, wx.GBPosition(Y_BASELINE, BUTTONGPX2+150), wx.GBSpan(40, 60), 0, 0)
 
         root.FDValue = NumCtrl(self.FocalPanel, wx.ID_ANY, 10, wx.DefaultPosition, size=wx.Size(60, 24),
-                               autoSize=False, min=0, max=9999, limited=True, fractionWidth=1)
+                               autoSize=False, min=0, max=99, limited=True, integerWidth=2, fractionWidth=1)
         root.FDValue.SetBackgroundColour(GRAYSCALE_1)
         FocalGBSizer.Add(root.FDValue, wx.GBPosition(BUTTONGPX1+10, BUTTONGPX2+210), wx.GBSpan(24, 60), 0, 0)
 
@@ -324,7 +324,7 @@ class laserGUI(wx.Panel):
         SetupGBSizer.Add(self.SpeedText1, wx.GBPosition(Y_BASELINE, BUTTONGPX2), wx.GBSpan(15, 100), 0, 0)
 
         root.EngSpeed = NumCtrl(self.SetupPanel, wx.ID_ANY, 200, wx.DefaultPosition, size=wx.Size(100, 20),
-                                autoSize=False, min=0, max=9999, limited=True)
+                                autoSize=False, min=0, max=9999, limited=True, integerWidth=5)
         root.EngSpeed.SetBackgroundColour(GRAYSCALE_1)
         SetupGBSizer.Add(root.EngSpeed, wx.GBPosition(Y_BASELINE+20, BUTTONGPX2), wx.GBSpan(20 , 100), 0, 0)
 
@@ -340,7 +340,7 @@ class laserGUI(wx.Panel):
         SetupGBSizer.Add(self.SpeedText3, wx.GBPosition(Y_BASELINE, BUTTONGPX2+165), wx.GBSpan(15, 100), 0, 5)
 
         root.TraSpeed = NumCtrl(self.SetupPanel, wx.ID_ANY, 3000, wx.DefaultPosition, size=wx.Size(100, 20),
-                                autoSize=False, min=0, max=99999, limited=True)
+                                autoSize=False, min=0, max=99999, limited=True, integerWidth=5)
         root.TraSpeed.SetBackgroundColour(GRAYSCALE_1)
         SetupGBSizer.Add(root.TraSpeed, wx.GBPosition(Y_BASELINE+20, BUTTONGPX2+165), wx.GBSpan(20, 100), 0, 0)
 
@@ -391,7 +391,7 @@ class laserGUI(wx.Panel):
         # root.Thickness = NumCtrl(self.SetupPanel, wx.ID_ANY, 0, wx.DefaultPosition, size=wx.Size(110, 20),
         #                                 integerWidth=3, fractionWidth=2, autoSize=False)
         root.Thickness = NumCtrl(self.SetupPanel, wx.ID_ANY, 0, wx.DefaultPosition, size=wx.Size(100, 20),
-                                 autoSize=False, min=0, max=9999, limited=True, fractionWidth=1)
+                                 autoSize=False, min=0, max=9999, limited=True, fractionWidth=1, integerWidth=5)
         root.Thickness.SetBackgroundColour(GRAYSCALE_1)
         SetupGBSizer.Add( root.Thickness, wx.GBPosition(Y_BASELINE+40, BUTTONGPX2+165), wx.GBSpan(20, 100), 0, 0)
 
