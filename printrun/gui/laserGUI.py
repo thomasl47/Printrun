@@ -88,6 +88,12 @@ class laserGUI(wx.Panel):
         root.connectbtn.SetBitmapHover(wx.Bitmap(u"Button/Button_connect_MouseOn.png", wx.BITMAP_TYPE_ANY ))
         root.toolbarsizer.Add(root.connectbtn, wx.GBPosition(Y_BASELINE+35, BUTTONGPX2), wx.GBSpan(21, 60), 0, 5)
 
+        root.checkmark = wx.StaticBitmap(self.ConnectPanel, wx.ID_ANY,
+                                            wx.Bitmap(u"Button/Icon_checkmark.png", wx.BITMAP_TYPE_ANY),
+                                            wx.DefaultPosition, wx.DefaultSize, 0)
+        root.checkmark.SetBackgroundColour(wx.Colour(255, 255, 255))
+        root.toolbarsizer.Add(root.checkmark, wx.GBPosition(Y_BASELINE+35, BUTTONGPX2+70), wx.GBSpan(21, 20), 0, 0)
+
         # root.resetbtn = wx.Button(self.ConnectPanel, wx.ID_ANY, u"Reset", wx.DefaultPosition, wx.Size(80, 25),
         #                              wx.NO_BORDER)
         # root.resetbtn.SetBackgroundColour(wx.Colour(230, 230, 230))
@@ -553,6 +559,9 @@ class laserGUI(wx.Panel):
 
         self.BindCommand(root)
 
+        #Hide checkmark after layout
+        root.checkmark.Hide()
+
     def __del__(self):
         pass
 
@@ -600,4 +609,3 @@ class laserGUI(wx.Panel):
         root.pausebtn.Bind(wx.EVT_BUTTON, root.pause)
         root.offbtn.Bind(wx.EVT_BUTTON, root.off)
         self.ActExportBtn.Bind(wx.EVT_BUTTON, root.savefile)
-

@@ -1090,6 +1090,9 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
             self.status_thread.join()
             self.status_thread = None
 
+        wx.CallAfter(self.connectbtn.SetBitmapLabel, wx.Bitmap(u"Button/Button_connect.png", wx.BITMAP_TYPE_ANY))
+        wx.CallAfter(self.connectbtn.SetBitmapHover, wx.Bitmap(u"Button/Button_connect_MouseOn.png",
+                                                               wx.BITMAP_TYPE_ANY))
         wx.CallAfter(self.connectbtn.SetLabel, _("Connect"))
         wx.CallAfter(self.connectbtn.SetToolTip, wx.ToolTip(_("Connect to the printer")))
         wx.CallAfter(self.connectbtn.Bind, wx.EVT_BUTTON, self.connect)
@@ -1664,6 +1667,9 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
 
     def online_gui(self):
         """Callback when printer goes online (graphical bits)"""
+        self.checkmark.Show()
+        self.connectbtn.SetBitmapLabel(wx.Bitmap(u"Button/Button_disconnect.png", wx.BITMAP_TYPE_ANY))
+        self.connectbtn.SetBitmapHover(wx.Bitmap(u"Button/Button_disconnect_MouseOn.png", wx.BITMAP_TYPE_ANY))
         self.connectbtn.SetLabel(_("Disconnect"))
         self.connectbtn.SetToolTip(wx.ToolTip("Disconnect from the printer"))
         self.connectbtn.Bind(wx.EVT_BUTTON, self.disconnect)
