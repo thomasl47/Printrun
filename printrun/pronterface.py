@@ -185,7 +185,7 @@ class PronterWindow(MainWindow, pronsole.pronsole):
         MainWindow.__init__(self, None, title = _("Pronterface"), size = size)
         if self.settings.last_window_maximized:
             self.Maximize()
-        self.SetIcon(wx.Icon(iconfile("pronterface.png"), wx.BITMAP_TYPE_PNG))
+        self.SetIcon(wx.Icon("Button/burner.png", wx.BITMAP_TYPE_PNG))
         self.Bind(wx.EVT_SIZE, self.on_resize)
         self.Bind(wx.EVT_MAXIMIZE, self.on_maximize)
         self.window_ready = True
@@ -274,7 +274,8 @@ class PronterWindow(MainWindow, pronsole.pronsole):
                 control.GetContainingSizer().Detach(control)
                 control.Reparent(temppanel)
             self.panel.DestroyChildren()
-            self.gwindow.Destroy()
+            if hasattr(self, "gwindow"):
+                self.gwindow.Destroy()
             self.reset_ui()
 
         # Create UI
@@ -356,7 +357,8 @@ class PronterWindow(MainWindow, pronsole.pronsole):
             self.save_in_rc("set last_extrusion", "set last_extrusion %d" % self.settings.last_extrusion)
         if self.excluder:
             self.excluder.close_window()
-        wx.CallAfter(self.gwindow.Destroy)
+        if hasattr(self, "gwindow"):
+            wx.CallAfter(self.gwindow.Destroy)
         wx.CallAfter(self.Destroy)
 
     def _get_bgcolor(self):
@@ -579,9 +581,10 @@ class PronterWindow(MainWindow, pronsole.pronsole):
 
     def show_viz_window(self, event):
         if self.fgcode:
-            self.gwindow.Show(True)
-            self.gwindow.SetToolTip(wx.ToolTip("Mousewheel zooms the display\nShift / Mousewheel scrolls layers"))
-            self.gwindow.Raise()
+            if hasattr(self, "gwindow"):
+                self.gwindow.Show(True)
+                self.gwindow.SetToolTip(wx.ToolTip("Mousewheel zooms the display\nShift / Mousewheel scrolls layers"))
+                self.gwindow.Raise()
 
     def setfeeds(self, e):
         self.feedrates_changed = True
@@ -800,7 +803,7 @@ class PronterWindow(MainWindow, pronsole.pronsole):
 
         info = wx.AboutDialogInfo()
 
-        info.SetIcon(wx.Icon(iconfile("pronterface.png"), wx.BITMAP_TYPE_PNG))
+        info.SetIcon(wx.Icon(iconfile("burner.png"), wx.BITMAP_TYPE_PNG))
         info.SetName('Printrun')
         info.SetVersion(printcore.__version__)
 
@@ -1570,7 +1573,8 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
 
     def loadviz(self, gcode = None):
         self.gviz.clear()
-        self.gwindow.p.clear()
+        if hasattr(self, "gwindow"):
+            self.gwindow.p.clear()
         if gcode is not None:
             generator = self.gviz.addfile_perlayer(gcode, True)
             next_layer = 0
@@ -1607,7 +1611,8 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
         # Load external window sequentially now that everything is ready.
         # We can't really do any better as the 3D viewer might clone the
         # finalized model from the main visualization
-        self.gwindow.p.addfile(gcode)
+        if hasattr(self, "gwindow"):
+            self.gwindow.p.addfile(gcode)
 
     #  --------------------------------------------------------------
     #  File saving handling

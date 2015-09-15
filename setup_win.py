@@ -1,11 +1,10 @@
 from distutils.core import setup
 import py2exe
 
-setup(windows = [{"script": "pronterface.py", "icon_resources": [(1, "pronterface.ico")]},
-                 {"script": "plater.py", "icon_resources": [(1, "plater.ico")]},
-                 ],
-      console = [{"script": "pronsole.py", "icon_resources": [(1, "pronsole.ico")]},
-                 ],
+data_files = [('images', ['burner.png'])]
+
+setup(windows = [{"script": "burner.py", "icon_resources": [(1, "burner.ico")]},],
+      data_files = data_files,
       options = {"py2exe": {"bundle_files": 1,
                             "dll_excludes": ["w9xpopen.exe"],
                             "compressed": 1,
