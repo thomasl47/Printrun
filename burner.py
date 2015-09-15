@@ -30,10 +30,12 @@ not yet available for python3. You should try running with python2 instead.""")
         raise
 
 from printrun.burner import PronterApp
-from wxPython._misc import wxLogNull
+import platform
 
 if __name__ == '__main__':
-    nullTarget = wxLogNull()
+    if platform.system() != "Darwin":
+        from wxPython._misc import wxLogNull
+        nullTarget = wxLogNull()
     app = PronterApp(False)
     try:
         app.MainLoop()

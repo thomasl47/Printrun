@@ -14,6 +14,7 @@
 # along with Printrun.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
+import platform
 
 try:
     import wx
@@ -149,8 +150,14 @@ class MainWindow(wx.Frame):
         self.panel.SetMaxSize(wx.Size(1200, 700))
         #self.panel.Fit()
         self.panel.SetSizer(self.laserpanelSizer)
-        self.SetMinSize(wx.Size(1200, 780))
-        self.SetMaxSize(wx.Size(1200, 780))
+
+        if platform.system() == "Darwin":
+            self.SetMinSize(wx.Size(1200, 740))
+            self.SetMaxSize(wx.Size(1200, 740))
+        else:
+            self.SetMinSize(wx.Size(1200, 780))
+            self.SetMaxSize(wx.Size(1200, 780))
+
         self.Fit()
         self.Bind(wx.EVT_CLOSE, self.kill)
 

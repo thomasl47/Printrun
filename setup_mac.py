@@ -7,10 +7,10 @@ Usage:
 
 from setuptools import setup
 
-APP = ['pronterface.py']
+APP = ['burner.py']
 DATA_FILES = []
 PACKAGES = ['argparse', 'pyserial', 'wxPython']
-OPTIONS = {'argv_emulation': False}
+OPTIONS = {'argv_emulation': False, 'iconfile':'Burner.icns'}
 
 setup(
     app=APP,
