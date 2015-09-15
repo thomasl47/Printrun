@@ -29,7 +29,7 @@ not yet available for python3. You should try running with python2 instead.""")
     else:
         raise
 
-from printrun.pronterface import PronterApp
+from printrun.burner import PronterApp
 from wxPython._misc import wxLogNull
 
 if __name__ == '__main__':
