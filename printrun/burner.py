@@ -793,7 +793,7 @@ class PronterWindow(MainWindow, pronsole.pronsole):
 
         info = wx.AboutDialogInfo()
 
-        info.SetIcon(wx.Icon(iconfile("burner.png"), wx.BITMAP_TYPE_PNG))
+        info.SetIcon(wx.Icon("Button/burner.png", wx.BITMAP_TYPE_PNG))
         info.SetName('Burner')
         info.SetVersion(printcore.__version__)
 

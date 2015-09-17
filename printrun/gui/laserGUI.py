@@ -86,13 +86,13 @@ class laserGUI(wx.Panel):
                                                                                  wx.BITMAP_TYPE_ANY),
                                           wx.DefaultPosition,wx.DefaultSize , wx.NO_BORDER)
         root.connectbtn.SetBitmapHover(wx.Bitmap(u"Button/Button_connect_MouseOn.png", wx.BITMAP_TYPE_ANY ))
-        root.toolbarsizer.Add(root.connectbtn, wx.GBPosition(Y_BASELINE+35, BUTTONGPX2), wx.GBSpan(21, 60), 0, 5)
+        root.toolbarsizer.Add(root.connectbtn, wx.GBPosition(Y_BASELINE+35, BUTTONGPX2), wx.GBSpan(21, 75), 0, 5)
 
         root.checkmark = wx.StaticBitmap(self.ConnectPanel, wx.ID_ANY,
                                             wx.Bitmap(u"Button/Icon_checkmark.png", wx.BITMAP_TYPE_ANY),
                                             wx.DefaultPosition, wx.DefaultSize, 0)
         root.checkmark.SetBackgroundColour(wx.Colour(255, 255, 255))
-        root.toolbarsizer.Add(root.checkmark, wx.GBPosition(Y_BASELINE+35, BUTTONGPX2+70), wx.GBSpan(21, 20), 0, 0)
+        root.toolbarsizer.Add(root.checkmark, wx.GBPosition(Y_BASELINE+35, BUTTONGPX2+85), wx.GBSpan(21, 20), 0, 0)
 
         # root.resetbtn = wx.Button(self.ConnectPanel, wx.ID_ANY, u"Reset", wx.DefaultPosition, wx.Size(80, 25),
         #                              wx.NO_BORDER)
