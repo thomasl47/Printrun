@@ -7,7 +7,7 @@ Usage:
 
 from setuptools import setup
 
-APP = ['burner.py']
+APP = ['Burner.py']
 DATA_FILES = []
 PACKAGES = ['argparse', 'pyserial', 'wxPython']
 OPTIONS = {'argv_emulation': False, 'iconfile':'Burner.icns'}

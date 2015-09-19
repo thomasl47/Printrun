@@ -121,6 +121,13 @@ class LogPaneToggleable(ToggleablePane):
 class MainWindow(wx.Frame):
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
+        if platform.system() == "Darwin":
+            self.SetMinSize(wx.Size(1200, 740))
+            self.SetMaxSize(wx.Size(1200, 740))
+        else:
+            self.SetMinSize(wx.Size(1200, 780))
+            self.SetMaxSize(wx.Size(1200, 780))
+
         # this list will contain all controls that should be only enabled
         # when we're connected to a printer
         self.panel = wx.Panel(self, -1,  size=wx.Size(1200, 720))
@@ -150,13 +157,6 @@ class MainWindow(wx.Frame):
         self.panel.SetMaxSize(wx.Size(1200, 700))
         #self.panel.Fit()
         self.panel.SetSizer(self.laserpanelSizer)
-
-        if platform.system() == "Darwin":
-            self.SetMinSize(wx.Size(1200, 740))
-            self.SetMaxSize(wx.Size(1200, 740))
-        else:
-            self.SetMinSize(wx.Size(1200, 780))
-            self.SetMaxSize(wx.Size(1200, 780))
 
         self.Fit()
         self.Bind(wx.EVT_CLOSE, self.kill)

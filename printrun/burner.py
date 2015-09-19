@@ -1487,7 +1487,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
     def post_gcode_load(self, print_stats = True):
         # Must be called in wx.CallAfter for safety
         self.loading_gcode = False
-        self.SetTitle(_(u"Pronterface - %s") % self.filename)
+        self.SetTitle(_(u"Burner - %s") % self.filename)
         message = _("Loaded %s, %d lines") % (self.filename, len(self.fgcode),)
         self.log(message)
         self.statusbar.SetStatusText(message)
@@ -1528,7 +1528,7 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
     def post_gcode_load_and_print(self, print_stats = True):
         # Must be called in wx.CallAfter for safety
         self.loading_gcode = False
-        self.SetTitle(_(u"Pronterface - %s") % self.filename)
+        self.SetTitle(_(u"Burner - %s") % self.filename)
         message = _("Loaded %s, %d lines") % (self.filename, len(self.fgcode),)
         self.log(message)
         self.statusbar.SetStatusText(message)
@@ -2577,6 +2577,6 @@ class PronterApp(wx.App):
 
     def __init__(self, *args, **kwargs):
         super(PronterApp, self).__init__(*args, **kwargs)
-        self.SetAppName("Pronterface")
+        self.SetAppName("Burner")
         self.mainwindow = PronterWindow(self)
         self.mainwindow.Show()
