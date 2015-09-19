@@ -798,12 +798,11 @@ class PronterWindow(MainWindow, pronsole.pronsole):
         info.SetName('Burner')
         info.SetVersion(__version__)
 
-        description = "Burner is an open source python based laser engraving software for ATOM2.0."
-
-        description += "\n\n" + "more info & update: "
+        description = "\n" + "more info and update:"
 
         info.SetDescription(description)
-        info.SetCopyright('(C)  Layer One Co., Ltd.')
+        info.SetCopyright('Burner is an open source python based laser engraving software for ATOM2.0.\n'
+                          '(C)  Layer One Co., Ltd.')
         info.SetWebSite('www.atom3dp.com')
 
         licence = """\
@@ -1323,7 +1322,10 @@ Printrun. If not, see <http://www.gnu.org/licenses/>."""
     def load_recent_file(self, event):
         fileid = event.GetId() - wx.ID_FILE1
         path = self.filehistory.GetHistoryFile(fileid)
-        self.loadfile(None, filename = path)
+        if(path[-3:]=="png"):
+            self.loadpng(None, filename=path)
+        else:
+            self.loadfile(None, filename = path)
 
     def loadpng(self, event, filename = None):
         if self.slicing and self.slicep is not None:
