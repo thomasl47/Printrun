@@ -14,6 +14,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with Burner.  If not, see <http://www.gnu.org/licenses/>.
+__version__ = "2015.09.21"
 
 import os
 import Queue
@@ -795,26 +796,23 @@ class PronterWindow(MainWindow, pronsole.pronsole):
 
         info.SetIcon(wx.Icon("Button/burner.png", wx.BITMAP_TYPE_PNG))
         info.SetName('Burner')
-        info.SetVersion(printcore.__version__)
+        info.SetVersion(__version__)
 
-        description = _("Printrun is a pure Python 3D printing"
-                        " (and other types of CNC) host software.")
+        description = "Burner is an open source python based laser engraving software for ATOM2.0."
 
-        description += "\n\n" + \
-                       _("%.02fmm of filament have been extruded during prints") \
-                       % self.settings.total_filament_used
+        description += "\n\n" + "more info & update: "
 
         info.SetDescription(description)
-        info.SetCopyright('(C) 2011 - 2015')
-        info.SetWebSite('https://github.com/kliment/Printrun')
+        info.SetCopyright('(C)  Layer One Co., Ltd.')
+        info.SetWebSite('www.atom3dp.com')
 
         licence = """\
-Printrun is free software: you can redistribute it and/or modify it under the
+Burner is free software: you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software
 Foundation, either version 3 of the License, or (at your option) any later
 version.
 
-Printrun is distributed in the hope that it will be useful, but WITHOUT ANY
+Burner is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
@@ -822,8 +820,8 @@ You should have received a copy of the GNU General Public License along with
 Printrun. If not, see <http://www.gnu.org/licenses/>."""
 
         info.SetLicence(licence)
-        info.AddDeveloper('Kliment Yanev')
-        info.AddDeveloper('Guillaume Seguin')
+        info.AddDeveloper('Coby')
+        info.AddDeveloper('Nagayoshi')
 
         wx.AboutBox(info)
 
