@@ -1377,6 +1377,12 @@ class PronterWindow(MainWindow, pronsole.pronsole):
         self.PNGtoGcode(str(filename))
         self.pngLoaded = True
         self.load_gcode_async(self.filename)
+        if( self.pngSizeTooLarge ):
+            dlg = wx.MessageDialog(self, _("Image is larger than the platform!! Reduce pixel or enlarge resolution."), _("Warning!!"), wx.OK)
+            if dlg.ShowModal() == wx.ID_OK:
+                self.pngLoaded = False
+            dlg.Destroy()
+
 
     def loadfile(self, event, filename = None):
         if self.slicing and self.slicep is not None:
@@ -2340,8 +2346,10 @@ class PronterWindow(MainWindow, pronsole.pronsole):
         #private options
         grayscale_type = 1
         homing = 1
-        if not hasattr(self, 'resolution'):
-            self.resolution = 10
+
+        self.resolution = 0.1*float(self.ResValue.GetValue())
+        if self.ResType.GetValue() == "Pixel/inch":
+            self.resolution *=2.54
 
         conversion_type = 1
         BW_threshold = 128
@@ -2433,6 +2441,16 @@ class PronterWindow(MainWindow, pronsole.pronsole):
         pGcode_xmin = (float(xmin) - float(w)/2. )/Scala
         pGcode_ymax = (float(ymax) - float(h)/2. )/Scala
         pGcode_ymin = (float(ymin) - float(h)/2. )/Scala
+
+        self.pngSizeTooLarge = False
+        if pGcode_xmax > 110:
+            self.pngSizeTooLarge = True
+        if pGcode_xmin < -110:
+            self.pngSizeTooLarge = True
+        if pGcode_ymax > 110:
+            self.pngSizeTooLarge = True
+        if pGcode_ymin < -110:
+            self.pngSizeTooLarge = True
 
         gcode_box = 'G28; home all axes\n'
         gcode_box += 'G21; Set units to millimeters\n'

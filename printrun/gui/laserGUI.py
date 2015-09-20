@@ -309,6 +309,15 @@ class laserGUI(wx.Panel):
         self.ResBtnHigh.SetBackgroundColour(BGCOLOR)
         SetupGBSizer.Add(self.ResBtnHigh, wx.GBPosition(Y_BASELINE+20, BUTTONGPX2+50+5), wx.GBSpan(20, 50), 0, 0)
 
+        root.ResValue = NumCtrl(self.SetupPanel, wx.ID_ANY, 100, wx.DefaultPosition, size=wx.Size(100, 20),
+                                autoSize=False, min=1, max=9999, limited=True, integerWidth=5)
+#         root.ResValue.SetBackgroundColour(GRAYSCALE_1)
+        SetupGBSizer.Add(root.ResValue, wx.GBPosition(Y_BASELINE+20, BUTTONGPX2+165), wx.GBSpan(20 , 100), 0, 0)
+
+        root.ResType = wx.ComboBox(self.SetupPanel, -1, choices=["Pixel/cm", "Pixel/inch"], style=wx.CB_READONLY, size=(100, -1))
+#        root.ResType.SetBackgroundColour(GRAYSCALE_1)
+        SetupGBSizer.Add(root.ResType, wx.GBPosition(Y_BASELINE+18, BUTTONGPX2+270), wx.GBSpan(30, 100), 0, 0)
+
         # Right Panel 4-2
         Y_BASELINE = 85
         self.SpeedImage = wx.StaticBitmap(self.SetupPanel, wx.ID_ANY,
