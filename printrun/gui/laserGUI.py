@@ -1,11 +1,19 @@
 # -*- coding: utf-8 -*-
 
-###########################################################################
-## Python code generated with wxFormBuilder (version Jun  5 2014)
-## http://www.wxformbuilder.org/
-##
-## PLEASE DO "NOT" EDIT THIS FILE!
-###########################################################################
+# This file is part of the Burner suite.
+#
+# Burner is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Burner is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Burner.  If not, see <http://www.gnu.org/licenses/>.
 
 import wx
 import wx.xrc
@@ -314,7 +322,9 @@ class laserGUI(wx.Panel):
 #         root.ResValue.SetBackgroundColour(GRAYSCALE_1)
         SetupGBSizer.Add(root.ResValue, wx.GBPosition(Y_BASELINE+20, BUTTONGPX2+165), wx.GBSpan(20 , 100), 0, 0)
 
-        root.ResType = wx.ComboBox(self.SetupPanel, -1, choices=["Pixel/cm", "Pixel/inch"], style=wx.CB_READONLY, size=(100, -1))
+        root.ResType = wx.ComboBox(self.SetupPanel, -1, choices=["Pixel/cm", "Pixel/inch"], style=wx.CB_READONLY,
+                                   size=(100, -1))
+        root.ResType.SetSelection(0)
 #        root.ResType.SetBackgroundColour(GRAYSCALE_1)
         SetupGBSizer.Add(root.ResType, wx.GBPosition(Y_BASELINE+18, BUTTONGPX2+270), wx.GBSpan(30, 100), 0, 0)
 
